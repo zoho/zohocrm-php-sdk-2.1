@@ -1,0 +1,236 @@
+<?php 
+namespace com\zoho\crm\api\wizards;
+
+use com\zoho\crm\api\customviews\Criteria;
+use com\zoho\crm\api\util\Model;
+
+class Button implements Model
+{
+
+	private  $id;
+	private  $sequenceNumber;
+	private  $displayLabel;
+	private  $criteria;
+	private  $targetScreen;
+	private  $type;
+	private  $color;
+	private  $shape;
+	private  $backgroundColor;
+	private  $keyModified=array();
+
+	/**
+	 * The method to get the id
+	 * @return string A string representing the id
+	 */
+	public  function getId()
+	{
+		return $this->id; 
+
+	}
+
+	/**
+	 * The method to set the value to id
+	 * @param string $id A string
+	 */
+	public  function setId(string $id)
+	{
+		$this->id=$id; 
+		$this->keyModified['id'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the sequenceNumber
+	 * @return int A int representing the sequenceNumber
+	 */
+	public  function getSequenceNumber()
+	{
+		return $this->sequenceNumber; 
+
+	}
+
+	/**
+	 * The method to set the value to sequenceNumber
+	 * @param int $sequenceNumber A int
+	 */
+	public  function setSequenceNumber(int $sequenceNumber)
+	{
+		$this->sequenceNumber=$sequenceNumber; 
+		$this->keyModified['sequence_number'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the displayLabel
+	 * @return string A string representing the displayLabel
+	 */
+	public  function getDisplayLabel()
+	{
+		return $this->displayLabel; 
+
+	}
+
+	/**
+	 * The method to set the value to displayLabel
+	 * @param string $displayLabel A string
+	 */
+	public  function setDisplayLabel(string $displayLabel)
+	{
+		$this->displayLabel=$displayLabel; 
+		$this->keyModified['display_label'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the criteria
+	 * @return Criteria An instance of Criteria
+	 */
+	public  function getCriteria()
+	{
+		return $this->criteria; 
+
+	}
+
+	/**
+	 * The method to set the value to criteria
+	 * @param Criteria $criteria An instance of Criteria
+	 */
+	public  function setCriteria(Criteria $criteria)
+	{
+		$this->criteria=$criteria; 
+		$this->keyModified['criteria'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the targetScreen
+	 * @return Screen An instance of Screen
+	 */
+	public  function getTargetScreen()
+	{
+		return $this->targetScreen; 
+
+	}
+
+	/**
+	 * The method to set the value to targetScreen
+	 * @param Screen $targetScreen An instance of Screen
+	 */
+	public  function setTargetScreen(Screen $targetScreen)
+	{
+		$this->targetScreen=$targetScreen; 
+		$this->keyModified['target_screen'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the type
+	 * @return string A string representing the type
+	 */
+	public  function getType()
+	{
+		return $this->type; 
+
+	}
+
+	/**
+	 * The method to set the value to type
+	 * @param string $type A string
+	 */
+	public  function setType(string $type)
+	{
+		$this->type=$type; 
+		$this->keyModified['type'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the color
+	 * @return string A string representing the color
+	 */
+	public  function getColor()
+	{
+		return $this->color; 
+
+	}
+
+	/**
+	 * The method to set the value to color
+	 * @param string $color A string
+	 */
+	public  function setColor(string $color)
+	{
+		$this->color=$color; 
+		$this->keyModified['color'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the shape
+	 * @return string A string representing the shape
+	 */
+	public  function getShape()
+	{
+		return $this->shape; 
+
+	}
+
+	/**
+	 * The method to set the value to shape
+	 * @param string $shape A string
+	 */
+	public  function setShape(string $shape)
+	{
+		$this->shape=$shape; 
+		$this->keyModified['shape'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the backgroundColor
+	 * @return string A string representing the backgroundColor
+	 */
+	public  function getBackgroundColor()
+	{
+		return $this->backgroundColor; 
+
+	}
+
+	/**
+	 * The method to set the value to backgroundColor
+	 * @param string $backgroundColor A string
+	 */
+	public  function setBackgroundColor(string $backgroundColor)
+	{
+		$this->backgroundColor=$backgroundColor; 
+		$this->keyModified['background_color'] = 1; 
+
+	}
+
+	/**
+	 * The method to check if the user has modified the given key
+	 * @param string $key A string
+	 * @return int A int representing the modification
+	 */
+	public  function isKeyModified(string $key)
+	{
+		if(((array_key_exists($key, $this->keyModified))))
+		{
+			return $this->keyModified[$key]; 
+
+		}
+		return null; 
+
+	}
+
+	/**
+	 * The method to mark the given key as modified
+	 * @param string $key A string
+	 * @param int $modification A int
+	 */
+	public  function setKeyModified(string $key, int $modification)
+	{
+		$this->keyModified[$key] = $modification; 
+
+	}
+} 
