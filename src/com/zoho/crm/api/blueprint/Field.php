@@ -1030,7 +1030,7 @@ class Field implements Model
 
 	/**
 	 * The method to get the multiselectlookup
-	 * @return array A array representing the multiselectlookup
+	 * @return MultiSelectLookup An instance of MultiSelectLookup
 	 */
 	public  function getMultiselectlookup()
 	{
@@ -1040,9 +1040,9 @@ class Field implements Model
 
 	/**
 	 * The method to set the value to multiselectlookup
-	 * @param array $multiselectlookup A array
+	 * @param MultiSelectLookup $multiselectlookup An instance of MultiSelectLookup
 	 */
-	public  function setMultiselectlookup(array $multiselectlookup)
+	public  function setMultiselectlookup(MultiSelectLookup $multiselectlookup)
 	{
 		$this->multiselectlookup=$multiselectlookup; 
 		$this->keyModified['multiselectlookup'] = 1; 

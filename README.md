@@ -121,7 +121,7 @@ The persistence is achieved by writing an implementation of the inbuilt **TokenS
 
 - **deleteTokens()** - The method to delete all the stored tokens.
 
-- **getTokenById($id, $token)** -
+- **getTokenById($id, $token)** - This method is used to retrieve the user token details based on unique ID.
 
 Note:
 
@@ -139,9 +139,13 @@ In case the user prefers to use the default DataBase persistence, **MySQL** can 
 
 - There must be a table name oauthtoken with columns.
 
+  - id varchar(255)
+
   - user_mail varchar(255)
 
   - client_id varchar(255)
+
+  - client_secret varchar(255)
 
   - refresh_token varchar(255)
 
@@ -150,6 +154,8 @@ In case the user prefers to use the default DataBase persistence, **MySQL** can 
   - grant_token varchar(255)
 
   - expiry_time varchar(20)
+
+  - redirect_url varchar(255)
 
 #### MySQL Query
 
@@ -210,7 +216,7 @@ In case of default File Persistence, the user can persist tokens in the local dr
 
   - expiry_time
 
-  - redirect_uri
+  - redirect_url
 
 #### Create FileStore object
 
@@ -397,7 +403,7 @@ Before you get started with creating your PHP application, you need to register 
 
     $timeout = 2; //The maximum number of seconds to allow cURL functions to execute.
 
-    $sdkConfig = (new SDKConfigBuilder())->setAutoRefreshFields($autoRefreshFields)->setPickListValidation($pickListValidation)->setSSLVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
+    $sdkConfig = (new SDKConfigBuilder())->autoRefreshFields($autoRefreshFields)->pickListValidation($pickListValidation)->sslVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
     ```
 
 - Create an instance of RequestProxy containing the proxy properties of the user.
@@ -508,7 +514,7 @@ class Initialize
 
     $timeout = 2;//The maximum number of seconds to allow cURL functions to execute.
 
-    $sdkConfig = (new SDKConfigBuilder())->setAutoRefreshFields($autoRefreshFields)->setPickListValidation($pickListValidation)->setSSLVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
+    $sdkConfig = (new SDKConfigBuilder())->autoRefreshFields($autoRefreshFields)->pickListValidation($pickListValidation)->sslVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
 
     $resourcePath = "/Users/user_name/Documents/phpsdk-application";
 
@@ -744,7 +750,7 @@ class MultiThread
 
     $timeout = 2;
 
-    $sdkConfig = (new SDKConfigBuilder())->setAutoRefreshFields($autoRefreshFields)->setPickListValidation($pickListValidation)->setSSLVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
+    $sdkConfig = (new SDKConfigBuilder())->autoRefreshFields($autoRefreshFields)->pickListValidation($pickListValidation)->sslVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
 
     $resourcePath ="/Users/user_name/Documents/phpsdk-application";
 
@@ -923,7 +929,7 @@ class Record
 
     $timeout = 2;
 
-    $sdkConfig = (new SDKConfigBuilder())->setAutoRefreshFields($autoRefreshFields)->setPickListValidation($pickListValidation)->setSSLVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
+    $sdkConfig = (new SDKConfigBuilder())->autoRefreshFields($autoRefreshFields)->pickListValidation($pickListValidation)->sslVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
 
     $resourcePath ="/Users/user_name/Documents/phpsdk-application";
 

@@ -29,6 +29,26 @@ class InventoryLineItems extends Record implements Model
 	}
 
 	/**
+	 * The method to get the parentId
+	 * @return Record An instance of Record
+	 */
+	public  function getParentId()
+	{
+		return $this->getKeyValue('parent_id'); 
+
+	}
+
+	/**
+	 * The method to set the value to parentId
+	 * @param Record $parentId An instance of Record
+	 */
+	public  function setParentId(Record $parentId)
+	{
+		$this->addKeyValue('parent_id', $parentId); 
+
+	}
+
+	/**
 	 * The method to get the quantity
 	 * @return float A float representing the quantity
 	 */

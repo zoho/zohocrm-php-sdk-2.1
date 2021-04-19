@@ -18,7 +18,9 @@ class Constants
 
     const CLIENT_SECRET = "client_secret";
 
-    const REDIRECT_URL = "redirect_uri";
+    const REDIRECT_URL = "redirect_url";
+
+    const REDIRECT_URI = "redirect_uri";
 
     const GRANT_TYPE = "grant_type";
 

@@ -2,6 +2,7 @@
 namespace com\zoho\crm\api\record;
 
 use com\zoho\crm\api\record\Record;
+use com\zoho\crm\api\record\Tax;
 use com\zoho\crm\api\tags\Tag;
 use com\zoho\crm\api\users\User;
 use com\zoho\crm\api\util\Choice;
