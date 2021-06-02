@@ -133,7 +133,7 @@ class CommonAPIHandler
             return;
         }
 
-        if($this->param->getParameterMap()!==null && count($this->param->getParameterMap())>0)
+        if($this->param->getParameterMap() !== null && count($this->param->getParameterMap()) > 0)
         {
             $this->param->setParameterMap(array_merge($this->param->getParameterMap(), $param->getParameterMap()));
         }
@@ -172,7 +172,7 @@ class CommonAPIHandler
             return;
         }
 
-        if($this->header->getHeaderMap()!== null && count($this->header->getHeaderMap())>0)
+        if($this->header->getHeaderMap() !== null && count($this->header->getHeaderMap()) > 0)
         {
             $this->header->setHeaderMap(array_merge($this->header->getHeaderMap(), $header->getHeaderMap()));
         }
@@ -326,12 +326,9 @@ class CommonAPIHandler
 
                 $returnObject = $converterInstance->getWrappedResponse($response[Constants::RESPONSE], $className);
 
-                if ($returnObject !== null)
+                if ($returnObject !== null && ($className == get_class($returnObject) || $this->isExpectedType($returnObject, $className)))
                 {
-                    if ($className == get_class($returnObject) || $this->isExpectedType($returnObject, $className))
-                    {
-                        $isModel = true;
-                    }
+                    $isModel = true;
                 }
             }
             else
@@ -443,9 +440,9 @@ class CommonAPIHandler
             case "video/3gpp2":
             case "font/ttf":
                 return new Downloader($this);
+            default:
+                return null;
         }
-
-        return null;
     }
 
     private function setAPIUrl(APIHTTPConnector $connector)

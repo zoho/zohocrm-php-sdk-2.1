@@ -24,12 +24,12 @@ class USDataCenter extends DataCenter
     {
         self::$US = new USDataCenter();
 
-        if (USDataCenter::$PRODUCTION == null)
+        if (self::$PRODUCTION == null)
         {
-            USDataCenter::$PRODUCTION = DataCenter::setEnvironment("https://www.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_prd");
+            self::$PRODUCTION = DataCenter::setEnvironment("https://www.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_prd");
         }
 
-        return USDataCenter::$PRODUCTION;
+        return self::$PRODUCTION;
     }
 
     /**
@@ -40,12 +40,12 @@ class USDataCenter extends DataCenter
     {
         self::$US = new USDataCenter();
 
-        if (USDataCenter::$SANDBOX == null)
+        if (self::$SANDBOX == null)
         {
-            USDataCenter::$SANDBOX = DataCenter::setEnvironment("https://sandbox.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_sdb");
+            self::$SANDBOX = DataCenter::setEnvironment("https://sandbox.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_sdb");
         }
 
-        return USDataCenter::$SANDBOX;
+        return self::$SANDBOX;
     }
 
     /**
@@ -56,12 +56,12 @@ class USDataCenter extends DataCenter
     {
         self::$US = new USDataCenter();
 
-        if (USDataCenter::$DEVELOPER == null)
+        if (self::$DEVELOPER == null)
         {
-            USDataCenter::$DEVELOPER = DataCenter::setEnvironment("https://developer.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_dev");
+            self::$DEVELOPER = DataCenter::setEnvironment("https://developer.zohoapis.com", self::$US->getIAMUrl(), self::$US->getFileUploadUrl(), "us_dev");
         }
 
-        return USDataCenter::$DEVELOPER;
+        return self::$DEVELOPER;
     }
 
     public function getIAMUrl()

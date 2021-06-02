@@ -41,6 +41,7 @@ class Field implements Model
 	private  $id;
 	private  $customField;
 	private  $lookup;
+	private  $filterable;
 	private  $visible;
 	private  $pickListValuesSortedLexically;
 	private  $length;
@@ -59,7 +60,6 @@ class Field implements Model
 	private  $pickListValues;
 	private  $autoNumber;
 	private  $defaultValue;
-	private  $sectionId;
 	private  $validationRule;
 	private  $convertMapping;
 	private  $type;
@@ -616,7 +616,7 @@ class Field implements Model
 
 	/**
 	 * The method to get the multiModuleLookup
-	 * @return array A array representing the multiModuleLookup
+	 * @return MultiModuleLookup An instance of MultiModuleLookup
 	 */
 	public  function getMultiModuleLookup()
 	{
@@ -626,9 +626,9 @@ class Field implements Model
 
 	/**
 	 * The method to set the value to multiModuleLookup
-	 * @param array $multiModuleLookup A array
+	 * @param MultiModuleLookup $multiModuleLookup An instance of MultiModuleLookup
 	 */
-	public  function setMultiModuleLookup(array $multiModuleLookup)
+	public  function setMultiModuleLookup(MultiModuleLookup $multiModuleLookup)
 	{
 		$this->multiModuleLookup=$multiModuleLookup; 
 		$this->keyModified['multi_module_lookup'] = 1; 
@@ -716,6 +716,27 @@ class Field implements Model
 	{
 		$this->lookup=$lookup; 
 		$this->keyModified['lookup'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the filterable
+	 * @return bool A bool representing the filterable
+	 */
+	public  function getFilterable()
+	{
+		return $this->filterable; 
+
+	}
+
+	/**
+	 * The method to set the value to filterable
+	 * @param bool $filterable A bool
+	 */
+	public  function setFilterable(bool $filterable)
+	{
+		$this->filterable=$filterable; 
+		$this->keyModified['filterable'] = 1; 
 
 	}
 
@@ -1094,27 +1115,6 @@ class Field implements Model
 	{
 		$this->defaultValue=$defaultValue; 
 		$this->keyModified['default_value'] = 1; 
-
-	}
-
-	/**
-	 * The method to get the sectionId
-	 * @return int A int representing the sectionId
-	 */
-	public  function getSectionId()
-	{
-		return $this->sectionId; 
-
-	}
-
-	/**
-	 * The method to set the value to sectionId
-	 * @param int $sectionId A int
-	 */
-	public  function setSectionId(int $sectionId)
-	{
-		$this->sectionId=$sectionId; 
-		$this->keyModified['section_id'] = 1; 
 
 	}
 

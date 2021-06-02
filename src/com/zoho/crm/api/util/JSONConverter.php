@@ -44,7 +44,7 @@ class JSONConverter extends Converter
 
             foreach ($classes as $className)
             {
-                if (strtolower($className)== strtolower($requestObjectClassName))
+                if (strtolower($className) == strtolower($requestObjectClassName))
                 {
                     $classDetail = Initializer::$jsonDetails[$requestObjectClassName];
 
@@ -127,10 +127,12 @@ class JSONConverter extends Converter
             {
                 $requiredKeys[$keyName] = 1;
             }
-            if (array_key_exists(Constants::PRIMARY, $memberDetail) && $memberDetail[Constants::PRIMARY] == true)
+
+            if (array_key_exists(Constants::PRIMARY, $memberDetail) && $memberDetail[Constants::PRIMARY] == true && (!array_key_exists(Constants::REQUIRED_IN_UPDATE, $memberDetail) || $memberDetail[Constants::REQUIRED_IN_UPDATE]))
             {
                 $primaryKeys[$keyName] = 1;
             }
+
             if (array_key_exists(Constants::REQUIRED_IN_UPDATE, $memberDetail) && $memberDetail[Constants::REQUIRED_IN_UPDATE] == true)
             {
                 $requiredInUpdateKeys[$keyName] = 1;
@@ -169,24 +171,13 @@ class JSONConverter extends Converter
 
                     if ($requestInstance instanceof FileDetails)
                     {
-                        if($keyName === Constants::ATTACHMENT_ID)
+                        if($fieldValue == null || $fieldValue == "null")
                         {
-                            $requestJSON[strtolower($keyName)] = $fieldValue;
-                        }
-                        else if($keyName == Constants::FILE_ID)
-                        {
-                            $requestJSON[strtolower($keyName)] = $fieldValue;
+                            $requestJSON[strtolower($keyName)] = null;
                         }
                         else
                         {
-                            if($fieldValue == null || $fieldValue == "null")
-                            {
-                                $requestJSON[strtolower($keyName)] = null;
-                            }
-                            else
-                            {
-                                $requestJSON[strtolower($keyName)] = $fieldValue;
-                            }
+                            $requestJSON[strtolower($keyName)] = $fieldValue;
                         }
                     }
                     else
@@ -220,7 +211,7 @@ class JSONConverter extends Converter
                 $error[Constants::INSTANCE_NUMBER] = $instanceNumber;
             }
 
-            throw new SDKException(Constants::MANDATORY_VALUE_ERROR, Constants::MANDATORY_KEY_ERROR ,$error);
+            throw new SDKException(Constants::MANDATORY_VALUE_ERROR, Constants::MANDATORY_KEY_ERROR, $error);
         }
 
         if($this->commonAPIHandler->isMandatoryChecker() != null && $this->commonAPIHandler->isMandatoryChecker())
@@ -426,6 +417,7 @@ class JSONConverter extends Converter
             $keyDetail = array();
 
             $keyValue = array_key_exists($keyName, $keyValues) ? $keyValues[$keyName] : null;
+
             $jsonValue = null;
 
             if ($keyValue !== null)
@@ -469,7 +461,6 @@ class JSONConverter extends Converter
 				{
 				    $jsonValue = $this->setData($keyDetail, $keyValue);
 				}
-
             }
             else
             {
@@ -478,6 +469,7 @@ class JSONConverter extends Converter
 
             $requestJSON[$keyName] = $jsonValue;
         }
+
         if ($skipMandatory === true || $this->checkException($classMemberName, $recordInstance, $instanceNumber, $lookUp, $requiredKeys, $primaryKeys))
         {
             return $requestJSON;
@@ -708,7 +700,7 @@ class JSONConverter extends Converter
         {
             $keyName = array_key_exists(Constants::NAME, $keyDetail) ? $keyDetail[Constants::NAME] : null;// api-name of the member
 
-            if ($keyName != null && array_key_exists($keyName, $responseJSON ) && $responseJSON[$keyName] !== null && !is_null($responseJSON[$keyName]))
+            if ($keyName != null && array_key_exists($keyName, $responseJSON) && $responseJSON[$keyName] !== null)
             {
                 $keyData = $responseJSON[$keyName];
 
@@ -841,7 +833,7 @@ class JSONConverter extends Converter
             }
             else if (array_key_exists(Constants::STRUCTURE_NAME, $memberDetail) && array_key_exists(Constants::MODULE, $memberDetail))
             {
-                $memberValue = $this->isRecordResponse($keyData, $this->getModuleDetailFromUserSpecJSON($memberDetail[Constants::MODULE]),$memberDetail[Constants::STRUCTURE_NAME]);
+                $memberValue = $this->isRecordResponse($keyData, $this->getModuleDetailFromUserSpecJSON($memberDetail[Constants::MODULE]), $memberDetail[Constants::STRUCTURE_NAME]);
             }
             else if (array_key_exists(Constants::STRUCTURE_NAME, $memberDetail))
             {
@@ -850,7 +842,6 @@ class JSONConverter extends Converter
             else
             {
                 $memberValue = DataTypeConverter::preConvert($keyData, $type);
-
             }
         }
 
@@ -861,7 +852,7 @@ class JSONConverter extends Converter
     {
         $mapInstance = array();
 
-        if(sizeof($response)>0)
+        if(sizeof($response) > 0)
         {
             if ($memberDetail == null || ($memberDetail != null && ! array_key_exists(Constants::KEYS, $memberDetail)))
             {
@@ -882,11 +873,11 @@ class JSONConverter extends Converter
 
                         $keyValue = null;
 
-                        if(array_key_exists($keyName, $response) && $response[$keyName]!=null)
+                        if(array_key_exists($keyName, $response) && $response[$keyName]!= null)
                         {
                             $keyValue = $this->getData($response[$keyName], $keyDetail);
 
-                            $mapInstance[$keyName]= $keyValue;
+                            $mapInstance[$keyName] = $keyValue;
                         }
                     }
                 }
@@ -942,9 +933,7 @@ class JSONConverter extends Converter
 
     public function getModuleDetailFromUserSpecJSON($module)
     {
-        $moduleDetail = Utility::getJSONObject(Initializer::getJSON($this->getEncodedFileName()), $module);
-
-        return $moduleDetail;
+        return Utility::getJSONObject(Initializer::getJSON($this->getEncodedFileName()), $module);
     }
 
     public function redirectorForJSONToObject($keyData)
@@ -1034,7 +1023,7 @@ class JSONConverter extends Converter
                     $keyName = $memberDetail[Constants::NAME];
                 }
 
-                if ($keyName != null && array_key_exists($keyName, $responseJson) && (is_array($responseJson[$keyName]) || $responseJson[$keyName] != null))
+                if ($keyName != null && array_key_exists($keyName, $responseJson) && $responseJson[$keyName] != null)
                 {
                     $keyData = $responseJson[$keyName];
 
@@ -1117,7 +1106,7 @@ class JSONConverter extends Converter
 
     public function buildName($memberName)
     {
-        $name = explode("_", $memberName);
+        $name = explode("_", \strtolower($memberName));
 
         $sdkName = lcfirst($name[0]);
 

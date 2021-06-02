@@ -39,12 +39,30 @@ class OAuthToken implements Token
     private $id = null;
 
     /**
+     * This is a setter method to set OAuth client id.
+     * @param string A string representing the OAuth client id.
+     */
+    public function setClientId($clientID)
+    {
+        $this->clientID = $clientID;
+    }
+
+    /**
      * This is a getter method to get OAuth client id.
      * @return string A string representing the OAuth client id.
      */
     public function getClientId()
     {
         return $this->clientID;
+    }
+
+    /**
+     * This is a getter method to set OAuth client secret.
+     * @param string A string representing the OAuth client secret.
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
     }
 
     /**
@@ -75,21 +93,21 @@ class OAuthToken implements Token
     }
 
     /**
+     * This is a setter method to set grant token.
+     * @param string A string representing the grant token.
+     */
+    public function setGrantToken($grantToken)
+    {
+        $this->grantToken = $grantToken;
+    }
+
+    /**
      * This is a getter method to get grant token.
      * @return NULL|string A string representing the grant token.
      */
     public function getGrantToken()
     {
         return $this->grantToken;
-    }
-
-    /**
-     * This is a getter method to set grant token.
-     * @param string A string representing the grant token.
-     */
-    public function setGrantToken($grantToken)
-    {
-        $this->grantToken = $grantToken;
     }
 
     /**
@@ -272,7 +290,7 @@ class OAuthToken implements Token
 
         if($this->redirectURL != null)
         {
-            $requestParams[Constants::REDIRECT_URL] =  $this->redirectURL;
+            $requestParams[Constants::REDIRECT_URI] =  $this->redirectURL;
         }
 
         $requestParams[Constants::GRANT_TYPE] = Constants::REFRESH_TOKEN;
@@ -283,9 +301,14 @@ class OAuthToken implements Token
 
         try
         {
-            $this->generateId();
+            $this->processResponse($response);
 
-            $store->saveToken($user, $this->processResponse($response));
+            if($this->id == null)
+            {
+                $this->generateId();
+            }
+
+            $store->saveToken($user, $this);
         }
         catch(SDKException $ex)
         {
@@ -309,7 +332,7 @@ class OAuthToken implements Token
 
         if($this->redirectURL != null)
         {
-            $requestParams[Constants::REDIRECT_URL] =  $this->redirectURL;
+            $requestParams[Constants::REDIRECT_URI] =  $this->redirectURL;
         }
 
         $requestParams[Constants::GRANT_TYPE] = Constants::GRANT_TYPE_AUTH_CODE;
@@ -320,9 +343,11 @@ class OAuthToken implements Token
 
         try
         {
+            $this->processResponse($response);
+
             $this->generateId();
 
-            $store->saveToken($user, $this->processResponse($response));
+            $store->saveToken($user, $this);
 
         }
         catch(SDKException $ex)
@@ -420,9 +445,10 @@ class OAuthToken implements Token
      * Creates an OAuthToken class instance with the specified parameters.
      * @param string $clientID A string containing the OAuth client id.
      * @param string $clientSecret A string containing the OAuth client secret.
-     * @param string $token A string containing the REFRESH/GRANT token.
-     * @param string $type A class containing the given token type.
+     * @param string $grantToken A string containing the GRANT token.
+     * @param string $refreshToken A string containing the Refresh token.
      * @param string $redirectURL A string containing the OAuth redirect URL.
+     * @param string $id A string
      */
     private function __construct($clientID, $clientSecret, $grantToken, $refreshToken, $redirectURL=null, $id=null)
     {

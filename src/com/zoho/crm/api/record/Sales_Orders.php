@@ -1,7 +1,6 @@
 <?php 
 namespace com\zoho\crm\api\record;
 
-use com\zoho\crm\api\record\InventoryLineItems;
 use com\zoho\crm\api\record\Record;
 use com\zoho\crm\api\tags\Tag;
 use com\zoho\crm\api\users\User;
@@ -70,6 +69,11 @@ class Sales_Orders
 		return new Field('Carrier'); 
 
 	}
+	public static final function OrderedItems()
+	{
+		return new Field('Ordered_Items'); 
+
+	}
 	public static final function QuoteName()
 	{
 		return new Field('Quote_Name'); 
@@ -128,11 +132,6 @@ class Sales_Orders
 	public static final function BillingCode()
 	{
 		return new Field('Billing_Code'); 
-
-	}
-	public static final function ProductDetails()
-	{
-		return new Field('Product_Details'); 
 
 	}
 	public static final function Subject()

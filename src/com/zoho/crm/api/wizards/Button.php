@@ -16,6 +16,8 @@ class Button implements Model
 	private  $color;
 	private  $shape;
 	private  $backgroundColor;
+	private  $visibility;
+	private  $transition;
 	private  $keyModified=array();
 
 	/**
@@ -204,6 +206,48 @@ class Button implements Model
 	{
 		$this->backgroundColor=$backgroundColor; 
 		$this->keyModified['background_color'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the visibility
+	 * @return string A string representing the visibility
+	 */
+	public  function getVisibility()
+	{
+		return $this->visibility; 
+
+	}
+
+	/**
+	 * The method to set the value to visibility
+	 * @param string $visibility A string
+	 */
+	public  function setVisibility(string $visibility)
+	{
+		$this->visibility=$visibility; 
+		$this->keyModified['visibility'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the transition
+	 * @return Transition An instance of Transition
+	 */
+	public  function getTransition()
+	{
+		return $this->transition; 
+
+	}
+
+	/**
+	 * The method to set the value to transition
+	 * @param Transition $transition An instance of Transition
+	 */
+	public  function setTransition(Transition $transition)
+	{
+		$this->transition=$transition; 
+		$this->keyModified['transition'] = 1; 
 
 	}
 

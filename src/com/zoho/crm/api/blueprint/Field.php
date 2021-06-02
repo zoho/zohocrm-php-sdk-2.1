@@ -10,6 +10,7 @@ use com\zoho\crm\api\fields\External;
 use com\zoho\crm\api\fields\Formula;
 use com\zoho\crm\api\fields\HistoryTracking;
 use com\zoho\crm\api\fields\Module;
+use com\zoho\crm\api\fields\MultiModuleLookup;
 use com\zoho\crm\api\fields\MultiSelectLookup;
 use com\zoho\crm\api\fields\MultiUserLookup;
 use com\zoho\crm\api\fields\PickListValue;
@@ -58,6 +59,7 @@ class Field implements Model
 	private  $id;
 	private  $customField;
 	private  $lookup;
+	private  $filterable;
 	private  $visible;
 	private  $pickListValuesSortedLexically;
 	private  $length;
@@ -652,7 +654,7 @@ class Field implements Model
 
 	/**
 	 * The method to get the multiModuleLookup
-	 * @return array A array representing the multiModuleLookup
+	 * @return MultiModuleLookup An instance of MultiModuleLookup
 	 */
 	public  function getMultiModuleLookup()
 	{
@@ -662,9 +664,9 @@ class Field implements Model
 
 	/**
 	 * The method to set the value to multiModuleLookup
-	 * @param array $multiModuleLookup A array
+	 * @param MultiModuleLookup $multiModuleLookup An instance of MultiModuleLookup
 	 */
-	public  function setMultiModuleLookup(array $multiModuleLookup)
+	public  function setMultiModuleLookup(MultiModuleLookup $multiModuleLookup)
 	{
 		$this->multiModuleLookup=$multiModuleLookup; 
 		$this->keyModified['multi_module_lookup'] = 1; 
@@ -752,6 +754,27 @@ class Field implements Model
 	{
 		$this->lookup=$lookup; 
 		$this->keyModified['lookup'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the filterable
+	 * @return bool A bool representing the filterable
+	 */
+	public  function getFilterable()
+	{
+		return $this->filterable; 
+
+	}
+
+	/**
+	 * The method to set the value to filterable
+	 * @param bool $filterable A bool
+	 */
+	public  function setFilterable(bool $filterable)
+	{
+		$this->filterable=$filterable; 
+		$this->keyModified['filterable'] = 1; 
 
 	}
 

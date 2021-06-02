@@ -15,7 +15,7 @@ class ProxyBuilder
 
     private $password = "";
 
-    public function host($host)
+    public function host(string $host)
     {
         Utility::assertNotNull($host, Constants::REQUEST_PROXY_ERROR, Constants::HOST_ERROR_MESSAGE);
 
@@ -24,7 +24,7 @@ class ProxyBuilder
         return $this;
     }
 
-    public function port($port)
+    public function port(int $port)
     {
         Utility::assertNotNull($port, Constants::REQUEST_PROXY_ERROR, Constants::PORT_ERROR_MESSAGE);
 
@@ -33,14 +33,14 @@ class ProxyBuilder
         return $this;
     }
 
-    public function user($user)
+    public function user(string $user)
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function password($password)
+    public function password(string $password)
     {
         $this->password = $password;
 

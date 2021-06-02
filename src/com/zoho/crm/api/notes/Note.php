@@ -15,6 +15,7 @@ class Note implements Model
 	private  $createdTime;
 	private  $parentId;
 	private  $editable;
+	private  $sharingPermission;
 	private  $seModule;
 	private  $isSharedToClient;
 	private  $modifiedBy;
@@ -150,6 +151,27 @@ class Note implements Model
 	{
 		$this->editable=$editable; 
 		$this->keyModified['$editable'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the sharingPermission
+	 * @return string A string representing the sharingPermission
+	 */
+	public  function getSharingPermission()
+	{
+		return $this->sharingPermission; 
+
+	}
+
+	/**
+	 * The method to set the value to sharingPermission
+	 * @param string $sharingPermission A string
+	 */
+	public  function setSharingPermission(string $sharingPermission)
+	{
+		$this->sharingPermission=$sharingPermission; 
+		$this->keyModified['$sharing_permission'] = 1; 
 
 	}
 

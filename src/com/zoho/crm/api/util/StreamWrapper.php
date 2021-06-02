@@ -38,7 +38,7 @@ class StreamWrapper
             }
             else
             {
-                throw new SDKException(Constants::FILE_ERROR, Constants::FILE_DOES_NOT_EXISTS." ".$filepath);
+                throw new SDKException(Constants::FILE_ERROR, Constants::FILE_DOES_NOT_EXISTS . " " . $filepath);
             }
         }
     }

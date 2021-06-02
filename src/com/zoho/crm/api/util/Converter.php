@@ -3,7 +3,6 @@ namespace com\zoho\crm\api\util;
 
 use com\zoho\crm\api\exception\SDKException;
 
-
 use com\zoho\crm\api\Initializer;
 
 use com\zoho\crm\api\util\Constants;
@@ -21,7 +20,7 @@ abstract class Converter
      */
     public function __construct($commonAPIHandler)
     {
-       $this->commonAPIHandler=$commonAPIHandler;
+       $this->commonAPIHandler = $commonAPIHandler;
     }
 
     /**
@@ -279,18 +278,15 @@ abstract class Converter
 			}
 		}
 
-		if(array_key_exists(Constants::REGEX, $keyDetails))
+		if(array_key_exists(Constants::REGEX, $keyDetails) && !preg_match($keyDetails[Constants::REGEX], $value))
 		{
-		    if(!preg_match($keyDetails[Constants::REGEX], $value))
-			{
-			    $detailsJO[Constants::FIELD] =  $memberName;
+		    $detailsJO[Constants::FIELD] =  $memberName;
 
-			    $detailsJO[Constants::CLASS_KEY] =  $className;
+			$detailsJO[Constants::CLASS_KEY] =  $className;
 
-			    $detailsJO[Constants::INSTANCE_NUMBER] = $instanceNumber;
+			$detailsJO[Constants::INSTANCE_NUMBER] = $instanceNumber;
 
-				throw new SDKException(Constants::REGEX_MISMATCH_ERROR, null, $detailsJO, null);
-			}
+			throw new SDKException(Constants::REGEX_MISMATCH_ERROR, null, $detailsJO, null);
         }
 
         return true;

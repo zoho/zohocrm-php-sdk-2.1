@@ -18,6 +18,10 @@ use com\zoho\crm\api\sdkconfigbuilder\SDKConfig;
 
 use com\zoho\crm\api\dc\Environment;
 
+use com\zoho\api\logger\Logger;
+
+use com\zoho\crm\api\RequestProxy;
+
 class InitializeBuilder
 {
     private $environment;
@@ -55,8 +59,6 @@ class InitializeBuilder
             $this->token = Initializer::getInitializer()->getToken();
 
             $this->sdkConfig = Initializer::getInitializer()->getSDKConfig();
-
-            $this->requestProxy = Initializer::getInitializer()->getRequestProxy();
         }
     }
 
@@ -89,53 +91,39 @@ class InitializeBuilder
         Initializer::switchUser($this->user, $this->environment, $this->token, $this->sdkConfig, $this->requestProxy);
     }
 
-    public function logger($logger)
+    public function logger(Logger $logger)
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    public function token($token)
+    public function token(Token $token)
     {
         Utility::assertNotNull($token, $this->errorMessage, Constants::TOKEN_ERROR_MESSAGE);
-
-        if(!$token instanceof Token)
-        {
-            $error = array(Constants::FIELD => Constants::TOKEN, Constants::EXPECTED_TYPE => Token::class);
-
-            throw new SDKException(Constants::INITIALIZATION_ERROR, Constants::INITIALIZATION_EXCEPTION, $error);
-        }
 
         $this->token = $token;
 
         return $this;
     }
 
-    public function SDKConfig($sdkConfig)
+    public function SDKConfig(SDKConfig $sdkConfig)
     {
         Utility::assertNotNull($sdkConfig, $this->errorMessage, Constants::SDK_CONFIG_ERROR_MESSAGE);
-
-        if(!$sdkConfig instanceof SDKConfig)
-        {
-            $error = array(Constants::FIELD => Constants::SDK_CONFIG, Constants::EXPECTED_TYPE => SDKConfig::class);
-
-            throw new SDKException(Constants::INITIALIZATION_ERROR, Constants::INITIALIZATION_EXCEPTION, $error);
-        }
 
         $this->sdkConfig = $sdkConfig;
 
         return $this;
     }
 
-    public function requestProxy($requestProxy)
+    public function requestProxy(RequestProxy $requestProxy)
     {
         $this->requestProxy = $requestProxy;
 
         return $this;
     }
 
-    public function resourcePath($resourcePath)
+    public function resourcePath(string $resourcePath)
     {
         if(is_null($resourcePath) || strlen($resourcePath) <= 0)
         {
@@ -152,48 +140,27 @@ class InitializeBuilder
         return $this;
     }
 
-    public function user($user)
+    public function user(UserSignature $user)
     {
         Utility::assertNotNull($user, $this->errorMessage, Constants::USERSIGNATURE_ERROR_MESSAGE);
-
-        if(!$user instanceof UserSignature)
-        {
-            $error = array(Constants::FIELD => Constants::USER, Constants::EXPECTED_TYPE => UserSignature::class);
-
-            throw new SDKException(Constants::INITIALIZATION_ERROR, Constants::INITIALIZATION_EXCEPTION, $error);
-        }
 
         $this->user = $user;
 
         return $this;
     }
 
-    public function store($store)
+    public function store(TokenStore $store)
     {
         Utility::assertNotNull($store, $this->errorMessage, Constants::STORE_ERROR_MESSAGE);
-
-        if(!$store instanceof TokenStore)
-        {
-            $error = array(Constants::FIELD => Constants::STORE, Constants::EXPECTED_TYPE => TokenStore::class);
-
-            throw new SDKException(Constants::INITIALIZATION_ERROR, Constants::INITIALIZATION_EXCEPTION, $error);
-        }
 
         $this->store = $store;
 
         return $this;
     }
 
-    public function environment($environment)
+    public function environment(Environment $environment)
     {
         Utility::assertNotNull($environment, $this->errorMessage, Constants::ENVIRONMENT_ERROR_MESSAGE);
-
-        if(!$environment instanceof Environment)
-        {
-            $error = array(Constants::FIELD => Constants::ENVIRONMENT, Constants::EXPECTED_TYPE => Environment::class);
-
-            throw new SDKException(Constants::INITIALIZATION_ERROR, Constants::INITIALIZATION_EXCEPTION, $error);
-        }
 
         $this->environment = $environment;
 

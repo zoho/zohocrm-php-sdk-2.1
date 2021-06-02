@@ -15,10 +15,12 @@ class Attachment implements Model
 	private  $size;
 	private  $parentId;
 	private  $editable;
+	private  $sharingPermission;
 	private  $fileId;
 	private  $type;
 	private  $seModule;
 	private  $modifiedBy;
+	private  $attachmentType;
 	private  $state;
 	private  $id;
 	private  $createdBy;
@@ -175,6 +177,27 @@ class Attachment implements Model
 	}
 
 	/**
+	 * The method to get the sharingPermission
+	 * @return string A string representing the sharingPermission
+	 */
+	public  function getSharingPermission()
+	{
+		return $this->sharingPermission; 
+
+	}
+
+	/**
+	 * The method to set the value to sharingPermission
+	 * @param string $sharingPermission A string
+	 */
+	public  function setSharingPermission(string $sharingPermission)
+	{
+		$this->sharingPermission=$sharingPermission; 
+		$this->keyModified['$sharing_permission'] = 1; 
+
+	}
+
+	/**
 	 * The method to get the fileId
 	 * @return string A string representing the fileId
 	 */
@@ -255,6 +278,27 @@ class Attachment implements Model
 	{
 		$this->modifiedBy=$modifiedBy; 
 		$this->keyModified['Modified_By'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the attachmentType
+	 * @return int A int representing the attachmentType
+	 */
+	public  function getAttachmentType()
+	{
+		return $this->attachmentType; 
+
+	}
+
+	/**
+	 * The method to set the value to attachmentType
+	 * @param int $attachmentType A int
+	 */
+	public  function setAttachmentType(int $attachmentType)
+	{
+		$this->attachmentType=$attachmentType; 
+		$this->keyModified['$attachment_type'] = 1; 
 
 	}
 

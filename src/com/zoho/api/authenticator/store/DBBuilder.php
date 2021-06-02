@@ -18,44 +18,62 @@ class DBBuilder
 
     private $tableName = Constants::MYSQL_TABLE_NAME;
 
-    public function userName($userName)
+    public function userName(string $userName)
     {
-        $this->userName = $userName;
+        if($userName != null)
+        {
+            $this->userName = $userName;
+        }
 
         return $this;
     }
 
-    public function portNumber($portNumber)
+    public function portNumber(string $portNumber)
     {
-        $this->portNumber = $portNumber;
+        if($portNumber != null)
+        {
+            $this->portNumber = $portNumber;
+        }
 
         return $this;
     }
 
-    public function password($password)
+    public function password(string $password)
     {
-        $this->password = $password;
+        if($password != null)
+        {
+            $this->password = $password;
+        }
 
         return $this;
     }
 
-    public function host($host)
+    public function host(string $host)
     {
-        $this->host = $host;
+        if($host != null)
+        {
+            $this->host = $host;
+        }
 
         return $this;
     }
 
-    public function databaseName($databaseName)
+    public function databaseName(string $databaseName)
     {
-        $this->databaseName = $databaseName;
+        if($databaseName != null)
+        {
+            $this->databaseName = $databaseName;
+        }
 
         return $this;
     }
 
-    public function tableName($tableName)
+    public function tableName(string $tableName)
     {
-        $this->tableName = $tableName;
+        if($tableName != null)
+        {
+            $this->tableName = $tableName;
+        }
 
         return $this;
     }

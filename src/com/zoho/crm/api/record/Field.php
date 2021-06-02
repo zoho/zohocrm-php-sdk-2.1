@@ -2,7 +2,6 @@
 namespace com\zoho\crm\api\record;
 
 use com\zoho\crm\api\layouts\Layout;
-use com\zoho\crm\api\record\InventoryLineItems;
 use com\zoho\crm\api\record\Participants;
 use com\zoho\crm\api\record\PricingDetails;
 use com\zoho\crm\api\record\Record;

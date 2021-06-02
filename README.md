@@ -78,7 +78,7 @@ You can include the SDK to your project using:
   - Run the command below:
 
     ```sh
-    composer require zohocrm/php-sdk-2.1:4.0.0-beta
+    composer require zohocrm/php-sdk-2.1:4.0.0
     ```
 
   - The PHP SDK will be installed and a package named vendor will be created in the workspace of your client app.
@@ -125,11 +125,11 @@ The persistence is achieved by writing an implementation of the inbuilt **TokenS
 
 Note:
 
-- $id string.
+- $id is a string.
 
-- $user instanceof **UserSignature**.
+- $user is an instance of **UserSignature**.
 
-- $token instanceof **Token** interface.
+- $token is an instance of **Token** interface.
 
 ### DataBase Persistence
 
@@ -157,6 +157,9 @@ In case the user prefers to use the default DataBase persistence, **MySQL** can 
 
   - redirect_url varchar(255)
 
+Note:
+- Custom database name and table name can be set in DBStore instance
+
 #### MySQL Query
 
 ```sql
@@ -183,7 +186,9 @@ CREATE TABLE oauthtoken (
 * 3 -> DataBase user name. Default value "root"
 * 4 -> DataBase password. Default value ""
 * 5 -> DataBase port number. Default value "3306"
+* 6 -> Table Name. Default value "oauthtoken"
 */
+// $tokenstore = (new DBBuilder())->build();
 $tokenstore = (new DBBuilder())
 ->host("hostName")
 ->databaseName("databaseName")
@@ -198,7 +203,7 @@ $tokenstore = (new DBBuilder())
 
 In case of default File Persistence, the user can persist tokens in the local drive, by providing the the absolute file path to the FileStore object.
 
-- The File contains.
+- The File contains
 
   - id
 
@@ -308,9 +313,9 @@ Before you get started with creating your PHP application, you need to register 
 
     ```php
     /*
-    * Create an instance of Logger Class that takes two parameters
-    * 1 -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
-    * 2 -> Absolute file path, where messages need to be logged.
+    * Create an instance of Logger Class that requires the following
+    * level -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
+    * filePath -> Absolute file path, where messages need to be logged.
     */
     $logger = (new LogBuilder())
     ->level(Levels::INFO)
@@ -330,7 +335,7 @@ Before you get started with creating your PHP application, you need to register 
     ```php
     /*
     * Configure the environment
-    * which is of the pattern Domain.Environment
+    * which is of the pattern Domain::Environment
     * Available Domains: USDataCenter, EUDataCenter, INDataCenter, CNDataCenter, AUDataCenter
     * Available Environments: PRODUCTION(), DEVELOPER(), SANDBOX()
     */
@@ -341,13 +346,28 @@ Before you get started with creating your PHP application, you need to register 
 
     ```php
     /*
-    * Create a Token instance
-    * 1 -> OAuth client id.
-    * 2 -> OAuth client secret.
-    * 3 -> REFRESH token.
-    * 4 -> OAuth redirect URL. (optional)
+    * Create a Token instance that requires the following
+    * clientId -> OAuth client id.
+    * clientSecret -> OAuth client secret.
+    * refreshToken -> REFRESH token.
+    * redirectURL -> OAuth redirect URL. (optional)
     */
     //Create a Token instance
+    // if refresh token is available
+    // The SDK throws an exception, if the given id is invalid.
+    $token = (new OAuthBuilder())
+    ->id("id")
+    ->build();
+
+    // if grant token is available
+    $token = (new OAuthBuilder())
+    ->clientId("clientId")
+    ->clientSecret("clientSecret")
+    ->grantToken("grantToken")
+    ->redirectURL("redirectURL")
+    ->build();
+
+    // if ID (obtained from persistence) is available
     $token = (new OAuthBuilder())
     ->clientId("clientId")
     ->clientSecret("clientSecret")
@@ -360,19 +380,28 @@ Before you get started with creating your PHP application, you need to register 
 
     ```php
     /*
-    * Create an instance of DBStore.
-    * 1 -> DataBase host name. Default value "localhost"
-    * 2 -> DataBase name. Default  value "zohooauth"
-    * 3 -> DataBase user name. Default value "root"
-    * 4 -> DataBase password. Default value ""
-    * 5 -> DataBase port number. Default value "3306"
-    * 6 -> DataBase table name. Default value "oauthtoken"
+    * Create an instance of DBStore that requires the following
+    * host -> DataBase host name. Default value "localhost"
+    * databaseName -> DataBase name. Default  value "zohooauth"
+    * userName -> DataBase user name. Default value "root"
+    * password -> DataBase password. Default value ""
+    * portNumber -> DataBase port number. Default value "3306"
+    * tabletName -> DataBase table name. Default value "oauthtoken"
     */
     //$tokenstore = (new DBBuilder())->build();
 
-    $tokenstore = (new DBBuilder())->host("hostName")->databaseName("dataBaseName")->userName("userName")->password("password")->portNumber("portNumber")->tableName("tableName")->build();
+    $tokenstore = (new DBBuilder())
+    ->host("hostName")
+    ->databaseName("dataBaseName")
+    ->userName("userName")
+    ->password("password")
+    ->portNumber("portNumber")
+    ->tableName("tableName")
+    ->build();
 
     // $tokenstore = new FileStore("absolute_file_path");
+
+    // $tokenstore = new CustomStore();
     ```
 
 - Create an instance of SDKConfig containing SDK configurations.
@@ -399,11 +428,19 @@ Before you get started with creating your PHP application, you need to register 
 
     $enableSSLVerification = true;
 
-    $connectionTimeout = 2; //The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+    //The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+    $connectionTimeout = 2;
 
-    $timeout = 2; //The maximum number of seconds to allow cURL functions to execute.
+    //The maximum number of seconds to allow cURL functions to execute.
+    $timeout = 2;
 
-    $sdkConfig = (new SDKConfigBuilder())->autoRefreshFields($autoRefreshFields)->pickListValidation($pickListValidation)->sslVerification($enableSSLVerification)->connectionTimeout($connectionTimeout)->timeout($timeout)->build();
+    $sdkConfig = (new SDKConfigBuilder())
+    ->autoRefreshFields($autoRefreshFields)
+    ->pickListValidation($pickListValidation)
+    ->sslVerification($enableSSLVerification)
+    ->connectionTimeout($connectionTimeout)
+    ->timeout($timeout)
+    ->build();
     ```
 
 - Create an instance of RequestProxy containing the proxy properties of the user.
@@ -456,7 +493,7 @@ class Initialize
   public static function initialize()
   {
     /*
-      * Create an instance of Logger Class that takes two parameters
+      * Create an instance of Logger Class that requires the following
       * 1 -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
       * 2 -> Absolute file path, where messages need to be logged.
     */
@@ -470,7 +507,7 @@ class Initialize
 
     /*
       * Configure the environment
-      * which is of the pattern Domain.Environment
+      * which is of the pattern Domain::Environment
       * Available Domains: USDataCenter, EUDataCenter, INDataCenter, CNDataCenter, AUDataCenter
       * Available Environments: PRODUCTION(), DEVELOPER(), SANDBOX()
     */
@@ -480,16 +517,23 @@ class Initialize
     * Create a Token instance
     * 1 -> OAuth client id.
     * 2 -> OAuth client secret.
-    * 3 -> REFRESH token.
+    * 3 -> GRANT token.
     * 4 -> OAuth redirect URL. (optional)
     */
     //Create a Token instance
     $token = (new OAuthBuilder())
     ->clientId("clientId")
     ->clientSecret("clientSecret")
-    ->refreshToken("refreshToken")
+    ->grantToken("grantToken")
     ->redirectURL("redirectURL")
     ->build();
+
+    /*
+     * TokenStore can be any of the following
+     * DB Persistence - Create an instance of DBStore
+     * File Persistence - Create an instance of FileStore
+     * Custom Persistence - Create an instance of CustomStore
+    */
 
     /*
     * Create an instance of DBStore.
@@ -505,6 +549,8 @@ class Initialize
     $tokenstore = (new DBBuilder())->host("hostName")->databaseName("dataBaseName")->userName("userName")->password("password")->portNumber("portNumber")->tableName("tableName")->build();
 
     // $tokenstore = new FileStore("absolute_file_path");
+
+    // $tokenstore = new CustomStore();
 
     $autoRefreshFields = false;
 
@@ -527,7 +573,7 @@ class Initialize
     ->build();
 
     /*
-      * Call static initialize method of Initializer class that takes the following arguments
+      * Set the following in InitializeBuilder
       * 1 -> UserSignature instance
       * 2 -> Environment instance
       * 3 -> Token instance
@@ -589,7 +635,7 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
 
   - **APIResponse&lt;DeletedRecordsHandler&gt;**
 
-- For  Record image download operation
+- For Record image download operation
 
   - **APIResponse&lt;DownloadHandler&gt;**
 
@@ -599,11 +645,15 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
 
   - **APIResponse&lt;MassUpdateResponseHandler&gt;**
 
+- For Transfer Pipeline operation
+
+  - **APIResponse&lt;TransferActionHandler&gt;**
+
 ### GET Requests
 
 - The **getObject()** of the returned APIResponse instance returns the response handler interface.
 
-- The **ResponseHandler interface** interface encompasses the following
+- The **ResponseHandler interface** encompasses the following
   - **ResponseWrapper class** (for **application/json** responses)
   - **FileBodyWrapper class** (for File download responses)
   - **APIException class**
@@ -658,20 +708,23 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
   - **ConvertActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
+- The **TransferActionHandler interface** encompasses the following
+  - **TransferActionWrapper class** (for **application/json** responses)
+  - **APIException class**
+
 ## Multi-User support in the PHP SDK
 
-The **PHP SDK** (from version 4.x.x) supports both single user and a multi-user app.
+The **PHP SDK** (version 4.x.x) supports both single user and a multi-user app.
 
 ### Multi-user App
 
-Multi-users functionality is achieved using Initializer's static **switchUser()**.
+Multi-users functionality is achieved using **switchUser()** method
 
 ```php
 (new InitializeBuilder())
 ->user($user)
 ->environment($environment)
 ->token($token)
-->store($tokenstore)
 ->SDKConfig($configInstance)
 ->switchUser();
 ```
@@ -738,7 +791,7 @@ class MultiThread
     $token1 = (new OAuthBuilder())
     ->clientId("clientId")
     ->clientSecret("clientSecret")
-    ->refreshToken("refreshToken")
+    ->grantToken("grantToken")
     ->redirectURL("redirectURL")
     ->build();
 
@@ -777,19 +830,16 @@ class MultiThread
     ->redirectURL("redirectURL2")
     ->build();
 
+    $this->getRecords("Leads");
+
+    // Initializer::removeUserConfiguration($user1, $environment1);
+
     (new InitializeBuilder())
     ->user($user2)
     ->environment($environment2)
     ->token($token2)
-    ->store($tokenstore)
     ->SDKConfig($configInstance)
     ->switchUser();
-
-    // Initializer::removeUserConfiguration($user1, $environment1);
-
-    $this->getRecords("Leads");
-
-    Initializer::switchUser($user1, $environment1, $token1, $sdkConfig);
 
     $this->getRecords("Contacts");
   }
@@ -887,7 +937,7 @@ class Record
   public static function getRecord()
   {
     /*
-      * Create an instance of Logger Class that takes two parameters
+      * Create an instance of Logger Class that requires the following
       * 1 -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
       * 2 -> Absolute file path, where messages need to be logged.
     */
@@ -901,7 +951,7 @@ class Record
 
     /*
       * Configure the environment
-      * which is of the pattern Domain.Environment
+      * which is of the pattern Domain::Environment
       * Available Domains: USDataCenter, EUDataCenter, INDataCenter, CNDataCenter, AUDataCenter
       * Available Environments: PRODUCTION(), DEVELOPER(), SANDBOX()
     */
@@ -934,7 +984,7 @@ class Record
     $resourcePath ="/Users/user_name/Documents/phpsdk-application";
 
     /*
-    * Call static initialize method of Initializer class that takes the following arguments
+    * Set the following in InitializeBuilder
     * 1 -> UserSignature instance
     * 2 -> Environment instance
     * 3 -> Token instance
