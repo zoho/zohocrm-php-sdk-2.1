@@ -7,9 +7,9 @@ class RequestProxy
 {
     private $host = null;
 
-    private $port =null;
+    private $port = null;
 
-    private $user =null;
+    private $user = null;
 
     private $password = null;
 

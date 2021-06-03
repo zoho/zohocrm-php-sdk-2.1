@@ -21,7 +21,7 @@ class FormDataConverter extends Converter
         parent::__construct($commonAPIHandler);
     }
 
-    public function formRequest($requestInstance, $pack, $instanceNumber, $classMemberDetail = NULL)
+    public function formRequest($requestInstance, $pack, $instanceNumber, $classMemberDetail = null)
     {
         $classDetail = Initializer::$jsonDetails[$pack];
 
@@ -59,37 +59,33 @@ class FormDataConverter extends Converter
 
             $fieldValue = $field->getValue($requestInstance);
 
-            if ($modification != null && $modification != 0 && $this->valueChecker(get_class($requestInstance), $memberName, $memberDetail, $fieldValue, $this->_uniqueValuesMap, $instanceNumber))
+            if ($modification != null && $modification != 0 && $fieldValue != null && $this->valueChecker(get_class($requestInstance), $memberName, $memberDetail, $fieldValue, $this->_uniqueValuesMap, $instanceNumber))
             {
-                if ($fieldValue != null)
+                $keyName = $memberDetail[Constants::NAME];
+
+                $type = $memberDetail[Constants::TYPE];
+
+                if ($type == Constants::LIST_NAMESPACE)
                 {
-                    $keyName = $memberDetail[Constants::NAME];
-
-                    $type = $memberDetail[Constants::TYPE];
-
-                    if ($type == Constants::LIST_NAMESPACE)
-                    {
-                        $request[$keyName] = $this->setJSONArray($fieldValue, $memberDetail);
-                    }
-                    else if ($type == Constants::MAP_NAMESPACE)
-                    {
-                        $request[$keyName] = $this->setJSONObject($fieldValue, $memberDetail);
-                    }
-                    else if (array_key_exists(Constants::STRUCTURE_NAME, $memberDetail))
-                    {
-                        $request[$keyName] = $this->formRequest($fieldValue, $memberDetail[Constants::STRUCTURE_NAME], 1, $memberDetail);
-                    }
-                    else
-                    {
-                        $request[$keyName] = $fieldValue;
-                    }
+                    $request[$keyName] = $this->setJSONArray($fieldValue, $memberDetail);
+                }
+                else if ($type == Constants::MAP_NAMESPACE)
+                {
+                    $request[$keyName] = $this->setJSONObject($fieldValue, $memberDetail);
+                }
+                else if (array_key_exists(Constants::STRUCTURE_NAME, $memberDetail))
+                {
+                    $request[$keyName] = $this->formRequest($fieldValue, $memberDetail[Constants::STRUCTURE_NAME], 1, $memberDetail);
+                }
+                else
+                {
+                    $request[$keyName] = $fieldValue;
                 }
             }
         }
 
         return $request;
     }
-
 
     public function appendToRequest(&$requestBase, $requestObject)
     {
@@ -113,7 +109,7 @@ class FormDataConverter extends Converter
 
                     $current_time_long = $date->getTimestamp();
 
-                    $boundaryStart = utf8_encode($hypen.(string)$current_time_long.$lineEnd);
+                    $boundaryStart = utf8_encode($hypen . (string)$current_time_long . $lineEnd);
 
                     for ($i = 0; $i < sizeof($keysDetail); $i++)
                     {
@@ -127,18 +123,18 @@ class FormDataConverter extends Converter
 
                             $data = $data . $boundaryStart;
 
-                            $contentDisp = "Content-Disposition: form-data; name=\"".$key."\";filename=\"".$fileName."\"".$lineEnd.$lineEnd;
+                            $contentDisp = "Content-Disposition: form-data; name=\"" . $key . "\";filename=\"" . $fileName . "\"" . $lineEnd . $lineEnd;
 
-                            $data = $data.utf8_encode($contentDisp);
+                            $data = $data . utf8_encode($contentDisp);
 
-                            $data = $data.$fileData.utf8_encode($lineEnd);
+                            $data = $data . $fileData.utf8_encode($lineEnd);
                         }
                     }
                     $boundaryend = $hypen . (string)$current_time_long . $hypen . $lineEnd . $lineEnd;
 
                     $data = $data . utf8_encode($boundaryend);
 
-                    $header = ['ENCTYPE: multipart/form-data','Content-Type:multipart/form-data;boundary=' . (string)$current_time_long];
+                    $header = ['ENCTYPE: multipart/form-data', 'Content-Type:multipart/form-data;boundary=' . (string)$current_time_long];
 
                     $requestBase[CURLOPT_HTTPHEADER] = $header;
                 }
@@ -150,27 +146,27 @@ class FormDataConverter extends Converter
 
                     $date = new \DateTime();
 
-                    $current_time_long= $date->getTimestamp();
+                    $current_time_long = $date->getTimestamp();
 
                     $lineEnd = "\r\n";
 
                     $hypen = "--";
 
-                    $contentDisp = "Content-Disposition: form-data; name=\"".$key."\";filename=\"".$fileName."\"".$lineEnd.$lineEnd;
+                    $contentDisp = "Content-Disposition: form-data; name=\"" . $key . "\";filename=\"" . $fileName . "\"" . $lineEnd . $lineEnd;
 
-                    $header = ['ENCTYPE: multipart/form-data','Content-Type:multipart/form-data;boundary='.(string)$current_time_long];
+                    $header = ['ENCTYPE: multipart/form-data', 'Content-Type:multipart/form-data;boundary=' . (string)$current_time_long];
 
                     $data = utf8_encode($lineEnd);
 
-                    $boundaryStart = utf8_encode($hypen.(string)$current_time_long.$lineEnd) ;
+                    $boundaryStart = utf8_encode($hypen . (string)$current_time_long . $lineEnd) ;
 
-                    $data = $data.$boundaryStart;
+                    $data = $data . $boundaryStart;
 
                     $data = $data.utf8_encode($contentDisp);
 
-                    $data = $data.$fileData.utf8_encode($lineEnd);
+                    $data = $data . $fileData.utf8_encode($lineEnd);
 
-                    $boundaryend = $hypen.(string)$current_time_long.$hypen.$lineEnd.$lineEnd;
+                    $boundaryend = $hypen . (string)$current_time_long. $hypen. $lineEnd. $lineEnd;
 
                     $data = $data.utf8_encode($boundaryend);
 
@@ -311,11 +307,11 @@ class FormDataConverter extends Converter
 
     public function getWrappedResponse($responseObject, $pack)
     {
-        return NULL;
+        return $this->getResponse($responseObject, $pack);
     }
 
     public function getResponse($responseJson, $pack)
     {
-        return NULL;
+        return null;
     }
 }

@@ -2,8 +2,11 @@
 namespace com\zoho\crm\api;
 
 use com\zoho\crm\api\util\Constants;
+
 use com\zoho\crm\api\util\HeaderParamValidator;
+
 use com\zoho\crm\api\exception\SDKException;
+
 use com\zoho\crm\api\util\DataTypeConverter;
 
 /**
@@ -52,7 +55,7 @@ class ParameterMap
 
         if($value === null)
         {
-            throw new SDKException(Constants::PARAMETER_NULL_ERROR,$paramName.Constants::NULL_VALUE_ERROR_MESSAGE);
+            throw new SDKException(Constants::PARAMETER_NULL_ERROR, $paramName.Constants::NULL_VALUE_ERROR_MESSAGE);
         }
 
         $paramClassName = $param->getClassName();

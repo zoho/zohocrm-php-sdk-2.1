@@ -1,7 +1,6 @@
 <?php 
 namespace com\zoho\crm\api\record;
 
-use com\zoho\crm\api\record\InventoryLineItems;
 use com\zoho\crm\api\record\Record;
 use com\zoho\crm\api\tags\Tag;
 use com\zoho\crm\api\users\User;
@@ -53,6 +52,11 @@ class Purchase_Orders
 	public static final function BillingCountry()
 	{
 		return new Field('Billing_Country'); 
+
+	}
+	public static final function PurchaseItems()
+	{
+		return new Field('Purchase_Items'); 
 
 	}
 	public static final function id()
@@ -123,11 +127,6 @@ class Purchase_Orders
 	public static final function BillingCode()
 	{
 		return new Field('Billing_Code'); 
-
-	}
-	public static final function ProductDetails()
-	{
-		return new Field('Product_Details'); 
 
 	}
 	public static final function Subject()

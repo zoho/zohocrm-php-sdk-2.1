@@ -17,7 +17,6 @@ class Profile implements Model
 	private  $default;
 	private  $description;
 	private  $id;
-	private  $category;
 	private  $custom;
 	private  $createdBy;
 	private  $sections;
@@ -232,27 +231,6 @@ class Profile implements Model
 	{
 		$this->id=$id; 
 		$this->keyModified['id'] = 1; 
-
-	}
-
-	/**
-	 * The method to get the category
-	 * @return bool A bool representing the category
-	 */
-	public  function getCategory()
-	{
-		return $this->category; 
-
-	}
-
-	/**
-	 * The method to set the value to category
-	 * @param bool $category A bool
-	 */
-	public  function setCategory(bool $category)
-	{
-		$this->category=$category; 
-		$this->keyModified['category'] = 1; 
 
 	}
 

@@ -44,15 +44,15 @@ class FileStore implements TokenStore
         {
             $csvReader = file($this->filePath, FILE_IGNORE_NEW_LINES);
 
-            if ($token instanceof OAuthToken)
+            if($token instanceof OAuthToken)
             {
-                for ($index = 1; $index < sizeof($csvReader); $index++)
+                for($index = 1; $index < sizeof($csvReader); $index++)
                 {
                     $allContents = $csvReader[$index];
 
                     $nextRecord = str_getcsv($allContents);
 
-                    if ($this->checkTokenExists($user->getEmail(), $token, $nextRecord))
+                    if($this->checkTokenExists($user->getEmail(), $token, $nextRecord))
                     {
                         $token->setAccessToken($nextRecord[5]);
 
@@ -89,25 +89,17 @@ class FileStore implements TokenStore
 
                 $this->deleteToken($token);
 
-                $data = array();
-
-                array_push($data, $token->getId());
-
-                array_push($data, $user->getEmail());
-
-                array_push($data, $token->getClientId());
-
-                array_push($data, $token->getClientSecret());
-
-                array_push($data, $token->getRefreshToken());
-
-                array_push($data, $token->getAccessToken());
-
-                array_push($data, $token->getGrantToken());
-
-                array_push($data, $token->getExpiresIn());
-
-                array_push($data, $token->getRedirectURL());
+                $data = array(
+                    $token->getId(),
+                    $user->getEmail(),
+                    $token->getClientId(),
+                    $token->getClientSecret(),
+                    $token->getRefreshToken(),
+                    $token->getAccessToken(),
+                    $token->getGrantToken(),
+                    $token->getExpiresIn(),
+                    $token->getRedirectURL()
+                );
             }
 
             $csvWriter = file($this->filePath);
@@ -187,7 +179,7 @@ class FileStore implements TokenStore
 
                 $grantToken = ($nextRecord[6] != null && strlen($nextRecord[6]) > 0) ? $nextRecord[6] : null;
 
-                $token = (new OAuthBuilder())->clientId($nextRecord[2])->clientSecret($nextRecord[3])->build();
+                $token = (new OAuthBuilder())->clientId($nextRecord[2])->clientSecret($nextRecord[3])->refreshToken($nextRecord[4])->build();
 
                 $token->setId($nextRecord[0]);
 
@@ -197,8 +189,6 @@ class FileStore implements TokenStore
                 }
 
                 $token->setUserMail(strval($nextRecord[1]));
-
-                $token->setRefreshToken($nextRecord[4]);
 
                 $token->setAccessToken($nextRecord[5]);
 
@@ -262,11 +252,11 @@ class FileStore implements TokenStore
 
             if ($token instanceof OAuthToken)
             {
+                $isRowPresent = false;
+
                 for ($index = 1; $index < sizeof($csvReader); $index++)
                 {
                     $allContents = $csvReader[$index];
-
-                    $isRowPresent = false;
 
                     $nextRecord = str_getcsv($allContents);
 
@@ -278,25 +268,28 @@ class FileStore implements TokenStore
 
 						$redirectURL = ($nextRecord[8] != null && strlen($nextRecord[8]) > 0)? $nextRecord[8] : null;
 
-						$oauthToken = (new OAuthBuilder())->clientId($nextRecord[2])->clientSecret($nextRecord[3])
-								->refreshToken($nextRecord[4])->build();
+                        $token->setClientId($nextRecord[2]);
 
-                        $oauthToken->setId($id);
+                        $token->setClientSecret($nextRecord[3]);
+
+						$token->setRefreshToken($nextRecord[4]);
+
+                        $token->setId($id);
 
                         if($grantToken != null)
                         {
-                            $oauthToken->setGrantToken($grantToken);
+                            $token->setGrantToken($grantToken);
                         }
 
-                        $oauthToken->setUserMail($nextRecord[1]);
+                        $token->setUserMail($nextRecord[1]);
 
-                        $oauthToken->setAccessToken($nextRecord[5]);
+                        $token->setAccessToken($nextRecord[5]);
 
-                        $oauthToken->setExpiresIn($nextRecord[7]);
+                        $token->setExpiresIn($nextRecord[7]);
 
-                        $oauthToken->setRedirectURL($nextRecord[8]);
+                        $token->setRedirectURL($redirectURL);
 
-                        return $oauthToken;
+                        return $token;
                     }
                 }
 

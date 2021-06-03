@@ -9,6 +9,7 @@ class Category implements Model
 	private  $displayLabel;
 	private  $permissionsDetails;
 	private  $name;
+	private  $module;
 	private  $keyModified=array();
 
 	/**
@@ -71,6 +72,27 @@ class Category implements Model
 	{
 		$this->name=$name; 
 		$this->keyModified['name'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the module
+	 * @return string A string representing the module
+	 */
+	public  function getModule()
+	{
+		return $this->module; 
+
+	}
+
+	/**
+	 * The method to set the value to module
+	 * @param string $module A string
+	 */
+	public  function setModule(string $module)
+	{
+		$this->module=$module; 
+		$this->keyModified['module'] = 1; 
 
 	}
 

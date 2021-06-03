@@ -91,6 +91,26 @@ class User extends Record implements Model
 	}
 
 	/**
+	 * The method to get the sortOrderPreference
+	 * @return string A string representing the sortOrderPreference
+	 */
+	public  function getSortOrderPreference()
+	{
+		return $this->getKeyValue('sort_order_preference'); 
+
+	}
+
+	/**
+	 * The method to set the value to sortOrderPreference
+	 * @param string $sortOrderPreference A string
+	 */
+	public  function setSortOrderPreference(string $sortOrderPreference)
+	{
+		$this->addKeyValue('sort_order_preference', $sortOrderPreference); 
+
+	}
+
+	/**
 	 * The method to get the city
 	 * @return string A string representing the city
 	 */
@@ -387,6 +407,26 @@ class User extends Record implements Model
 	public  function setCountryLocale(string $countryLocale)
 	{
 		$this->addKeyValue('country_locale', $countryLocale); 
+
+	}
+
+	/**
+	 * The method to get the sandboxdeveloper
+	 * @return bool A bool representing the sandboxdeveloper
+	 */
+	public  function getSandboxdeveloper()
+	{
+		return $this->getKeyValue('sandboxDeveloper'); 
+
+	}
+
+	/**
+	 * The method to set the value to sandboxdeveloper
+	 * @param bool $sandboxdeveloper A bool
+	 */
+	public  function setSandboxdeveloper(bool $sandboxdeveloper)
+	{
+		$this->addKeyValue('sandboxDeveloper', $sandboxdeveloper); 
 
 	}
 

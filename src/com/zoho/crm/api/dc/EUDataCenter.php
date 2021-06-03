@@ -24,12 +24,12 @@ class EUDataCenter extends DataCenter
     {
         self::$EU = new EUDataCenter();
 
-        if (EUDataCenter::$PRODUCTION == null)
+        if (self::$PRODUCTION == null)
         {
-            EUDataCenter::$PRODUCTION = DataCenter::setEnvironment("https://www.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_prd");
+            self::$PRODUCTION = DataCenter::setEnvironment("https://www.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_prd");
         }
 
-        return EUDataCenter::$PRODUCTION;
+        return self::$PRODUCTION;
     }
 
     /**
@@ -40,12 +40,12 @@ class EUDataCenter extends DataCenter
     {
         self::$EU = new EUDataCenter();
 
-        if (EUDataCenter::$SANDBOX == null)
+        if (self::$SANDBOX == null)
         {
-            EUDataCenter::$SANDBOX = DataCenter::setEnvironment("https://sandbox.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_sdb");
+            self::$SANDBOX = DataCenter::setEnvironment("https://sandbox.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_sdb");
         }
 
-        return EUDataCenter::$SANDBOX;
+        return self::$SANDBOX;
     }
 
     /**
@@ -56,12 +56,12 @@ class EUDataCenter extends DataCenter
     {
         self::$EU = new EUDataCenter();
 
-        if (EUDataCenter::$DEVELOPER == null)
+        if (self::$DEVELOPER == null)
         {
-            EUDataCenter::$DEVELOPER = DataCenter::setEnvironment("https://developer.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_dev");
+            self::$DEVELOPER = DataCenter::setEnvironment("https://developer.zohoapis.eu", self::$EU->getIAMUrl(), self::$EU->getFileUploadUrl(), "eu_dev");
         }
 
-        return EUDataCenter::$DEVELOPER;
+        return self::$DEVELOPER;
     }
 
     public function getIAMUrl()

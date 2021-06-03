@@ -10,6 +10,7 @@ class LineTax implements Model
 	private  $name;
 	private  $id;
 	private  $value;
+	private  $displayName;
 	private  $keyModified=array();
 
 	/**
@@ -93,6 +94,27 @@ class LineTax implements Model
 	{
 		$this->value=$value; 
 		$this->keyModified['value'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the displayName
+	 * @return string A string representing the displayName
+	 */
+	public  function getDisplayName()
+	{
+		return $this->displayName; 
+
+	}
+
+	/**
+	 * The method to set the value to displayName
+	 * @param string $displayName A string
+	 */
+	public  function setDisplayName(string $displayName)
+	{
+		$this->displayName=$displayName; 
+		$this->keyModified['display_name'] = 1; 
 
 	}
 

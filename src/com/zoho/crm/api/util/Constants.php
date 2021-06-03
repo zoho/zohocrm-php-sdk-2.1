@@ -18,7 +18,9 @@ class Constants
 
     const CLIENT_SECRET = "client_secret";
 
-    const REDIRECT_URL = "redirect_uri";
+    const REDIRECT_URL = "redirect_url";
+
+    const REDIRECT_URI = "redirect_uri";
 
     const GRANT_TYPE = "grant_type";
 
@@ -121,8 +123,6 @@ class Constants
     const INVOICES = "Invoices";
 
     const PURCHASEORDERS = "PurchaseOrders";
-
-    const INVENTORY_LINE_ITEMS = "com\\zoho\\crm\\api\\record\\InventoryLineItems";
 
     const PRICINGDETAILS = "com\\zoho\\crm\\api\\record\\PricingDetails";
 
@@ -408,11 +408,15 @@ class Constants
 
     const INVENTORY_MODULES = array("invoices", "sales_orders","purchase_orders","quotes");
 
+    const INVENTORY_MODULES_ITEMS = array("invoiced_items", "quoted_items","purchase_items","ordered_items");
+
     const NOTES = "Notes";
 
     const ATTACHMENTS = '$attachments';
 
-    const ATTACHMENTS_NAMESPACE = "com.zoho.crm.api.attachments.Attachment";
+    const DISCOUNT = "Discount";
+
+    const ATTACHMENTS_NAMESPACE = "com\\zoho\\crm\\api\\attachments\\Attachment";
 
     const LINE_TAX = '$line_tax';
 
@@ -464,7 +468,7 @@ class Constants
 
     const FORM_REQUEST_EXCEPTION = "Exception in forming request body : ";
 
-    const SDK_VERSION = "4.0.0-beta";
+    const SDK_VERSION = "4.0.0";
 
     const API_CALL_EXCEPTION = "Exception in current API call execution : ";
 
@@ -574,6 +578,8 @@ class Constants
 
     const COMMENTS = "comments";
 
+    const PRODUCT_NAME = "Product_Name";
+
     const API_ERROR_RESPONSE = "Error response :";
 
     const CASES = "cases";
@@ -630,7 +636,7 @@ class Constants
 
     const API_VERSION = "v2";
 
-    const PHOTO_SUPPORTED_MODULES = array("leads", "contacts", "accounts", "products", "vendors");
+    const PHOTO_SUPPORTED_MODULES = array("leads", "contacts", "accounts", "products", "vendors", "deals", "cases", "solutions");
 
     const PHOTO_UPLOAD_ERROR_MESSAGE  = "The given module is not supported in API.";
 
@@ -670,8 +676,6 @@ class Constants
 
     const DEFAULT_MODULENAME_VS_APINAME = array("leads"=>"Leads", "contacts"=>"Contacts", "accounts"=>"Accounts", "deals"=>"Deals", "tasks"=>"Tasks", "events"=>"Events", "activities"=>"Activities", "calls"=>"Calls", "products"=>"Products", "quotes"=>"Quotes", "sales_orders"=>"Sales_Orders", "purchase_orders"=>"Purchase_Orders", "invoices"=>"Invoices", "campaigns"=>"Campaigns", "vendors"=>"Vendors", "price_books"=>"Price_Books", "cases"=>"Cases", "solutions"=>"Solutions", "visits"=>"Visits", "approvals"=>"Approvals", "notes"=>"Notes", "attachments"=>"Attachments", "actions_performed"=>"Actions_Performed");
 
-    const KEY_VS_INVENTORY_MODULE = array("Quoted_Items"=>"quotes", "Invoiced_Items"=>"invoices", "Purchase_Items"=>"purchase_orders", "Ordered_Items"=>"sales_orders");
-
     const TERRITORY_NAMESPACE = "com\\zoho\\crm\\api\\record\\Territory";
 
     const IMAGEUPLOAD_NAMESPACE = "com\\zoho\\crm\\api\\record\\ImageUpload";
@@ -688,10 +692,20 @@ class Constants
 
     const TAX_NAMESPACE = "com\\zoho\\crm\\api\\record\\Tax";
 
+    const LINEITEM_PRODUCT = "com\\zoho\\crm\\api\\record\\LineItemProduct";
+
     const PRODUCTS = "Products";
 
     const TAX = "TAX";
 
     const TERRITORY = "Territory";
+
+    const GET_TOKEN_BY_ID_DB_ERROR = "Exception in getTokenById - DBStore : Given ID is invalid";
+
+    const RESOURCE_PATH_INVALID_ERROR_MESSAGE = "Resource Path MUST be a valid directory.";
+
+    const USER_SIGNATURE_ERROR = "USERSIGNATURE ERROR";
+
+    const OAUTH_MANDATORY_KEYS = ["grantToken", "refreshToken", "id"];
 }
 ?>

@@ -29,105 +29,40 @@ class OAuthBuilder
         return $this;
     }
 
-    public function clientId($clientID)
+    public function clientId(string $clientID)
     {
         Utility::assertNotNull($clientID, Constants::TOKEN_ERROR, Constants::CLIENT_ID_NULL_ERROR_MESSAGE);
-
-        if (strtolower(gettype($clientID)) !== strtolower(Constants::STRING_NAMESPACE))
-        {
-            $error = array();
-
-            $error[Constants::FIELD] = Constants::CLIENT_ID;
-
-            $error[Constants::EXPECTED_TYPE] = Constants::STRING_NAMESPACE;
-
-            $error[Constants::CLASS_KEY] = get_class();
-
-            throw new SDKException(Constants::TOKEN_ERROR, null, $error, null);
-        }
 
         $this->clientID = $clientID;
 
         return $this;
     }
 
-    public function clientSecret($clientSecret)
+    public function clientSecret(string $clientSecret)
     {
         Utility::assertNotNull($clientSecret, Constants::TOKEN_ERROR, Constants::CLIENT_SECRET_NULL_ERROR_MESSAGE);
-
-        if (strtolower(gettype($clientSecret)) !== strtolower(Constants::STRING_NAMESPACE))
-        {
-            $error = array();
-
-            $error[Constants::FIELD] = Constants::CLIENT_SECRET;
-
-            $error[Constants::EXPECTED_TYPE] = Constants::STRING_NAMESPACE;
-
-            $error[Constants::CLASS_KEY] = get_class();
-
-            throw new SDKException(Constants::TOKEN_ERROR, null, $error, null);
-        }
 
         $this->clientSecret = $clientSecret;
 
         return $this;
     }
 
-    public function redirectURL($redirectURL)
+    public function redirectURL(string $redirectURL)
     {
-        if ($redirectURL != null && strtolower(gettype($redirectURL)) !== strtolower(Constants::STRING_NAMESPACE))
-        {
-            $error = array();
-
-            $error[Constants::FIELD] = Constants::REDIRECT_URL;
-
-            $error[Constants::EXPECTED_TYPE] = Constants::STRING_NAMESPACE;
-
-            $error[Constants::CLASS_KEY] = get_class();
-
-            throw new SDKException(Constants::TOKEN_ERROR, null, $error, null);
-        }
-
         $this->redirectURL = $redirectURL;
 
         return $this;
     }
 
-    public function refreshToken($refreshToken)
+    public function refreshToken(string $refreshToken)
     {
-        if (strtolower(gettype($refreshToken)) !== strtolower(Constants::STRING_NAMESPACE))
-        {
-            $error = array();
-
-            $error[Constants::FIELD] = Constants::REFRESH_TOKEN;
-
-            $error[Constants::EXPECTED_TYPE] = Constants::STRING_NAMESPACE;
-
-            $error[Constants::CLASS_KEY] = get_class();
-
-            throw new SDKException(Constants::TOKEN_ERROR, null, $error, null);
-        }
-
         $this->refreshToken = $refreshToken;
 
         return $this;
     }
 
-    public function grantToken($grantToken)
+    public function grantToken(string $grantToken)
     {
-        if (strtolower(gettype($grantToken)) !== strtolower(Constants::STRING_NAMESPACE))
-        {
-            $error = array();
-
-            $error[Constants::FIELD] = Constants::GRANT_TOKEN;
-
-            $error[Constants::EXPECTED_TYPE] = Constants::STRING_NAMESPACE;
-
-            $error[Constants::CLASS_KEY] = get_class();
-
-            throw new SDKException(Constants::TOKEN_ERROR, null, $error, null);
-        }
-
         $this->grantToken = $grantToken;
 
         return $this;
@@ -135,6 +70,11 @@ class OAuthBuilder
 
     public function build()
     {
+        if($this->grantToken == null && $this->refreshToken == null && $this->id == null)
+        {
+            throw new SDKException(Constants::MANDATORY_VALUE_ERROR, Constants::MANDATORY_KEY_ERROR, Constants::OAUTH_MANDATORY_KEYS);
+        }
+
         $class = new \ReflectionClass(OAuthToken::class);
 
         $constructor = $class->getConstructor();

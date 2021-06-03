@@ -40,7 +40,7 @@ class DBStore implements TokenStore
      * @param string $password A String containing the DataBase password.
      * @param string $portNumber A String containing the DataBase port number.
      */
-    private function __construct($host = null, $databaseName = null, $tableName = null, $userName = null, $password = null, $portNumber = null)
+    private function __construct($host, $databaseName, $tableName, $userName, $password, $portNumber)
     {
         $this->host = $host;
 
@@ -71,17 +71,17 @@ class DBStore implements TokenStore
 
                 if ($result)
                 {
-                    while ($row = mysqli_fetch_row($result))
+                    while ($row = mysqli_fetch_assoc($result))
                     {
-                        $token->setId($row[0]);
+                        $token->setId($row[Constants::ID]);
 
-                        $token->setAccessToken($row[5]);
+                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
 
-                        $token->setExpiresIn($row[7]);
+                        $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
 
-                        $token->setRefreshToken($row[4]);
+                        $token->setRefreshToken($row[Constants::REFRESH_TOKEN]);
 
-                        $token->setUserMail($row[1]);
+                        $token->setUserMail($row[Constants::USER_MAIL]);
 
                         return $token;
                     }
@@ -117,7 +117,7 @@ class DBStore implements TokenStore
 
                 $connection = $this->getMysqlConnection();
 
-                $query = "INSERT INTO ". $this->tableName ." (id,user_mail,client_id,client_secret,refresh_token,access_token,grant_token,expiry_time,redirect_url) VALUES(?,?,?,?,?,?,?,?,?)";
+                $query = "INSERT INTO " . $this->tableName . " (id,user_mail,client_id,client_secret,refresh_token,access_token,grant_token,expiry_time,redirect_url) VALUES(?,?,?,?,?,?,?,?,?)";
 
                 $stmt = mysqli_prepare($connection, $query);
 
@@ -203,7 +203,7 @@ class DBStore implements TokenStore
 
     private function getMysqlConnection()
     {
-        $mysqli_con = new \mysqli($this->host . ":". $this->portNumber, $this->userName, $this->password, $this->databaseName);
+        $mysqli_con = new \mysqli($this->host . ":" . $this->portNumber, $this->userName, $this->password, $this->databaseName);
 
         if ($mysqli_con->connect_errno)
         {
@@ -223,34 +223,32 @@ class DBStore implements TokenStore
         {
             $connection = $this->getMysqlConnection();
 
-            $query = "select * from ". $this->tableName .";";
+            $query = "select * from " . $this->tableName . ";";
 
             $result = mysqli_query($connection, $query);
 
             if ($result)
             {
-                while ($row = mysqli_fetch_row($result))
+                while ($row = mysqli_fetch_assoc($result))
                 {
-                    $grantToken = ($row[6] !== null && $row[6] !== Constants::NULL_VALUE && strlen($row[6]) > 0) ? $row[6] : null;
+                    $grantToken = ($row[Constants::GRANT_TOKEN] !== null && $row[Constants::GRANT_TOKEN] !== Constants::NULL_VALUE && strlen($row[Constants::GRANT_TOKEN]) > 0) ? $row[Constants::GRANT_TOKEN] : null;
 
-                    $token = (new OAuthBuilder())->clientId($row[2])->clientSecret($row[3])->build();
+                    $token = (new OAuthBuilder())->clientId($row[Constants::CLIENT_ID])->clientSecret($row[Constants::CLIENT_SECRET])->refreshToken($row[Constants::REFRESH_TOKEN])->build();
 
-                    $token->setId($row[0]);
+                    $token->setId($row[Constants::ID]);
 
                     if($grantToken != null)
                     {
                         $token->setGrantToken($grantToken);
                     }
 
-                    $token->setUserMail($row[1]);
+                    $token->setUserMail($row[Constants::USER_MAIL]);
 
-                    $token->setRefreshToken($row[4]);
+                    $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
 
-                    $token->setAccessToken($row[5]);
+                    $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
 
-                    $token->setExpiresIn($row[7]);
-
-                    $token->setRedirectURL($row[8]);
+                    $token->setRedirectURL($row[Constants::REDIRECT_URL]);
 
                     $tokens[] = $token;
                 }
@@ -279,7 +277,7 @@ class DBStore implements TokenStore
         {
             $connection = $this->getMysqlConnection();
 
-            $query = "delete from ". $this->tableName .";";
+            $query = "delete from " . $this->tableName . ";";
 
             mysqli_query($connection, $query);
 
@@ -306,7 +304,7 @@ class DBStore implements TokenStore
         }
         $query = $is_delete ? "delete from " : "select * from ";
 
-        $query .= $this->tableName ." where user_mail='" . $email. "' and client_id='" . $token->getClientId() . "' and ";
+        $query .= $this->tableName . " where user_mail='" . $email . "' and client_id='" . $token->getClientId() . "' and ";
 
         if ($token->getGrantToken() != null)
         {
@@ -336,29 +334,32 @@ class DBStore implements TokenStore
 
                 if ($result)
                 {
-                    while ($row = mysqli_fetch_row($result))
+                    while ($row = mysqli_fetch_assoc($result))
                     {
-                        $grantToken = ($row[6] != null && $row[6] !== Constants::NULL_VALUE && strlen($row[6]) > 0)? $row[6] : null;
+                        $grantToken = ($row[Constants::GRANT_TOKEN] != null && $row[Constants::GRANT_TOKEN] !== Constants::NULL_VALUE && strlen($row[Constants::GRANT_TOKEN]) > 0)? $row[Constants::GRANT_TOKEN] : null;
 
-                        $oauthToken = (new OAuthBuilder())->clientId($row[2])->clientSecret($row[3])
-                        ->refreshToken($row[4])->build();
+                        $token->setClientId($row[Constants::CLIENT_ID]);
 
-                        $oauthToken->setId($id);
+                        $token->setClientSecret($row[Constants::CLIENT_SECRET]);
+
+                        $token->setRefreshToken($row[Constants::REFRESH_TOKEN]);
+
+                        $token->setId($id);
 
                         if($grantToken != null)
                         {
-                            $oauthToken->setGrantToken($grantToken);
+                            $token->setGrantToken($grantToken);
                         }
 
-                        $oauthToken->setUserMail($row[1]);
+                        $token->setUserMail($row[Constants::USER_MAIL]);
 
-                        $oauthToken->setAccessToken($row[5]);
+                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
 
-                        $oauthToken->setExpiresIn($row[7]);
+                        $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
 
-                        $oauthToken->setRedirectURL($row[8]);
+                        $token->setRedirectURL($row[Constants::REDIRECT_URL]);
 
-                        return $oauthToken;
+                        return $token;
                     }
                 }
                 else

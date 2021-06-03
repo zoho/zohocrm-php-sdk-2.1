@@ -220,17 +220,17 @@ class APIHTTPConnector
 
         $header_size = curl_getinfo($curl_pointer, CURLINFO_HEADER_SIZE);
 
-        $headers = substr($response[Constants::RESPONSE], 0, $header_size);
+        $responseHeaders = substr($response[Constants::RESPONSE], 0, $header_size);
 
         curl_close($curl_pointer);
 
-        $headers = explode("\r\n", $headers);
+        $responseHeaders = explode("\r\n", $responseHeaders);
 
-        $headers = array_filter($headers);
+        $responseHeaders = array_filter($responseHeaders);
 
         $headersArray = array();
 
-        foreach($headers as $key => $value)
+        foreach($responseHeaders as $key => $value)
         {
             array_push($headersArray, preg_split('/:\s{1,}/', $value, 2));
         }
@@ -327,7 +327,7 @@ class APIHTTPConnector
 		{
 			if(strpos($this->url, $contentType) == true)
 			{
-                $this->header[Constants::CONTENT_TYPE] = $this->contentType;
+                $this->headers[Constants::CONTENT_TYPE] = $this->contentType;
 
                 return;
 			}

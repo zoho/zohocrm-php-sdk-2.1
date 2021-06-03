@@ -1,7 +1,6 @@
 <?php 
 namespace com\zoho\crm\api\record;
 
-use com\zoho\crm\api\record\InventoryLineItems;
 use com\zoho\crm\api\record\Record;
 use com\zoho\crm\api\tags\Tag;
 use com\zoho\crm\api\users\User;
@@ -43,6 +42,11 @@ class Invoices
 	public static final function ModifiedBy()
 	{
 		return new Field('Modified_By'); 
+
+	}
+	public static final function InvoicedItems()
+	{
+		return new Field('Invoiced_Items'); 
 
 	}
 	public static final function BillingCountry()
@@ -123,11 +127,6 @@ class Invoices
 	public static final function BillingCode()
 	{
 		return new Field('Billing_Code'); 
-
-	}
-	public static final function ProductDetails()
-	{
-		return new Field('Product_Details'); 
 
 	}
 	public static final function Subject()

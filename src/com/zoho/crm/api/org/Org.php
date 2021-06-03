@@ -7,6 +7,7 @@ class Org implements Model
 {
 
 	private  $country;
+	private  $hierarchyPreferences;
 	private  $photoId;
 	private  $city;
 	private  $description;
@@ -36,6 +37,7 @@ class Org implements Model
 	private  $companyName;
 	private  $privacySettings;
 	private  $primaryEmail;
+	private  $hipaaComplianceEnabled;
 	private  $isoCode;
 	private  $keyModified=array();
 
@@ -57,6 +59,27 @@ class Org implements Model
 	{
 		$this->country=$country; 
 		$this->keyModified['country'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the hierarchyPreferences
+	 * @return HierarchyPreference An instance of HierarchyPreference
+	 */
+	public  function getHierarchyPreferences()
+	{
+		return $this->hierarchyPreferences; 
+
+	}
+
+	/**
+	 * The method to set the value to hierarchyPreferences
+	 * @param HierarchyPreference $hierarchyPreferences An instance of HierarchyPreference
+	 */
+	public  function setHierarchyPreferences(HierarchyPreference $hierarchyPreferences)
+	{
+		$this->hierarchyPreferences=$hierarchyPreferences; 
+		$this->keyModified['hierarchy_preferences'] = 1; 
 
 	}
 
@@ -666,6 +689,27 @@ class Org implements Model
 	{
 		$this->primaryEmail=$primaryEmail; 
 		$this->keyModified['primary_email'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the hipaaComplianceEnabled
+	 * @return bool A bool representing the hipaaComplianceEnabled
+	 */
+	public  function getHipaaComplianceEnabled()
+	{
+		return $this->hipaaComplianceEnabled; 
+
+	}
+
+	/**
+	 * The method to set the value to hipaaComplianceEnabled
+	 * @param bool $hipaaComplianceEnabled A bool
+	 */
+	public  function setHipaaComplianceEnabled(bool $hipaaComplianceEnabled)
+	{
+		$this->hipaaComplianceEnabled=$hipaaComplianceEnabled; 
+		$this->keyModified['hipaa_compliance_enabled'] = 1; 
 
 	}
 

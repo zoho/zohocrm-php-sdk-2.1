@@ -88,12 +88,9 @@ class HeaderParamValidator
     {
         foreach($json_Details as $json_Detail)
         {
-            if(array_key_exists(Constants::NAME, $json_Detail))
+            if(array_key_exists(Constants::NAME, $json_Detail) && strtolower($name) == strtolower($json_Detail[Constants::NAME]))
             {
-                if(strtolower($name) == strtolower($json_Detail[Constants::NAME]))
-                {
-                    return $json_Detail;
-                }
+                return $json_Detail;
             }
         }
     }

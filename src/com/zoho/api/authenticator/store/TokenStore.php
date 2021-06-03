@@ -19,6 +19,13 @@ interface TokenStore
      */
     public function getToken($user, $token);
 
+    /**
+     * This method is used to retrieve the user token details based on unique ID
+     * @param id A String representing the unique ID
+     * @param token A Token class instance.
+     * @return A Token class instance representing the user token details.
+     * @throws SDKException
+     */
     public function getTokenById($id, $token);
 
     /**

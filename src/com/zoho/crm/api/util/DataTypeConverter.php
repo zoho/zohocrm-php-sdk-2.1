@@ -65,7 +65,6 @@ class DataTypeConverter
 		self::addToMap(Constants::DOUBLE_NAMESPACE, $double, $double);
 	}
 
-
 	static function preConvertObjectData($obj)
 	{
 		return $obj;
@@ -123,9 +122,14 @@ class DataTypeConverter
 	 */
     static function preConvert($obj, $type)
 	{
-        self::init();
+		self::init();
 
-        return self::$PRE_CONVERTER_MAP[$type]($obj);
+		if(array_key_exists($type, self::$PRE_CONVERTER_MAP))
+		{
+			return self::$PRE_CONVERTER_MAP[$type]($obj);
+		}
+
+        return $obj;
 	}
 
 	/**
@@ -138,6 +142,11 @@ class DataTypeConverter
 	{
 		self::init();
 
-	    return self::$POST_CONVERTER_MAP[$type]($obj);
+		if(array_key_exists($type, self::$POST_CONVERTER_MAP))
+		{
+			return self::$POST_CONVERTER_MAP[$type]($obj);
+		}
+
+		return $obj;
 	}
 }
