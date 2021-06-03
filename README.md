@@ -181,12 +181,12 @@ CREATE TABLE oauthtoken (
 
 ```php
 /*
-* 1 -> DataBase host name. Default value "localhost"
-* 2 -> DataBase name. Default  value "zohooauth"
-* 3 -> DataBase user name. Default value "root"
-* 4 -> DataBase password. Default value ""
-* 5 -> DataBase port number. Default value "3306"
-* 6 -> Table Name. Default value "oauthtoken"
+* hostName -> DataBase host name. Default value "localhost"
+* databaseName -> DataBase name. Default  value "zohooauth"
+* userName -> DataBase user name. Default value "root"
+* password -> DataBase password. Default value ""
+* portNumber -> DataBase port number. Default value "3306"
+* tableName -> Table Name. Default value "oauthtoken"
 */
 // $tokenstore = (new DBBuilder())->build();
 $tokenstore = (new DBBuilder())
@@ -350,7 +350,9 @@ Before you get started with creating your PHP application, you need to register 
     * clientId -> OAuth client id.
     * clientSecret -> OAuth client secret.
     * refreshToken -> REFRESH token.
-    * redirectURL -> OAuth redirect URL. (optional)
+    * grantToken -> GRANT token.
+    * id -> User unique id.
+    * redirectURL -> OAuth redirect URL.
     */
     //Create a Token instance
     // if refresh token is available
@@ -494,8 +496,8 @@ class Initialize
   {
     /*
       * Create an instance of Logger Class that requires the following
-      * 1 -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
-      * 2 -> Absolute file path, where messages need to be logged.
+      * level -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
+      * filePath -> Absolute file path, where messages need to be logged.
     */
     $logger = (new LogBuilder())
     ->level(Levels::INFO)
@@ -515,10 +517,10 @@ class Initialize
 
     /*
     * Create a Token instance
-    * 1 -> OAuth client id.
-    * 2 -> OAuth client secret.
-    * 3 -> GRANT token.
-    * 4 -> OAuth redirect URL. (optional)
+    * clientId -> OAuth client id.
+    * clientSecret -> OAuth client secret.
+    * grantToken -> GRANT token.
+    * redirectURL -> OAuth redirect URL.
     */
     //Create a Token instance
     $token = (new OAuthBuilder())
@@ -537,16 +539,23 @@ class Initialize
 
     /*
     * Create an instance of DBStore.
-    * 1 -> DataBase host name. Default value "localhost"
-    * 2 -> DataBase name. Default  value "zohooauth"
-    * 3 -> DataBase user name. Default value "root"
-    * 4 -> DataBase password. Default value ""
-    * 5 -> DataBase port number. Default value "3306"
-    * 6 -> DataBase table name. Default value "oauthtoken"
+    * host -> DataBase host name. Default value "localhost"
+    * databaseName -> DataBase name. Default  value "zohooauth"
+    * userName -> DataBase user name. Default value "root"
+    * password -> DataBase password. Default value ""
+    * portNumber -> DataBase port number. Default value "3306"
+    * tableName -> DataBase table name. Default value "oauthtoken"
     */
     //$tokenstore = (new DBBuilder())->build();
 
-    $tokenstore = (new DBBuilder())->host("hostName")->databaseName("dataBaseName")->userName("userName")->password("password")->portNumber("portNumber")->tableName("tableName")->build();
+    $tokenstore = (new DBBuilder())
+    ->host("hostName")
+    ->databaseName("dataBaseName")
+    ->userName("userName")
+    ->password("password")
+    ->portNumber("portNumber")
+    ->tableName("tableName")
+    ->build();
 
     // $tokenstore = new FileStore("absolute_file_path");
 
@@ -574,14 +583,14 @@ class Initialize
 
     /*
       * Set the following in InitializeBuilder
-      * 1 -> UserSignature instance
-      * 2 -> Environment instance
-      * 3 -> Token instance
-      * 4 -> TokenStore instance
-      * 5 -> SDKConfig instance
-      * 6 -> resourcePath - A String
-      * 7 -> Log instance (optional)
-      * 8 -> RequestProxy instance (optional)
+      * user -> UserSignature instance
+      * environment -> Environment instance
+      * token -> Token instance
+      * store -> TokenStore instance
+      * SDKConfig -> SDKConfig instance
+      * resourcePath -> resourcePath - A String
+      * logger -> Log instance (optional)
+      * requestProxy -> RequestProxy instance (optional)
     */
     (new InitializeBuilder())
     ->user($user)
@@ -721,18 +730,18 @@ The **PHP SDK** (version 4.x.x) supports both single user and a multi-user app.
 Multi-users functionality is achieved using **switchUser()** method
 
 ```php
-(new InitializeBuilder())
-->user($user)
-->environment($environment)
-->token($token)
-->SDKConfig($configInstance)
-->switchUser();
+  (new InitializeBuilder())
+  ->user($user)
+  ->environment($environment)
+  ->token($token)
+  ->SDKConfig($configInstance)
+  ->switchUser();
 ```
 
 To Remove a user's configuration in SDK. Use the below code
 
 ```php
-Initializer::removeUserConfiguration($user, $environment);
+  Initializer::removeUserConfiguration($user, $environment);
 ```
 
 ```php
@@ -938,8 +947,8 @@ class Record
   {
     /*
       * Create an instance of Logger Class that requires the following
-      * 1 -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
-      * 2 -> Absolute file path, where messages need to be logged.
+      * level -> Level of the log messages to be logged. Can be configured by typing Levels "::" and choose any level from the list displayed.
+      * filePath -> Absolute file path, where messages need to be logged.
     */
     $logger = (new LogBuilder())
     ->level(Levels::INFO)
@@ -985,14 +994,14 @@ class Record
 
     /*
     * Set the following in InitializeBuilder
-    * 1 -> UserSignature instance
-    * 2 -> Environment instance
-    * 3 -> Token instance
-    * 4 -> TokenStore instance
-    * 5 -> SDKConfig instance
-    * 6 -> resourcePath -A String
-    * 7 -> Log instance (optional)
-    * 8 -> RequestProxy instance (optional)
+    * user -> UserSignature instance
+    * environment -> Environment instance
+    * token -> Token instance
+    * store -> TokenStore instance
+    * SDKConfig -> SDKConfig instance
+    * resourcePath -> resourcePath -A String
+    * logger -> Log instance (optional)
+    * requestProxy -> RequestProxy instance (optional)
     */
     (new InitializeBuilder())
     ->user($user)
