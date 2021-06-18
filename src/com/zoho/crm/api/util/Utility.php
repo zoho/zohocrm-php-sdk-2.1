@@ -148,7 +148,7 @@ class Utility
 				}
 				else if(array_key_exists(strtolower($apiPathSplit[$i]), Constants::DEFAULT_MODULENAME_VS_APINAME) && Constants::DEFAULT_MODULENAME_VS_APINAME[strtolower($apiPathSplit[$i])] != null)
 				{
-					$apiPathSplit[$i] = Constants::DEFAULT_MODULENAME_VS_APINAME[strtolower(apiPathSplit[$i])];
+					$apiPathSplit[$i] = Constants::DEFAULT_MODULENAME_VS_APINAME[strtolower($apiPathSplit[$i])];
 				}
 			}
 

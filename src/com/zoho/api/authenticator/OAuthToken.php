@@ -212,13 +212,20 @@ class OAuthToken implements Token
 
             $oauthToken = null;
 
-            if($this->id != null)
+            if($this->accessToken == null)
             {
-                $oauthToken = $store->getTokenById($this->id, $this);
+                if($this->id != null)
+                {
+                    $oauthToken = $store->getTokenById($this->id, $this);
+                }
+                else
+                {
+                    $oauthToken = $store->getToken($user, $this);
+                }
             }
             else
             {
-                $oauthToken = $store->getToken($user, $this);
+                $oauthToken = $this;
             }
 
             $token = null;
