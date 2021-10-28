@@ -7,15 +7,25 @@ use com\zoho\crm\api\inventorytemplates\ResponseWrapper;
 
 use com\zoho\crm\api\inventorytemplates\APIException;
 
+use com\zoho\crm\api\record\Info;
+
+use com\zoho\crm\api\inventorytemplates\GetInventoryTemplatesParam;
+
+use com\zoho\crm\api\ParameterMap;
+
 class InventoryTemplate
 {
     public static function getInventoryTemplates(string $module=null, string $sortBy=null, string $sortOrder=null, string $category=null)
     {
         //Get instance of InventoryTemplatesOperations Class
-        $inventoryTemplatesOperations = new InventoryTemplatesOperations($module, $sortBy, $sortOrder, $category);
+        $inventoryTemplatesOperations = new InventoryTemplatesOperations($sortBy, $sortOrder, $category);
+	
+		$paramInstance = new ParameterMap();
+		
+		$paramInstance->add(GetInventoryTemplatesParam::module(), $module);
 
         //Call getInventoryTemplates method
-        $response = $inventoryTemplatesOperations->getInventoryTemplates();
+        $response = $inventoryTemplatesOperations->getInventoryTemplates($paramInstance);
 
         if($response != null)
         {
@@ -127,13 +137,40 @@ class InventoryTemplate
 
                 echo("InventoryTemplate Info MoreRecords : "); print_r($info->getMoreRecords()); echo("\n");
             }
+            //Check if the request returned an exception
+            else if($responseHandler instanceof APIException)
+            {
+                //Get the received APIException instance
+                $exception = $responseHandler;
+
+                //Get the Status
+                echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+                //Get the Code
+                echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+                echo("Details: " );
+
+                if($exception->getDetails() != null)
+                {
+                    //Get the details map
+                    foreach ($exception->getDetails() as $keyName => $keyValue)
+                    {
+                        //Get each value in the map
+                        echo($keyName . ": " . $keyValue . "\n");
+                    }
+                }
+
+                //Get the Message
+                echo("Message: " . $exception->getMessage()->getValue() . "\n");
+            }
         }
     }
 
     public static function getInventoryTemplateById(string $Id, string $module=null, string $sortBy=null, string $sortOrder=null, string $category=null)
     {
        //Get instance of InventoryTemplatesOperations Class
-       $inventoryTemplatesOperations = new InventoryTemplatesOperations($module, $sortBy, $sortOrder, $category);
+       $inventoryTemplatesOperations = new InventoryTemplatesOperations($sortBy, $sortOrder, $category);
 
        //Call getInventoryTemplateById method that takes Id as parameter
        $response = $inventoryTemplatesOperations->getInventoryTemplateById($Id);
@@ -240,6 +277,33 @@ class InventoryTemplate
                    //Get the Favorite of each InventoryTemplate
                    echo("InventoryTemplate Favorite: "); print_r($inventoryTemplate->getFavorite()); echo("\n");
                 }
+           }
+           //Check if the request returned an exception
+           else if($responseHandler instanceof APIException)
+           {
+               //Get the received APIException instance
+               $exception = $responseHandler;
+
+               //Get the Status
+               echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+               //Get the Code
+               echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+               echo("Details: " );
+
+               if($exception->getDetails() != null)
+               {
+                   //Get the details map
+                   foreach ($exception->getDetails() as $keyName => $keyValue)
+                   {
+                       //Get each value in the map
+                       echo($keyName . ": " . $keyValue . "\n");
+                   }
+               }
+
+               //Get the Message
+               echo("Message: " . $exception->getMessage()->getValue() . "\n");
            }
        }
     }

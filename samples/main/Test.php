@@ -168,13 +168,13 @@ class Test
     {
         $moduleAPIName = "Leads";
 
-        $recordId = "34770616890001";
+        $recordId = "34770616891";
 
-        $absoluteFilePath = "/Users/username/Desktop/test.html";
+        $absoluteFilePath = "/Users/username/Desktop/download.png";
 
         $attachmentIds = array("34770619774001", "34770619773001");
 
-        $destinationFolder = "/Users/username/Documents/AutomateSDK/2.1API/Server/PHP/GitLab/SampleApp/zohocrm-php-sdk-sample-application/file";
+        $destinationFolder = "/Users/username/Desktop";
 
         $attachmentId = "34770619772001";
 
@@ -212,7 +212,7 @@ class Test
 
 		$jobId = "34770619781005";
 
-		$destinationFolder = "/Users/username/Documents/AutomateSDK/PHPSDK/attachment";
+		$destinationFolder = "/Users/username/Documents";
 
 		BulkRead::createBulkReadJob($moduleAPIName);
 
@@ -223,7 +223,7 @@ class Test
 
     public static function BulkWrite()
 	{
-		$absoluteFilePath = "/Users/username/Documents/JAVASDK/csvfile/upload/insert/Leads.zip";
+		$absoluteFilePath = "/Users/username/Documents/Leads.zip";
 
 		$orgID = "673573045";
 
@@ -233,9 +233,9 @@ class Test
 
 		$jobID = "34770619793002";
 
-		$downloadUrl = "https://download-accl.zoho.com/v2/crm/673573045/bulk-write/34770619793002/34770619793002.zip";
+		$downloadUrl = "https://download-accl.zoho.com/v2/crm/xxxx/bulk-write/34770619793002/34770619793002.zip";
 
-		$destinationFolder = "/Users/username/Documents/AutomateSDK/PHPSDK/attachment";
+		$destinationFolder = "/Users/username/Documents";
 
 		BulkWrite::uploadFile($orgID, $absoluteFilePath);
 
@@ -265,6 +265,14 @@ class Test
 		ContactRoles::updateContactRole($contactRoleId);
 
 		ContactRoles::deleteContactRole($contactRoleId);
+
+		ContactRoles::getAllContactRolesOfDeal("3477061358013");
+
+		ContactRoles::getContactRoleOfDeal("3477061208064", "3477061358013");
+
+		ContactRoles::addContactRoleToDeal("3477061208064", "3477061358013");
+
+		ContactRoles::removeContactRoleFromDeal("3477061208064", "3477061358013");
     }
 
     public static function Currency()
@@ -292,12 +300,12 @@ class Test
 
 		$customID = "34770615629003";
 
-		// $names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
+		$names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
 
-		// foreach($names as $name)
-		// {
-		// 	CustomView::getCustomViews($name);
-		// }
+		foreach($names as $name)
+		{
+			CustomView::getCustomViews($name);
+		}
 
 		CustomView::getCustomViews($moduleAPIName);
 
@@ -315,9 +323,9 @@ class Test
 
 	public static function FieldAttachment()
 	{
-		$destinationFolder = "/Users/username/Documents/AutomateSDK/PHPSDK/attachment";
+		$destinationFolder = "/Users/username/Documents";
 
-		FieldAttachment::getFieldAttachments("Leads","34770616920147","34770619480003", $destinationFolder);
+		FieldAttachment::getFieldAttachments("Leads","34770616920147","34770619483", $destinationFolder);
 	}
 
 	public static function Field()
@@ -326,12 +334,12 @@ class Test
 
 		$fieldId = "34770610022011";
 
-		// $names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
+		$names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
 
-		// foreach ($names as $name)
-		// {
-		// 	Fields::getFields($name);
-		// }
+		foreach ($names as $name)
+		{
+			Fields::getFields($name);
+		}
 
 		Fields::getFields($moduleAPIName);
 
@@ -340,9 +348,9 @@ class Test
 
 	public static function File()
 	{
-		$destinationFolder =  "/Users/username/Documents/AutomateSDK/2.1API/Server/PHP/GitLab/SampleApp/zohocrm-php-sdk-sample-application/file";
+		$destinationFolder =  "/Users/username/Desktop";
 
-		$id = "ae9c7cefa418aec1d6a5cc2d9ab35c3219aa6eb6389a478c36b635dd374044fb";
+		$id = "ae9c7c2dabdb0e8904284e";
 
 		File::uploadFiles();
 
@@ -364,12 +372,12 @@ class Test
 
 		$layoutId = "34770615902025";
 
-		// $names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
+		$names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
 
-		// foreach ($names as $name)
-		// {
-		// 	Layout::getLayouts($name);
-		// }
+		foreach ($names as $name)
+		{
+			Layout::getLayouts($name);
+		}
 
 		Layout::getLayouts($moduleAPIName);
 
@@ -442,11 +450,11 @@ class Test
 	{
 		$layoutId = "34770610091023";
 
+		PipeLine::getPipelines($layoutId);
+
 		PipeLine::createPipelines($layoutId);
 
 		PipeLine::updatePipelines($layoutId);
-
-		PipeLine::getPipelines($layoutId);
 
 		PipeLine::getPipeline($layoutId, "34770619482001");
 
@@ -471,32 +479,40 @@ class Test
 
 	public static function Record()
 	{
-		$moduleAPIName = "Leads";
+		$moduleAPIName = "leads";
 
 		$recordId = "34770619872001";
 
-		$destinationFolder =  "/Users/username/Documents/AutomateSDK/2.1API/Server/PHP/GitLab/SampleApp/zohocrm-php-sdk-sample-application/file/";
+		$externalFieldValue = "TestExternal";
 
-		$absoluteFilePath = "/Users/username/Desktop/field/download.png";
+		$destinationFolder = "/Users/username/Desktop/";
 
-		$recordIds = array("34770619873001","34770616606002","34770616603294");
+		$absoluteFilePath = "/Users/username/Desktop/download.png";
 
-		$jobId = "34770619879007";
+		$recordIds = array("Products_External","34770616002","347706294");
 
-		// $names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes",
-		// "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events",
-		//  "Purchase_Orders", "Accounts", "Cases", "Notes"];
+		$jobId = "3477069007";
 
-		// foreach($names as $name)
-		// {
-		// 	Record::getRecords($name);
-		// }
+		$names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes",
+		"Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events",
+		 "Purchase_Orders", "Accounts", "Cases", "Notes"];
+
+		foreach($names as $name)
+		{
+			Record::getRecords($name);
+		}
 
 		Record::getRecord($moduleAPIName, $recordId, $destinationFolder);
 
 		Record::updateRecord($moduleAPIName, $recordId);
 
 		Record::deleteRecord($moduleAPIName, $recordId);
+
+		Record::getRecordUsingExternalId($moduleAPIName, $externalFieldValue, $destinationFolder);
+
+		Record::updateRecordUsingExternalId($moduleAPIName, $externalFieldValue);
+		
+		Record::deleteRecordUsingExternalId($moduleAPIName, $externalFieldValue);
 
 		Record::getRecords($moduleAPIName);
 
@@ -523,6 +539,16 @@ class Test
 		Record::massUpdateRecords($moduleAPIName);
 
 		Record::getMassUpdateStatus($moduleAPIName, $jobId);
+
+		Record::getRecordCount();
+			
+		Record::assignTerritoriesToMultipleRecords($moduleAPIName);
+		
+		Record::assignTerritoryToRecord($moduleAPIName, $recordId);
+					
+		Record::removeTerritoriesFromMultipleRecords($moduleAPIName);
+					
+		Record::removeTerritoriesFromRecord($moduleAPIName, $recordId);
 	}
 
 	public static function RelatedList()
@@ -531,12 +557,12 @@ class Test
 
 		$relatedListId = "34770616819126";
 
-		// $names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
+		$names = ["Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes" ];
 
-		// foreach ($names as $name)
-		// {
-		// 	RelatedList::getRelatedLists($name);
-		// }
+		foreach ($names as $name)
+		{
+			RelatedList::getRelatedLists($name);
+		}
 
 		RelatedList::getRelatedLists($moduleAPIName);
 
@@ -545,17 +571,21 @@ class Test
 
 	public static function RelatedRecords()
 	{
-		$moduleAPIName = "Products";
+		$moduleAPIName = "leads";
 
-		$recordId = "34770619882001";
+		$recordId = "347712109001";
 
-		$relatedListAPIName = "Price_Books";
+		$relatedListAPIName = "products";
 
-		$relatedRecordId = "34770619880016";
+		$relatedRecordId = "34770617001";
 
-		$relatedListIds = array("34770619613018", "3477061988001");
+		$relatedListIds = array("AutomatedSDKExternal", "3477069001");
 
 		$destinationFolder =  "/Users/username/Desktop/field/";
+
+		$externalValue = "TestExternalLead111";
+
+		$externalFieldValue = "Products_External";
 
 		RelatedRecords::getRelatedRecords($moduleAPIName, $recordId, $relatedListAPIName);
 
@@ -563,11 +593,23 @@ class Test
 
 		RelatedRecords::delinkRecords($moduleAPIName, $recordId, $relatedListAPIName, $relatedListIds);
 
+		RelatedRecords::getRelatedRecordsUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName);
+			
+		RelatedRecords::updateRelatedRecordsUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName);
+			
+		RelatedRecords::deleteRelatedRecordsUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName, $relatedListIds);
+
 		RelatedRecords::getRelatedRecord($moduleAPIName, $recordId, $relatedListAPIName, $relatedRecordId, $destinationFolder);
 
 		RelatedRecords::updateRelatedRecord($moduleAPIName, $recordId, $relatedListAPIName, $relatedRecordId);
 
 		RelatedRecords::delinkRecord($moduleAPIName, $recordId, $relatedListAPIName, $relatedRecordId);
+
+		RelatedRecords::getRelatedRecordUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName, $externalFieldValue, $destinationFolder);
+			
+		RelatedRecords::updateRelatedRecordUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName, $externalFieldValue);
+			
+		RelatedRecords::deleteRelatedRecordUsingExternalId($moduleAPIName, $externalValue, $relatedListAPIName, $externalFieldValue);
 	}
 
 	public static function Role()
@@ -583,7 +625,7 @@ class Test
 	{
 		SendMail::getEmailAddresses();
 
-		SendMail::sendMail("34770619479004","Leads");
+		SendMail::sendMail("34770615001","Leads");
 	}
 
 	public static function ShareRecords()
@@ -605,15 +647,15 @@ class Test
 	{
 		$moduleAPIName = "Leads";
 
-		$tagId = "34770617951002";
+		$tagId = "347706003";
 
-		$recordId =  "34770615623115";
+		$recordId =  "347706623115";
 
 		$tagNames = array("addtag1", "addtag12");
 
-		$recordIds = array("34770615623115", "34770616454014");
+		$recordIds = array("347706623115", "3477054014");
 
-		$conflictId = "34770617951002";
+		$conflictId = "347703003";
 
 		Tag::getTags($moduleAPIName);
 
@@ -640,9 +682,9 @@ class Test
 
 	public static function Tax()
 	{
-		$taxId = "34770619873024";
+		$taxId = "34770873024";
 
-		$taxIds = array("34770619885005","34770619885006");
+		$taxIds = array("34770615005","347706885006");
 
 		Tax::getTaxes();
 
@@ -659,7 +701,7 @@ class Test
 
 	public static function Territory()
 	{
-		$territoryId = "34770613051397";
+		$territoryId = "3477051397";
 
 		Territory::getTerritories();
 
@@ -668,7 +710,7 @@ class Test
 
 	public static function User()
 	{
-		$userId = "34770619881005";
+		$userId = "347706291001";
 
 		User::getUsers();
 
@@ -687,7 +729,7 @@ class Test
 	{
 		$variableGroupName = "General";
 
-		$variableGroupId = "34770613089001";
+		$variableGroupId = "34770689001";
 
 		VariableGroup::getVariableGroups();
 
@@ -698,9 +740,9 @@ class Test
 
 	public static function Variable()
 	{
-		$variableIds = array("34770617035003","34770617294003");
+		$variableIds = array("347706035003","3477064003");
 
-		$variableId = "34770618204001";
+		$variableId = "34770604001";
 
 		$variableName = "Variable551";
 
@@ -725,11 +767,11 @@ class Test
 
 	public static function Wizard()
 	{
-		$wizardId = "34770619497009";
+		$wizardId = "347706197009";
 
 		Wizard::getWizards();
 
-		Wizard::getWizardById($wizardId, "34770610091055");
+		Wizard::getWizardById($wizardId, "3477061055");
 	}
 }
 

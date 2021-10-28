@@ -32,7 +32,7 @@ class Initialize
 		 */
 		$logger = (new LogBuilder())
 		->level(Levels::INFO)
-		->filePath("/Users/username/php_sdk_log.log")
+		->filePath("/Users/temp/Desktop/CRM_SDK/v2.1API/server-sdks/PHP/GitLab/SampleApp/zohocrm-php-sdk-sample-application/file/php_sdk_log.log")
 		->build();
 
         //Create an UserSignature instance that takes user Email as parameter
@@ -48,12 +48,13 @@ class Initialize
 
         //Create a Token instance
 		$token = (new OAuthBuilder())
-		->clientId("ClientId")
-		// ->id("php_abc_us_prd_")
-		->clientSecret("ClientSecret")
-		// ->grantToken("GrantToken")
-		->refreshToken("RefreshToken")
+		->clientId("clientId")
+		->id("php_abc_us_prd_ea9e")
+		->clientSecret("clientSecret")
+		->grantToken("grantToken")
+		->refreshToken("refreshToken")
 		->redirectURL("RedirectURL")
+		->accessToken("accessToken")
 		->build();
 
 		// $tokenstore = (new DBBuilder())
@@ -61,15 +62,15 @@ class Initialize
 		// ->databaseName("databaseName")
 		// ->userName("userName")
 		// ->portNumber("portNumber")
-		// ->tableName("tableName")
+		// ->tableName("oauthtoken")
 		// ->password("password")
 		// ->build();
 
-        $tokenstore = new FileStore("/Users/username/php_sdk_token.txt");
+        $tokenstore = new FileStore("/Users/username/Desktop/php_sdk_token.txt");
 
-		$resourcePath = "/Users/username";
+		$resourcePath = "/Users/username/Desktop";
 
-		$autoRefreshFields = true;
+		$autoRefreshFields = false;
 
 		$pickListValidation = false;
 
@@ -89,18 +90,22 @@ class Initialize
 		->timeout($timeout)
 		->build();
 
-		$requestProxy = (new ProxyBuilder())->host("proxyHost")->port(3306)->user("proxyUser")->password("password")->build();
+		$requestProxy = (new ProxyBuilder())
+		->host("proxyHost")
+		->port(3306)
+		->user("proxyUser")
+		->password("password")
+		->build();
 
        	/*
 		 * Call static initialize method of Initializer class that takes the arguments
-		 * 1 -> UserSignature instance
-		 * 2 -> Environment instance
-		 * 3 -> Token instance
-		 * 4 -> TokenStore instance
-		 * 5 ->
-		 * 6 -> The path containing the absolute directory path to store user specific JSON files containing module fields information.
-		 * 7 -> Logger instance
-		 * 8 -> RequestProxy instance
+		 * user -> UserSignature instance
+		 * environment -> Environment instance
+		 * token -> Token instance
+		 * store -> TokenStore instance
+		 * resourcePath -> The path containing the absolute directory path to store user specific JSON files containing module fields information.
+		 * logger -> Logger instance
+		 * requestProxy -> RequestProxy instance
 		*/
 		(new InitializeBuilder())
 		->user($user)
@@ -110,7 +115,7 @@ class Initialize
 		->SDKConfig($configInstance)
 		->resourcePath($resourcePath)
 		->logger($logger)
-		// ->requestProxy($requestProxy)
+		->requestProxy($requestProxy)
 		->initialize();
     }
 }

@@ -153,9 +153,9 @@ class PipeLine
 
         $stage = new Stage();
 
-        $stage->setFrom("36523970006817");
+        $stage->setFrom("36523976817");
 
-        $stage->setTo("36523970006819");
+        $stage->setTo("36523976819");
 
         $transferPipeLine->setStages([$stage]);
 
@@ -277,11 +277,11 @@ class PipeLine
 
         $pipeline = new $pipelineClass();
 
-		$pipeline->setDisplayValue("Adfasfsad13");
+		$pipeline->setDisplayValue("Adfas23fsad1332");
 
 		$pickList = new PickListValue();
 
-		$pickList->setId("34770610006801");
+		$pickList->setId("34770616805");
 
 		$pickList->setSequenceNumber(1);
 
@@ -409,13 +409,13 @@ class PipeLine
 
         $pipeline = new $pipelineClass();
 
-        $pipeline->setId("34770619482001");
+        $pipeline->setId("3477061012237001");
 
-		$pipeline->setDisplayValue("Qualification");
+		$pipeline->setDisplayValue("Closed Won");
 
 		$pickList = new PickListValue();
 
-		$pickList->setId("34770610006801");
+		$pickList->setId("34770616805");
 
 		$pickList->setSequenceNumber(1);
 
@@ -582,6 +582,8 @@ class PipeLine
                             //Get the Maps DisplayValue of each Pipeline
                             echo("Pipeline Maps DisplayValue: " . $map->getDisplayValue() . "\n");
 
+                            echo("PickListValue Sequence Number" . $map->getSequenceNumber());
+
                             //Get the Maps SequenceNumber of each Pipeline
                             echo("Pipeline Maps SequenceNumber: " . $map->getSequenceNumber() . "\n");
 
@@ -604,6 +606,9 @@ class PipeLine
 
                             //Get the Maps ForecastType of each Pipeline
                             echo("Pipeline Maps ForecastType: " . $map->getForecastType() . "\n");
+
+                            //Get PickListValue delete
+                            echo("PickListValue delete" . $map->getDelete());
                         }
                     }
 
@@ -654,7 +659,7 @@ class PipeLine
 
 		$pickList = new PickListValue();
 
-		$pickList->setId("34770610006801");
+		$pickList->setId("34770616801");
 
 		$pickList->setSequenceNumber(1);
 

@@ -54,15 +54,27 @@ class FileStore implements TokenStore
 
                     if($this->checkTokenExists($user->getEmail(), $token, $nextRecord))
                     {
-                        $token->setAccessToken($nextRecord[5]);
+                        $grantToken = ($nextRecord[6] != null && strlen($nextRecord[6]) > 0)? $nextRecord[6] : null;
 
-                        $token->setExpiresIn($nextRecord[7]);
-
-                        $token->setRefreshToken($nextRecord[4]);
+						$redirectURL = ($nextRecord[8] != null && strlen($nextRecord[8]) > 0)? $nextRecord[8] : null;
 
                         $token->setId($nextRecord[0]);
 
                         $token->setUserMail($nextRecord[1]);
+
+                        $token->setClientId($nextRecord[2]);
+						
+						$token->setClientSecret($nextRecord[3]);
+
+                        $token->setRefreshToken($nextRecord[4]);
+
+                        $token->setAccessToken($nextRecord[5]);
+
+                        $token->setGrantToken($grantToken);
+
+                        $token->setExpiresIn($nextRecord[7]);
+
+                        $token->setRedirectURL($redirectURL);
 
                         return $token;
                     }
@@ -179,6 +191,8 @@ class FileStore implements TokenStore
 
                 $grantToken = ($nextRecord[6] != null && strlen($nextRecord[6]) > 0) ? $nextRecord[6] : null;
 
+                $redirectURL = ($nextRecord[8] != null && strlen($nextRecord[8]) > 0)? $nextRecord[8] : null;
+
                 $token = (new OAuthBuilder())->clientId($nextRecord[2])->clientSecret($nextRecord[3])->refreshToken($nextRecord[4])->build();
 
                 $token->setId($nextRecord[0]);
@@ -194,7 +208,10 @@ class FileStore implements TokenStore
 
                 $token->setExpiresIn($nextRecord[7]);
 
-                $token->setRedirectURL($nextRecord[8]);
+                if($redirectURL != null)
+                {
+                    $token->setRedirectURL($redirectURL);
+                }
 
                 $tokens[] = $token;
             }
@@ -234,7 +251,7 @@ class FileStore implements TokenStore
 
         $tokenCheck = $grantToken != null ? $grantToken === (string)$row[6] : $refreshToken === (string)$row[4];
 
-        if($email === $row[1] && $clientId === $row[2] && $tokenCheck )
+        if($email === $row[1] && $clientId === $row[2] && $tokenCheck)
         {
             return true;
         }
@@ -268,22 +285,22 @@ class FileStore implements TokenStore
 
 						$redirectURL = ($nextRecord[8] != null && strlen($nextRecord[8]) > 0)? $nextRecord[8] : null;
 
+                        $token->setId($id);
+
+                        $token->setUserMail($nextRecord[1]);
+
                         $token->setClientId($nextRecord[2]);
 
                         $token->setClientSecret($nextRecord[3]);
 
 						$token->setRefreshToken($nextRecord[4]);
 
-                        $token->setId($id);
+                        $token->setAccessToken($nextRecord[5]);
 
                         if($grantToken != null)
                         {
                             $token->setGrantToken($grantToken);
                         }
-
-                        $token->setUserMail($nextRecord[1]);
-
-                        $token->setAccessToken($nextRecord[5]);
 
                         $token->setExpiresIn($nextRecord[7]);
 

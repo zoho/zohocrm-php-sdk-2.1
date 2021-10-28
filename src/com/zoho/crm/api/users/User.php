@@ -849,4 +849,24 @@ class User extends Record implements Model
 		$this->addKeyValue('name', $name); 
 
 	}
+
+	/**
+	 * The method to get the category
+	 * @return string A string representing the category
+	 */
+	public  function getCategory()
+	{
+		return $this->getKeyValue('category'); 
+
+	}
+
+	/**
+	 * The method to set the value to category
+	 * @param string $category A string
+	 */
+	public  function setCategory(string $category)
+	{
+		$this->addKeyValue('category', $category); 
+
+	}
 } 

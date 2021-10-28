@@ -336,7 +336,7 @@ class Tag
 		//Get instance of Tag Class
 		$tag1 = new $tagClass();
 
-		$tag1->setId("34770619870033");
+		$tag1->setId("3477061012284001");
 
 		$tag1->setName("tagName12");
 

@@ -510,7 +510,7 @@ class ShareRecords
 		//recordId = "34770615177002";
 
 		//Get instance of ShareRecordsOperations Class that takes moduleAPIName and recordId as parameter
-	    $shareRecordsOperations = new ShareRecordsOperations( $recordId,$moduleAPIName);
+	    $shareRecordsOperations = new ShareRecordsOperations($recordId, $moduleAPIName);
 
 		//Call revokeSharedRecord method
 		$response = $shareRecordsOperations->revokeSharedRecord();

@@ -125,7 +125,8 @@ class ModuleFieldsHandler
 	 */
 	public static function refreshFields(string $module)
 	{
-		try {
+		try 
+		{
 			self::deleteFields($module);
 
 			Utility::getFieldsInfo($module);

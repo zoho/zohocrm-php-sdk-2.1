@@ -130,6 +130,7 @@ class FormDataConverter extends Converter
                             $data = $data . $fileData.utf8_encode($lineEnd);
                         }
                     }
+                    
                     $boundaryend = $hypen . (string)$current_time_long . $hypen . $lineEnd . $lineEnd;
 
                     $data = $data . utf8_encode($boundaryend);
@@ -158,7 +159,7 @@ class FormDataConverter extends Converter
 
                     $data = utf8_encode($lineEnd);
 
-                    $boundaryStart = utf8_encode($hypen . (string)$current_time_long . $lineEnd) ;
+                    $boundaryStart = utf8_encode($hypen . (string)$current_time_long . $lineEnd);
 
                     $data = $data . $boundaryStart;
 

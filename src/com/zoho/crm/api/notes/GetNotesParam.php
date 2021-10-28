@@ -21,4 +21,14 @@ class GetNotesParam
 		return new Param('fields', 'com.zoho.crm.api.Notes.GetNotesParam'); 
 
 	}
+	public static final function sortOrder()
+	{
+		return new Param('sort_order', 'com.zoho.crm.api.Notes.GetNotesParam'); 
+
+	}
+	public static final function sortBy()
+	{
+		return new Param('sort_by', 'com.zoho.crm.api.Notes.GetNotesParam'); 
+
+	}
 } 

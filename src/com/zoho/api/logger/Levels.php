@@ -15,5 +15,6 @@ abstract class Levels
     const DEBUG = Constants::DEBUG;
     const TRACE = Constants::TRACE;
     const ALL = Constants::ALL;
+    const OFF = Constants::OFF;
 }
 ?>

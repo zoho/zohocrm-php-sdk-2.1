@@ -221,7 +221,7 @@ class CommonAPIHandler
         }
         catch(SDKException $e)
         {
-            SDKLogger::severeError(Constants::SET_API_URL_EXCEPTION, $ex);
+            SDKLogger::severeError(Constants::SET_API_URL_EXCEPTION, $e);
 
             throw $e;
         }
@@ -299,7 +299,7 @@ class CommonAPIHandler
 
         try
         {
-            $connector->addHeader(Constants::ZOHO_SDK, php_uname('s') . "/" . php_uname('r') . " php/" . phpversion() . ":" . Constants::SDK_VERSION);
+            $connector->addHeader(Constants::ZOHO_SDK, php_uname('s') . "/" . php_uname('r') . "/" . "php-2.1/" . phpversion() . ":" . Constants::SDK_VERSION);
 
             $response = $connector->fireRequest($convertInstance);
 
@@ -487,7 +487,7 @@ class CommonAPIHandler
             $APIPath = $APIPath . ($this->apiPath);
         }
 
-        $connector->setUrl($APIPath);
+        $connector->setURL($APIPath);
     }
 
     public function isMandatoryChecker()

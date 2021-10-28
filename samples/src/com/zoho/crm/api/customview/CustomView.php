@@ -272,8 +272,8 @@ class CustomView
                     //Get the createdBy SharedTo instance of each CustomView
                     $sharedToArray = $customView->getSharedTo();
 
-                    //Check if sharedTo is not null
-                    if($sharedTo != null)
+                    //Check if sharedToArray is not null
+                    if($sharedToArray != null)
                     {
                         foreach($sharedToArray as $sharedTo)
                         {

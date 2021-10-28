@@ -7,13 +7,16 @@ class PickListValue implements Model
 {
 
 	private  $displayValue;
+	private  $probability;
+	private  $forecastCategory;
+	private  $actualValue;
+	private  $id;
+	private  $forecastType;
 	private  $sequenceNumber;
 	private  $expectedDataType;
 	private  $maps;
-	private  $actualValue;
 	private  $sysRefName;
 	private  $type;
-	private  $id;
 	private  $keyModified=array();
 
 	/**
@@ -34,6 +37,111 @@ class PickListValue implements Model
 	{
 		$this->displayValue=$displayValue; 
 		$this->keyModified['display_value'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the probability
+	 * @return int A int representing the probability
+	 */
+	public  function getProbability()
+	{
+		return $this->probability; 
+
+	}
+
+	/**
+	 * The method to set the value to probability
+	 * @param int $probability A int
+	 */
+	public  function setProbability(int $probability)
+	{
+		$this->probability=$probability; 
+		$this->keyModified['probability'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the forecastCategory
+	 * @return string A string representing the forecastCategory
+	 */
+	public  function getForecastCategory()
+	{
+		return $this->forecastCategory; 
+
+	}
+
+	/**
+	 * The method to set the value to forecastCategory
+	 * @param string $forecastCategory A string
+	 */
+	public  function setForecastCategory(string $forecastCategory)
+	{
+		$this->forecastCategory=$forecastCategory; 
+		$this->keyModified['forecast_category'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the actualValue
+	 * @return string A string representing the actualValue
+	 */
+	public  function getActualValue()
+	{
+		return $this->actualValue; 
+
+	}
+
+	/**
+	 * The method to set the value to actualValue
+	 * @param string $actualValue A string
+	 */
+	public  function setActualValue(string $actualValue)
+	{
+		$this->actualValue=$actualValue; 
+		$this->keyModified['actual_value'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the id
+	 * @return string A string representing the id
+	 */
+	public  function getId()
+	{
+		return $this->id; 
+
+	}
+
+	/**
+	 * The method to set the value to id
+	 * @param string $id A string
+	 */
+	public  function setId(string $id)
+	{
+		$this->id=$id; 
+		$this->keyModified['id'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the forecastType
+	 * @return string A string representing the forecastType
+	 */
+	public  function getForecastType()
+	{
+		return $this->forecastType; 
+
+	}
+
+	/**
+	 * The method to set the value to forecastType
+	 * @param string $forecastType A string
+	 */
+	public  function setForecastType(string $forecastType)
+	{
+		$this->forecastType=$forecastType; 
+		$this->keyModified['forecast_type'] = 1; 
 
 	}
 
@@ -101,27 +209,6 @@ class PickListValue implements Model
 	}
 
 	/**
-	 * The method to get the actualValue
-	 * @return string A string representing the actualValue
-	 */
-	public  function getActualValue()
-	{
-		return $this->actualValue; 
-
-	}
-
-	/**
-	 * The method to set the value to actualValue
-	 * @param string $actualValue A string
-	 */
-	public  function setActualValue(string $actualValue)
-	{
-		$this->actualValue=$actualValue; 
-		$this->keyModified['actual_value'] = 1; 
-
-	}
-
-	/**
 	 * The method to get the sysRefName
 	 * @return string A string representing the sysRefName
 	 */
@@ -160,27 +247,6 @@ class PickListValue implements Model
 	{
 		$this->type=$type; 
 		$this->keyModified['type'] = 1; 
-
-	}
-
-	/**
-	 * The method to get the id
-	 * @return string A string representing the id
-	 */
-	public  function getId()
-	{
-		return $this->id; 
-
-	}
-
-	/**
-	 * The method to set the value to id
-	 * @param string $id A string
-	 */
-	public  function setId(string $id)
-	{
-		$this->id=$id; 
-		$this->keyModified['id'] = 1; 
 
 	}
 

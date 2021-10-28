@@ -12,6 +12,7 @@ class CustomView implements Model
 	private  $name;
 	private  $systemName;
 	private  $displayValue;
+	private  $createdTime;
 	private  $accessType;
 	private  $category;
 	private  $sortBy;
@@ -109,6 +110,27 @@ class CustomView implements Model
 	{
 		$this->displayValue=$displayValue; 
 		$this->keyModified['display_value'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the createdTime
+	 * @return \DateTime An instance of \DateTime
+	 */
+	public  function getCreatedTime()
+	{
+		return $this->createdTime; 
+
+	}
+
+	/**
+	 * The method to set the value to createdTime
+	 * @param \DateTime $createdTime An instance of \DateTime
+	 */
+	public  function setCreatedTime(\DateTime $createdTime)
+	{
+		$this->createdTime=$createdTime; 
+		$this->keyModified['created_time'] = 1; 
 
 	}
 

@@ -124,7 +124,7 @@ class Constants
 
     const PURCHASEORDERS = "PurchaseOrders";
 
-    const PRICINGDETAILS = "com\\zoho\\crm\\api\\record\\PricingDetails";
+    const PRICING_DETAILS_NAMESPACE = "com\\zoho\\crm\\api\\record\\PricingDetails";
 
     const PARTICIPANTS = "com\\zoho\\crm\\api\\record\\Participants";
 
@@ -356,7 +356,9 @@ class Constants
 
     const KEY_MODIFIED = "keyModified";
 
-    const LOGFILE_NAME = "sdk_logs.log";
+    const LOG_FILE_NAME = "sdk_logs.log";
+
+    const TOKEN_FILE = "sdk_tokens.txt";
 
     const THREAD_LOCAL = "ThreadLocal";
 
@@ -384,6 +386,8 @@ class Constants
 
     const ALL = "ALL";
 
+    const OFF = "OFF";
+
     const TOKEN_ERROR = "TOKEN ERROR";
 
     const TOKEN = "\$TOKEN";
@@ -404,7 +408,7 @@ class Constants
 
     const OBJECT = "Object";
 
-    const KEYSTOSKIP = array("Created_Time", "Modified_Time", "Created_By", "Modified_By", "Tag");
+    const KEYS_TO_SKIP = array("Created_Time", "Modified_Time", "Created_By", "Modified_By", "Tag");
 
     const INVENTORY_MODULES = array("invoices", "sales_orders","purchase_orders","quotes");
 
@@ -420,7 +424,7 @@ class Constants
 
     const LINE_TAX = '$line_tax';
 
-    const LINETAX = "com\\zoho\\crm\\api\\record\\LineTax";
+    const LINE_TAX_NAMESPACE = "com\\zoho\\crm\\api\\record\\LineTax";
 
     const PRODUCT_DETAILS = "product_details";
 
@@ -454,7 +458,7 @@ class Constants
 
     const REMINDAT_NAMESPACE = "com\\zoho\\crm\\api\\record\\RemindAt";
 
-    const SET_TO_CONTENT_TYPE = array("/crm/bulk/v2.1/read", "/crm/bulk/v2.1/write");
+    const SET_CONTENT_TYPE_HEADER = array("/crm/bulk/v2.1/read", "/crm/bulk/v2.1/write");
 
     const DATA_TYPE = array("List" => "array", "Boolean" => "boolean", "Long" => "string", "HashMap" => "array", "array" => "Map", "Map" => "array", "Float" => "double", "Date"=>"DateTime");
 
@@ -468,7 +472,7 @@ class Constants
 
     const FORM_REQUEST_EXCEPTION = "Exception in forming request body : ";
 
-    const SDK_VERSION = "4.0.0";
+    const SDK_VERSION = "5.0.0";
 
     const API_CALL_EXCEPTION = "Exception in current API call execution : ";
 
@@ -502,7 +506,7 @@ class Constants
 
     const IF_MODIFIED_SINCE = "If-Modified-Since";
 
-    const MODULE_RESPONSEWRAPPER = "com\zoho\crm\api\modules\ResponseWrapper";
+    const MODULE_RESPONSE_WRAPPER = "com\zoho\crm\api\modules\ResponseWrapper";
 
     const MODULE_API_EXCEPTION = "com\zoho\crm\api\modules\APIException";
 
@@ -680,7 +684,7 @@ class Constants
 
     const IMAGEUPLOAD_NAMESPACE = "com\\zoho\\crm\\api\\record\\ImageUpload";
 
-    const USERSIGNATURE_ERROR_MESSAGE = "UserSignature MUST NOT be null.";
+    const USER_SIGNATURE_ERROR_MESSAGE = "UserSignature MUST NOT be null.";
 
     const ENVIRONMENT_ERROR_MESSAGE = "Environment MUST NOT be null.";
 
@@ -706,6 +710,12 @@ class Constants
 
     const USER_SIGNATURE_ERROR = "USERSIGNATURE ERROR";
 
-    const OAUTH_MANDATORY_KEYS = ["grantToken", "refreshToken", "id"];
+    const OAUTH_MANDATORY_KEYS = ["grantToken", "refreshToken", "id", "accessToken"];
+
+    const PHP = "php_";
+
+    const SKIP_MODULES = array("deals");
+
+    const OWNER_LOOKUP = "ownerlookup";
 }
 ?>

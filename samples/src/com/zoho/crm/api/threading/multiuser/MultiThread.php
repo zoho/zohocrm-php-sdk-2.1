@@ -67,7 +67,7 @@ class MultiThread
 
         $builderInstance = new SDKConfigBuilder();
 
-        $configInstance = $builderInstance->setPickListValidation(true)->setAutoRefreshFields(false)->build();
+        $configInstance = $builderInstance->pickListValidation(true)->autoRefreshFields(false)->build();
 
         (new InitializeBuilder())
 		->user($user1)
@@ -105,7 +105,12 @@ class MultiThread
 
         $this->getRecords("Leads");
 
-        Initializer::switchUser($user1, $environment1, $token1, $configInstance);
+		(new InitializeBuilder())
+		->user($user1)
+		->environment($environment1)
+		->token($token1)
+		->SDKConfig($configInstance)
+        ->switchUser();
 
         $this->getRecords("apiName2");
     }

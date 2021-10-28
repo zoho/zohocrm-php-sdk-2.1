@@ -11,6 +11,7 @@ class Variable implements Model
 	private  $name;
 	private  $description;
 	private  $id;
+	private  $source;
 	private  $type;
 	private  $variableGroup;
 	private  $value;
@@ -97,6 +98,27 @@ class Variable implements Model
 	{
 		$this->id=$id; 
 		$this->keyModified['id'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the source
+	 * @return string A string representing the source
+	 */
+	public  function getSource()
+	{
+		return $this->source; 
+
+	}
+
+	/**
+	 * The method to set the value to source
+	 * @param string $source A string
+	 */
+	public  function setSource(string $source)
+	{
+		$this->source=$source; 
+		$this->keyModified['source'] = 1; 
 
 	}
 

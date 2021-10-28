@@ -137,7 +137,7 @@ class AssignmentRules
     {
         $paramInstance = new ParameterMap();
 
-        $paramInstance->add(GetAssignmentRuleParam::module(), "leads");
+        $paramInstance->add(GetAssignmentRuleParam::module(), "Leads");
 
        //Get instance of AssignmentRulesOperations Class
        $assignmentRulesOperations = new AssignmentRulesOperations();

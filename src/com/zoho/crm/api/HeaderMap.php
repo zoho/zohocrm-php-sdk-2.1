@@ -80,7 +80,12 @@ class HeaderMap
             }
         }
 
-        if (array_key_exists($headerName, $this->headerMap) &&  isset($this->headerMap[$headerName]))
+        if($parsedHeaderValue === true || $parsedHeaderValue === false)
+        {
+            $parsedHeaderValue = json_encode($parsedHeaderValue, JSON_UNESCAPED_UNICODE);
+        }
+
+        if (array_key_exists($headerName, $this->headerMap) && isset($this->headerMap[$headerName]))
         {
             $headerValue = $this->headerMap[$headerName];
 
