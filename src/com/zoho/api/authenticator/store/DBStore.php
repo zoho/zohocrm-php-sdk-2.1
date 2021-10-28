@@ -75,13 +75,21 @@ class DBStore implements TokenStore
                     {
                         $token->setId($row[Constants::ID]);
 
-                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
+                        $token->setUserMail($row[Constants::USER_MAIL]);
 
-                        $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
+                        $token->setClientId($row[Constants::CLIENT_ID]);
+
+                        $token->setClientSecret($row[Constants::CLIENT_SECRET]);
 
                         $token->setRefreshToken($row[Constants::REFRESH_TOKEN]);
 
-                        $token->setUserMail($row[Constants::USER_MAIL]);
+                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
+
+                        $token->setGrantToken($row[Constants::GRANT_TOKEN]);
+
+                        $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
+
+                        $token->setRedirectURL($row[Constants::REDIRECT_URL]);
 
                         return $token;
                     }
@@ -338,22 +346,22 @@ class DBStore implements TokenStore
                     {
                         $grantToken = ($row[Constants::GRANT_TOKEN] != null && $row[Constants::GRANT_TOKEN] !== Constants::NULL_VALUE && strlen($row[Constants::GRANT_TOKEN]) > 0)? $row[Constants::GRANT_TOKEN] : null;
 
+                        $token->setId($id);
+
+                        $token->setUserMail($row[Constants::USER_MAIL]);
+
                         $token->setClientId($row[Constants::CLIENT_ID]);
 
                         $token->setClientSecret($row[Constants::CLIENT_SECRET]);
 
                         $token->setRefreshToken($row[Constants::REFRESH_TOKEN]);
 
-                        $token->setId($id);
+                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
 
                         if($grantToken != null)
                         {
                             $token->setGrantToken($grantToken);
                         }
-
-                        $token->setUserMail($row[Constants::USER_MAIL]);
-
-                        $token->setAccessToken($row[Constants::ACCESS_TOKEN]);
 
                         $token->setExpiresIn($row[Constants::EXPIRY_TIME]);
 

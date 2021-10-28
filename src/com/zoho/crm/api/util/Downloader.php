@@ -30,7 +30,7 @@ class Downloader extends Converter
 
     public function getWrappedResponse($response, $pack)
     {
-        list ($headers, $content) = explode("\r\n\r\n", $response, 2);
+        list ($headers, $content) = explode("\r\n\r\n", strval($response), 2);
 
         $headerArray = (explode("\r\n", $headers, 50));
 

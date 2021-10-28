@@ -566,7 +566,7 @@ class Layout
 			//Get the Column of the Crypt
 			echo("Field Crypt Column: " . $crypt->getColumn() . "\n");
 
-			$encFldIds = $crypt->getEncFldids();
+			$encFldIds = $crypt->getEncfldids();
 
 			if($encFldIds != null)
 			{

@@ -200,7 +200,7 @@ class Currency
 		$currency->setSymbol("$");
 
 		//To set the rate at which the currency has to be exchanged for home currency.
-		$currency->setExchangeRate("20.0000");
+		$currency->setExchangeRate("20.0");
 
 		//To set the status of the currency.
 		//true: The currency is active.
@@ -360,7 +360,7 @@ class Currency
 		$currency->setPrefixSymbol(true);
 
 		//To set currency Id
-		$currency->setId("34770616040001");
+		$currency->setId("34770616041");
 
 		//To set the rate at which the currency has to be exchanged for home currency.
 		$currency->setExchangeRate("5.00");

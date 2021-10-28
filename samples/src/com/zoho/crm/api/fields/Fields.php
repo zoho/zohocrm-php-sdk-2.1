@@ -29,7 +29,7 @@ class Fields
 		//Get instance of ParameterMap Class
 		$paramInstance = new ParameterMap();
 
-		// $paramInstance->add(GetFieldsParam::type(), "Unused");
+		// $paramInstance->add(GetFieldsParam::type(), "unused");
 
 		//Call getFields method that takes paramInstance as parameter
 		$response = $fieldOperations->getFields($paramInstance);
@@ -100,7 +100,7 @@ class Fields
                             //Get the Column of the Crypt
                             echo("Field Crypt Column: " . $crypt->getColumn() . "\n");
 
-                            $encFldIds = $crypt->getEncFldids();
+                            $encFldIds = $crypt->getEncfldids();
 
                             if($encFldIds != null)
                             {
@@ -201,16 +201,29 @@ class Fields
                         //Get the BusinesscardSupported of each Field
                         echo("Field BusinesscardSupported: "); print_r($field->getBusinesscardSupported()); echo("\n");
 
-                        //Check if MultiModuleLookup is not null
-                        if($field->getMultiModuleLookup() != null)
-                        {
-                            //Get the MultiModuleLookup map
-                            foreach($field->getMultiModuleLookup() as $key => $value)
-                            {
-                                //Get each value in the map
-                                echo($key . ": " . $value . "\n");
-                            }
-                        }
+                        $multiModuleLookup = $field->getMultiModuleLookup();
+                        //Check if multiModuleLookup is not null
+						if($multiModuleLookup != null)
+						{
+							//Get the Name of the MultiModuleLookup
+							echo("Field MultiModuleLookup Name: " . $multiModuleLookup->getName());echo("\n");
+							
+							//Get the Value of the MultiModuleLookup
+							echo("Field MultiModuleLookup Id: " . $multiModuleLookup->getId());echo("\n");
+							
+							//Get the Object obtained Module instance
+							$module = $multiModuleLookup->getModule();
+							
+							//Check if module is not null
+							if($module != null)
+							{
+								//Get the ID of the Module
+								echo("Field MultiModuleLookup Module ID: " . $module->getId());echo("\n");
+								
+								//Get the Name of the Module
+								echo("Field MultiModuleLookup Module APIName: " . $module->getAPIName());echo("\n");
+							}
+						}
 
                         //Get the Object obtained Currency instance
                         $currency = $field->getCurrency();
@@ -408,6 +421,39 @@ class Fields
                         {
                             //Get the HistoryTracking of each Field
                             echo("Field HistoryTracking: " . print_r($field->getHistoryTracking()) . "\n");
+
+                            $historytracking = $field->getHistoryTracking();
+							
+							//Get the Module  of history tracking 
+							$module =  $historytracking->getModule();
+							
+							if ($module != null) 
+							{
+								$moduleLayout = $module->getLayout();
+
+								if ($moduleLayout != null) 
+								{
+									echo("Module layout id" . $moduleLayout->getId());
+								}
+
+								echo("Module layout display label" . $module->getDisplayLabel());
+								
+                                echo("Module layout api name" . $module->getAPIName());
+								
+                                echo("Module layout module" . $module->getId());
+								
+                                echo("Module layout id" . $module->getModule());
+								
+                                echo("Module layout module name" . $module->getModuleName());
+							}
+
+							//Get the duration configured field of each history tracking
+							$durationConfigured = $historytracking->getDurationConfiguredField();
+							
+                            if($durationConfigured != null) 
+							{
+								echo("historytracking duration configured field" . $durationConfigured->getId());
+							}
                         }
 
                         //Get the DataType of each Field
@@ -642,7 +688,7 @@ class Fields
                             //Get the Column of the Crypt
                             echo("Field Crypt Column: " . $crypt->getColumn() . "\n");
 
-                            $encFldIds = $crypt->getEncFldids();
+                            $encFldIds = $crypt->getEncfldids();
 
                             if($encFldIds != null)
                             {
@@ -887,6 +933,12 @@ class Fields
                             echo("Field ViewType QuickCreate: " . $viewType->getQuickCreate() . "\n");
                         }
 
+                        if($field->getDisplayField() != null) 
+						{
+							//check if field is DisplayField
+							echo("Field DisplayField " . $field->getDisplayField());
+						}
+
                         //Get the PickListValuesSortedLexically of each Field
                         echo("Field PickListValuesSortedLexically: " . $field->getPickListValuesSortedLexically() . "\n");
 
@@ -1056,6 +1108,50 @@ class Fields
                                 echo("Field AutoNumber StartNumber: " . $autoNumber->getStartNumber() . "\n");
                             }
                         }
+
+                        if($field->getDefaultValue() != null)
+						{
+							//Get the DefaultValue of each Field
+							echo("Field DefaultValue: " . $field->getDefaultValue());
+						}
+						
+						//Check if ValidationRule is not null
+						if($field->getValidationRule() != null)
+						{
+							//Get the details map
+							foreach($field->getValidationRule() as $key => $value )
+							{
+								//Get each value in the map
+								echo($key . ": " . $value);
+							}
+						}
+
+                        //get multi user lookup for field
+						if ($field->getMultiuserlookup() != null) 
+						{
+							$multiuserlookup = $field->getMultiuserlookup();
+							
+							//get displaylabel of multiuser lookup
+							echo("Get multiuserlookup display label" . $multiuserlookup->getDisplayLabel());
+							
+							//get linking module of multiuser lookup
+							echo("Get multiuserlookup linking module" . $multiuserlookup->getLinkingModule());
+							
+							//get lookup apiname of multiuser lookup
+							echo("Get multiuserlookup lookup api_name" . $multiuserlookup->getLookupApiname());
+							
+							//get apiname of multiuser lookup
+							echo("Get multiuserlookup api name" . $multiuserlookup->getAPIName());
+							
+							//get id of multiuser lookup
+							echo("Get multiuserlookup id" . $multiuserlookup->getId());
+							
+							//get connected module of multiuser lookup
+							echo("Get multiuserlookup connected module" . $multiuserlookup->getConnectedModule());
+							
+							//get connected lookup apiname of multiuser lookup
+							echo("Get multiuserlookup connected lookup api name" . $multiuserlookup->getConnectedlookupApiname());
+						}
                     }
                 }
             }
@@ -1091,6 +1187,12 @@ class Fields
         //Get the DisplayValue of each PickListValues
         echo("Field PickListValue DisplayValue: " . $pickListValue->getDisplayValue() . "\n");
 
+        //Get the Probability of each PickListValues
+		echo(" Fields PickListValue Probability: " . $pickListValue->getProbability());
+		
+		//Get the ForecastCategory of each PickListValues
+		echo(" Fields PickListValue ForecastCategory: " . $pickListValue->getForecastCategory());
+
         if($pickListValue->getSequenceNumber() != null)
         {
             //Get the SequenceNumber of each PickListValues
@@ -1099,6 +1201,9 @@ class Fields
 
         //Get the ExpectedDataType of each PickListValues
         echo("Field PickListValue ExpectedDataType: " . $pickListValue->getExpectedDataType() . "\n");
+
+        //Get the ForecastType of each PickListValues
+        echo(" Fields PickListValue ForecastType: " . $pickListValue->getForecastType());
 
         if($pickListValue->getMaps() != null)
         {

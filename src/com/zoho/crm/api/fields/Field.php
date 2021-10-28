@@ -43,6 +43,7 @@ class Field implements Model
 	private  $lookup;
 	private  $filterable;
 	private  $visible;
+	private  $displayField;
 	private  $pickListValuesSortedLexically;
 	private  $length;
 	private  $viewType;
@@ -758,6 +759,27 @@ class Field implements Model
 	{
 		$this->visible=$visible; 
 		$this->keyModified['visible'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the displayField
+	 * @return bool A bool representing the displayField
+	 */
+	public  function getDisplayField()
+	{
+		return $this->displayField; 
+
+	}
+
+	/**
+	 * The method to set the value to displayField
+	 * @param bool $displayField A bool
+	 */
+	public  function setDisplayField(bool $displayField)
+	{
+		$this->displayField=$displayField; 
+		$this->keyModified['display_field'] = 1; 
 
 	}
 

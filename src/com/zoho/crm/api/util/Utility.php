@@ -30,7 +30,7 @@ use com\zoho\api\logger\SDKLogger;
  */
 class Utility
 {
-    public static $apiTypeVsdataType = array();
+    public static $apiTypeVsDataType = array();
 
     public static $apiTypeVsStructureName = array();
 
@@ -199,6 +199,11 @@ class Utility
 
             self::setHandlerAPIPath($moduleAPIName, $handlerInstance);
 
+            if($handlerInstance != null && $handlerInstance->getModuleAPIName() == null && !in_array(strtolower($moduleAPIName), Constants::SKIP_MODULES)) 
+            {
+                return;
+            }
+
             $recordFieldDetailsPath = $resourcesPath . DIRECTORY_SEPARATOR . self::getFileName();
 
             if (file_exists($recordFieldDetailsPath))
@@ -288,6 +293,7 @@ class Utility
 					{
 						unset($recordFieldDetailsJson[strtolower($moduleAPIName)]);
                     }
+
                     if(self::$newFile)
 					{
 						if(array_key_exists(Constants::FIELDS_LAST_MODIFIED_TIME, $recordFieldDetailsJson) && $recordFieldDetailsJson[Constants::FIELDS_LAST_MODIFIED_TIME] != null)
@@ -350,9 +356,9 @@ class Utility
 		{
 			foreach($modifiedModules as $module => $value)
 			{
-				if(array_key_exists($module, $recordFieldDetailsJson))
+				if(array_key_exists(strtolower($module), $recordFieldDetailsJson))
 				{
-					unset($recordFieldDetailsJson[$module]);
+					unset($recordFieldDetailsJson[strtolower($module)]);
 				}
 			}
 
@@ -360,7 +366,7 @@ class Utility
 
 			foreach($modifiedModules as $module => $value)
 			{
-                $moduleData = $modifiedModules[$module];
+                $moduleData = $modifiedModules[strtolower($module)];
 
 				Utility::getFieldsInfo($moduleData[Constants::API_NAME], null);
 			}
@@ -426,6 +432,8 @@ class Utility
 			{
                 $isNewData = true;
 
+                $moduleAPIName = self::verifyModuleAPIName($moduleAPIName);
+
                 $relatedListValues = self::getRelatedListDetails($moduleAPIName);
 
                 $recordFieldDetailsJSON = file_exists($recordFieldDetailsPath) ?  Initializer::getJSON($recordFieldDetailsPath) : array();
@@ -475,7 +483,7 @@ class Utility
 			        throw new SDKException(Constants::UNSUPPORTED_IN_API, $commonAPIHandler->getHttpMethod() . " " . $commonAPIHandler->getAPIPath() . " " . Constants::UNSUPPORTED_IN_API_MESSAGE);
                 }
 
-                if($relatedListJO[Constants::MODULE] === Constants::NULL_VALUE)
+                if($relatedListJO[Constants::MODULE] !== Constants::NULL_VALUE)
                 {
     				$commonAPIHandler->setModuleAPIName($relatedListJO[Constants::MODULE]);
 
@@ -590,7 +598,7 @@ class Utility
                 {
                     $keyName = $field->getAPIName();
 
-                    if (in_array($keyName, Constants::KEYSTOSKIP))
+                    if (in_array($keyName, Constants::KEYS_TO_SKIP))
                     {
                         continue;
                     }
@@ -610,7 +618,7 @@ class Utility
 
                     $fieldDetail[Constants::TYPE] = Constants::LIST_NAMESPACE;
 
-                    $fieldDetail[Constants::STRUCTURE_NAME] = Constants::LINETAX;
+                    $fieldDetail[Constants::STRUCTURE_NAME] = Constants::LINE_TAX_NAMESPACE;
 
                     $fieldDetail[Constants::LOOKUP] = true;
 
@@ -786,7 +794,7 @@ class Utility
 
             $responseObject = $response->getObject();
 
-            $moduleResponseWrapper = Constants::MODULE_RESPONSEWRAPPER;
+            $moduleResponseWrapper = Constants::MODULE_RESPONSE_WRAPPER;
 
             $apiException = Constants::MODULE_API_EXCEPTION;
 
@@ -889,7 +897,7 @@ class Utility
 
             $fieldDetail[Constants::TYPE] = Constants::LIST_NAMESPACE;
 
-            $fieldDetail[Constants::STRUCTURE_NAME] = Constants::PRICINGDETAILS;
+            $fieldDetail[Constants::STRUCTURE_NAME] = Constants::PRICING_DETAILS_NAMESPACE;
 
             $fieldDetail[Constants::SKIP_MANDATORY] = true;
 
@@ -951,7 +959,7 @@ class Utility
 
             $fieldDetail[Constants::STRUCTURE_NAME] = Constants::LINEITEM_PRODUCT;
 
-            $fieldDetail[Constants::LOOKUP] = true;
+            $fieldDetail[Constants::SKIP_MANDATORY] = true;
 
             return $fieldDetail;
         }
@@ -973,9 +981,9 @@ class Utility
 
             return $fieldDetail;
         }
-        else if (array_key_exists($apiType, Utility::$apiTypeVsdataType))
+        else if (array_key_exists($apiType, Utility::$apiTypeVsDataType))
         {
-            $fieldDetail[Constants::TYPE] = Utility::$apiTypeVsdataType[$apiType];
+            $fieldDetail[Constants::TYPE] = Utility::$apiTypeVsDataType[$apiType];
         }
         else if(strtolower($apiType) == Constants::FORMULA)
         {
@@ -983,9 +991,9 @@ class Utility
             {
                 $returnType = $field->getFormula()->getReturnType();
 
-                if($returnType != null && array_key_exists($returnType, Utility::$apiTypeVsdataType) && Utility::$apiTypeVsdataType[$returnType] != null)
+                if($returnType != null && array_key_exists($returnType, Utility::$apiTypeVsDataType) && Utility::$apiTypeVsDataType[$returnType] != null)
                 {
-                    $fieldDetail[Constants::TYPE] = Utility::$apiTypeVsdataType[$returnType];
+                    $fieldDetail[Constants::TYPE] = Utility::$apiTypeVsDataType[$returnType];
                 }
             }
 
@@ -1001,7 +1009,7 @@ class Utility
             $fieldDetail[Constants::LOOKUP] = true;
         }
 
-        if(strtolower($apiType) == Constants::CONSENT_LOOKUP)
+        if(strtolower($apiType) == Constants::CONSENT_LOOKUP || strtolower($apiType) == Constants::OWNER_LOOKUP)
         {
             $fieldDetail[Constants::SKIP_MANDATORY] = true;
         }
@@ -1076,7 +1084,7 @@ class Utility
             {
                 $fieldDetail[Constants::MODULE] = $module;
 
-                if(strtolower($module) == Constants::ACCOUNTS && ($field->getCustomField() != null && !$field->getCustomField()))
+                if(strtolower($module) == Constants::ACCOUNTS && !$field->getCustomField())
                 {
                     $fieldDetail[Constants::SKIP_MANDATORY] = true;
                 }
@@ -1101,7 +1109,7 @@ class Utility
 
     public static function fillDataType()
     {
-        if(count(self::$apiTypeVsdataType) > 0)
+        if(count(self::$apiTypeVsDataType) > 0)
         {
             return;
         }
@@ -1152,140 +1160,140 @@ class Utility
 
         foreach ($fieldAPINamesString as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::STRING_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::STRING_NAMESPACE;
         }
 
         foreach ($fieldAPINamesInteger as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::INTEGER_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::INTEGER_NAMESPACE;
         }
 
         foreach ($fieldAPINamesBoolean as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::BOOLEAN_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::BOOLEAN_NAMESPACE;
         }
 
         foreach ($fieldAPINamesLong as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LONG_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LONG_NAMESPACE;
         }
 
         foreach ($fieldAPINamesDouble as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::FLOAT_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::FLOAT_NAMESPACE;
         }
 
         foreach ($fieldAPINamesDateTime as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::DATETIME_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::DATETIME_NAMESPACE;
         }
 
         foreach ($fieldAPINamesDate as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::DATE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::DATE;
         }
 
         foreach ($fieldAPINamesLookup as $fieldAPIName)
         {
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::RECORD_NAMESPACE;
 
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::RECORD_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::RECORD_NAMESPACE;
         }
 
         foreach ($fieldAPINamesPickList as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::CHOICE_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::CHOICE_NAMESPACE;
         }
 
         foreach ($fieldAPINamesMultiSelectPickList as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::CHOICE_NAMESPACE;
         }
 
         foreach ($fieldAPINamesSubForm as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::RECORD_NAMESPACE;
         }
 
         foreach ($fieldAPINamesOwnerLookUp as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::USER_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::USER_NAMESPACE;
 
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::USER_NAMESPACE;
         }
 
         foreach ($fieldAPINamesMultiUserLookUp as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::USER_NAMESPACE;
         }
 
         foreach ($fieldAPINamesMultiModuleLookUp as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
             self::$apiTypeVsStructureName[$fieldAPIName] = Constants::MODULE_NAMESPACE;
         }
 
         foreach ($fieldAPINamesFieldFile as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::FIELD_FILE_NAMESPACE;
 		}
 
 		foreach ($fieldAPINameTaskRemindAt as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::REMINDAT_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::REMINDAT_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::REMINDAT_NAMESPACE;
         }
 
         foreach ($fieldAPINameRecurringActivity as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::RECURRING_ACTIVITY_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::RECURRING_ACTIVITY_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::RECURRING_ACTIVITY_NAMESPACE;
         }
 
         foreach ($fieldAPINameReminder as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::REMINDER_NAMESPACE;
         }
 
         foreach ($fieldAPINameConsentLookUp as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::CONSENT_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::CONSENT_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::CONSENT_NAMESPACE;
         }
 
         foreach ($fieldAPINameImageUpload as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::IMAGEUPLOAD_NAMESPACE;
         }
 
         foreach ($fieldAPINameMultiSelectLookUp as $fieldAPIName)
 		{
-			self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+			self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
 			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::RECORD_NAMESPACE;
         }
 
         foreach($fieldAPINameLineTax as $fieldAPIName)
         {
-            self::$apiTypeVsdataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
+            self::$apiTypeVsDataType[$fieldAPIName] = Constants::LIST_NAMESPACE;
 
-			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::LINETAX;
+			self::$apiTypeVsStructureName[$fieldAPIName] = Constants::LINE_TAX_NAMESPACE;
         }
     }
 }

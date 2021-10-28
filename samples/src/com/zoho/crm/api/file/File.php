@@ -44,7 +44,7 @@ class File
         $streamWrapper2 = new StreamWrapper(null, null, "/Users/username/Desktop/samplecode.txt");
 
         //Set file to the FileBodyWrapper instance
-        $bodyWrapper->setFile([$streamWrapper, $streamWrapper1, $streamWrapper2 ]);
+        $bodyWrapper->setFile([$streamWrapper, $streamWrapper1, $streamWrapper2]);
 
         //Get instance of ParameterMap Class
         $paramInstance = new ParameterMap();

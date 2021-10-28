@@ -39,30 +39,12 @@ class OAuthToken implements Token
     private $id = null;
 
     /**
-     * This is a setter method to set OAuth client id.
-     * @param string A string representing the OAuth client id.
-     */
-    public function setClientId($clientID)
-    {
-        $this->clientID = $clientID;
-    }
-
-    /**
      * This is a getter method to get OAuth client id.
      * @return string A string representing the OAuth client id.
      */
     public function getClientId()
     {
         return $this->clientID;
-    }
-
-    /**
-     * This is a getter method to set OAuth client secret.
-     * @param string A string representing the OAuth client secret.
-     */
-    public function setClientSecret($clientSecret)
-    {
-        $this->clientSecret = $clientSecret;
     }
 
     /**
@@ -81,24 +63,6 @@ class OAuthToken implements Token
     public function getRedirectURL()
     {
         return $this->redirectURL;
-    }
-
-    /**
-     * This is a getter method to set OAuth redirect URL.
-     * @param string A string representing the OAuth redirect URL.
-     */
-    public function setRedirectURL($redirectURL)
-    {
-        $this->redirectURL = $redirectURL;
-    }
-
-    /**
-     * This is a setter method to set grant token.
-     * @param string A string representing the grant token.
-     */
-    public function setGrantToken($grantToken)
-    {
-        $this->grantToken = $grantToken;
     }
 
     /**
@@ -126,6 +90,42 @@ class OAuthToken implements Token
     public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
+    }
+
+    /**
+     * This is a getter method to set OAuth redirect URL.
+     * @param string A string representing the OAuth redirect URL.
+     */
+    public function setRedirectURL($redirectURL)
+    {
+        $this->redirectURL = $redirectURL;
+    }
+
+    /**
+     * This is a setter method to set OAuth client id.
+     * @param string A string representing the OAuth client id.
+     */
+    public function setClientId($clientID)
+    {
+        $this->clientID = $clientID;
+    }
+
+    /**
+     * This is a getter method to set OAuth client secret.
+     * @param string A string representing the OAuth client secret.
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * This is a setter method to set grant token.
+     * @param string A string representing the grant token.
+     */
+    public function setGrantToken($grantToken)
+    {
+        $this->grantToken = $grantToken;
     }
 
     /**
@@ -234,7 +234,7 @@ class OAuthToken implements Token
             {
                 $token = $this->refreshToken != null ? $this->refreshAccessToken($user, $store)->getAccessToken() : $this->generateAccessToken($user, $store)->getAccessToken();
             }
-            else if ($this->isAccessTokenExpired($oauthToken->getExpiresIn())) //access token will expire in next 5 seconds or less
+            else if ($oauthToken->getExpiresIn() != null && $this->isAccessTokenExpired($oauthToken->getExpiresIn())) //access token will expire in next 5 seconds or less
             {
                 SDKLogger::info(Constants::REFRESH_TOKEN_MESSAGE);
 
@@ -294,11 +294,6 @@ class OAuthToken implements Token
         $requestParams[Constants::CLIENT_ID] =  $this->clientID;
 
         $requestParams[Constants::CLIENT_SECRET] =  $this->clientSecret;
-
-        if($this->redirectURL != null)
-        {
-            $requestParams[Constants::REDIRECT_URI] =  $this->redirectURL;
-        }
 
         $requestParams[Constants::GRANT_TYPE] = Constants::REFRESH_TOKEN;
 
@@ -382,9 +377,9 @@ class OAuthToken implements Token
             throw new SDKException(Constants::INVALID_TOKEN_ERROR, array_key_exists(Constants::ERROR, $jsonResponse) ? $jsonResponse[Constants::ERROR] : Constants::NO_ACCESS_TOKEN_ERROR);
         }
 
-        $this->accessToken = $jsonResponse[Constants::ACCESS_TOKEN];
+        $this->setAccessToken($jsonResponse[Constants::ACCESS_TOKEN]);
 
-        $this->expiresIn = $this->getTokenExpiresIn($jsonResponse);
+        $this->setExpiresIn($this->getTokenExpiresIn($jsonResponse));
 
         if (array_key_exists(Constants::REFRESH_TOKEN, $jsonResponse))
         {
@@ -457,7 +452,7 @@ class OAuthToken implements Token
      * @param string $redirectURL A string containing the OAuth redirect URL.
      * @param string $id A string
      */
-    private function __construct($clientID, $clientSecret, $grantToken, $refreshToken, $redirectURL=null, $id=null)
+    private function __construct($clientID, $clientSecret, $grantToken, $refreshToken, $redirectURL=null, $id=null, $accessToken=null)
     {
         $this->clientID = $clientID;
 
@@ -469,6 +464,8 @@ class OAuthToken implements Token
 
         $this->redirectURL = $redirectURL;
 
+        $this->accessToken = $accessToken;
+
         $this->id = $id;
     }
 
@@ -476,7 +473,7 @@ class OAuthToken implements Token
 	{
 		$email = Initializer::getInitializer()->getUser()->getEmail();
 
-		$builder = "php_".explode("@",$email)[0]."_";
+		$builder = Constants::PHP.explode("@",$email)[0]."_";
 
 		$builder .= Initializer::getInitializer()->getEnvironment()->getName()."_";
 

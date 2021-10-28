@@ -66,7 +66,7 @@ class BulkRead
 		$query->setModule($module);
 
 		//Specifies the unique ID of the custom view whose records you want to export.
-		$query->setCvid("34770610087501");
+		// $query->setCvid("34770610087501");
 
 		// List of Field API Names
 		$fieldAPINames = array();

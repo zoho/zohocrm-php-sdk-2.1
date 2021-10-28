@@ -101,7 +101,7 @@ class Modules
                     echo("Module Id: " . $module->getId() . "\n");
 
                     //Get the IsBlueprintSupported of each Module
-                    echo("Module IsBlueprintSupported: "); print_r($module->getIsBlueprintSupported()); echo("\n");
+                    echo("Module IsBlueprintSupported: "); print_r($module->getIsblueprintsupported()); echo("\n");
 
                     //Get the Visible of each Module
                     echo("Module Visible: "); print_r($module->getVisible()); echo("\n");
@@ -136,6 +136,18 @@ class Modules
 
                     //Get the FilterSupported of each Module
                     echo("Module FilterSupported: "); print_r($module->getFilterSupported()); echo("\n");
+
+                    //Get List of properties field APIName
+                    $onDemandProperties = $module->getOnDemandProperties();
+                    
+                    if($onDemandProperties != null)
+                    {
+                        foreach($onDemandProperties as $fieldName)
+                        {
+                            //Get the Field Name
+                            echo("Module onDemandProperties Fields: " . $fieldName);
+                        }
+                    }
 
                     //Get the ShowAsTab of each Module
                     echo("Module ShowAsTab: "); print_r($module->getShowAsTab()); echo("\n");
@@ -257,7 +269,7 @@ class Modules
 	 */
 	public static function getModule(string $moduleAPIName)
 	{
-		//example, moduleAPIName = "Leads";
+		//example, moduleAPIName = "module_api_name";
 
 		//Get instance of ModulesOperations Class
 		$moduleOperations = new ModulesOperations();
@@ -560,6 +572,9 @@ class Modules
 		//Get the SystemName of the CustomView
 		echo("Module CustomView SystemName: " . $customView->getSystemName() . "\n");
 
+        //Get the AccessType of the CustomView
+        echo("Module CustomView AccessType: " . $customView->getAccessType() . "\n");
+
 		// Get the Criteria instance of the CustomView
 		$criteria = $customView->getCriteria();
 
@@ -571,6 +586,39 @@ class Modules
 
 		//Get the SortBy of the CustomView
 		echo("Module CustomView SortBy: " . $customView->getSortBy() . "\n");
+        			
+        //Get the CreatedBy User instance of each Module
+		$createdBy = $customView->getCreatedBy();
+		
+		//Check if createdBy is not null
+		if($createdBy != null)
+		{
+			//Get the name of the createdBy User
+			echo("Module Created By User-Name: " . $createdBy->getName());
+			
+			//Get the ID of the createdBy User
+			echo("Module Created By User-ID: " . $createdBy->getId());
+		}
+		
+		$sharedToDetails = $customView->getSharedTo();
+		
+		if($sharedToDetails != null)
+		{
+			foreach($sharedToDetails as $sharedTo)
+			{
+				//Get the Name of the each sharedTo
+				echo("SharedDetails Name: " . $sharedTo->getName());
+				
+				//Get the ID of the each sharedTo
+				echo("SharedDetails ID: " . $sharedTo->getId());
+				
+				//Get the Type of the each sharedTo
+				echo("SharedDetails Type: " . $sharedTo->getType());
+				
+				//Get the Subordinates of the each sharedTo
+				echo("SharedDetails Subordinates: " . $sharedTo->getSubordinates());
+			}
+		}
 
 		//Get the Default of the CustomView
 		echo("Module CustomView Default: " . $customView->getDefault() . "\n");
@@ -623,7 +671,7 @@ class Modules
 	 */
 	public static function updateModuleByAPIName(string $moduleAPIName)
 	{
-		//example, apiName = "Leads";
+		//example, apiName = "module_api_name";
 
 		//Get instance of ModulesOperations Class
 		$moduleOperations = new ModulesOperations();
@@ -767,7 +815,7 @@ class Modules
 	 */
 	public static function updateModuleById(string $moduleID)
 	{
-		//example, moduleAPIName = "Leads";
+		//example, moduleAPIName = "module_api_name";
 
 		//Get instance of ModulesOperations Class
 		$moduleOperations = new ModulesOperations();

@@ -7,15 +7,24 @@ use com\zoho\crm\api\emailtemplates\ResponseWrapper;
 
 use com\zoho\crm\api\emailtemplates\APIException;
 
+use com\zoho\crm\api\ParameterMap;
+
+use com\zoho\crm\api\emailtemplates\GetEmailTemplatesParam;
+
 class EmailTemplate
 {
     public static function getEmailTemplates(string $module)
     {
         //Get instance of EmailTemplatesOperations Class
-        $emailTemplatesOperations = new EmailTemplatesOperations($module);
+        $emailTemplatesOperations = new EmailTemplatesOperations();
+
+        //Get instance of ParameterMap Class
+		$paramInstance = new ParameterMap();
+
+        $paramInstance->add(GetEmailTemplatesParam::module(), $module);
 
         //Call getEmailTemplates method that takes ParameterMap instance as parameter
-        $response = $emailTemplatesOperations->getEmailTemplates();
+        $response = $emailTemplatesOperations->getEmailTemplates($paramInstance);
 
         if($response != null)
         {

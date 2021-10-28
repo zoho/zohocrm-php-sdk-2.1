@@ -57,7 +57,7 @@ class JSONConverter extends Converter
         {
             $moduleAPIName = $this->commonAPIHandler->getModuleAPIName();
 
-            $returnJSON = $this->isRecordRequest($requestInstance, $classDetail,$instanceNumber,$memberDetail);
+            $returnJSON = $this->isRecordRequest($requestInstance, $classDetail, $instanceNumber, $memberDetail);
 
             $this->commonAPIHandler->setModuleAPIName($moduleAPIName);
 
@@ -167,7 +167,6 @@ class JSONConverter extends Converter
                             unset($requiredInUpdateKeys[$keyName]);
                         }
                     }
-
 
                     if ($requestInstance instanceof FileDetails)
                     {
@@ -298,7 +297,7 @@ class JSONConverter extends Converter
         return true;
     }
 
-    public function isRecordRequest($recordInstance, $classDetail,$instanceNumber, $memberDetail =null)
+    public function isRecordRequest($recordInstance, $classDetail, $instanceNumber, $memberDetail =null)
     {
         $lookUp = false;
 
@@ -306,8 +305,8 @@ class JSONConverter extends Converter
 
         $classMemberName = null;
 
-        if ($memberDetail != null){
-
+        if ($memberDetail != null) 
+        {
             if (array_key_exists(Constants::LOOKUP, $memberDetail))
             {
                 $lookUp = $memberDetail[Constants::LOOKUP];
@@ -405,8 +404,8 @@ class JSONConverter extends Converter
 				    $primaryKeys[$name] = 1;
 				}
 			}
-
 		}
+
         foreach ($keyModified as $keyName => $keyVal)
         {
             if ($keyVal != 1)
@@ -432,6 +431,7 @@ class JSONConverter extends Converter
                     unset($primaryKeys[$keyName]);
                 }
             }
+
             $memberName = $this->buildName($keyName);
 
             if ($moduleDetail != null && sizeof($moduleDetail) > 0 && (array_key_exists($keyName, $moduleDetail) || array_key_exists($memberName, $moduleDetail)))
@@ -593,7 +593,7 @@ class JSONConverter extends Converter
 
                     foreach ($requestObjects as $request)
                     {
-                        $jsonArray[] = $this->formRequest($request, $pack, $instanceCount,$memberDetail);
+                        $jsonArray[] = $this->formRequest($request, $pack, $instanceCount, $memberDetail);
 
                         $instanceCount++;
                     }
@@ -637,7 +637,7 @@ class JSONConverter extends Converter
 
     public function getWrappedResponse($response, $pack)
     {
-        list ($headers, $content) = explode("\r\n\r\n", $response, 2);
+        list ($headers, $content) = explode("\r\n\r\n", strval($response), 2);
 
         $responseObject = json_decode($content, true);
 
@@ -873,7 +873,7 @@ class JSONConverter extends Converter
 
                         $keyValue = null;
 
-                        if(array_key_exists($keyName, $response) && $response[$keyName]!= null)
+                        if(array_key_exists($keyName, $response) && $response[$keyName] != null)
                         {
                             $keyValue = $this->getData($response[$keyName], $keyDetail);
 
@@ -1023,7 +1023,7 @@ class JSONConverter extends Converter
                     $keyName = $memberDetail[Constants::NAME];
                 }
 
-                if ($keyName != null && array_key_exists($keyName, $responseJson) && $responseJson[$keyName] != null)
+                if ($keyName != null && array_key_exists($keyName, $responseJson) && (is_array($responseJson[$keyName]) || $responseJson[$keyName] !== null))
                 {
                     $keyData = $responseJson[$keyName];
 
@@ -1058,13 +1058,16 @@ class JSONConverter extends Converter
                         {
                             $type = Constants::LIST_NAMESPACE;
                         }
-
                     }
-
+                    
                     if (strtolower($type) == strtolower($memberDetail[Constants::TYPE]))
                     {
                         $matches++;
                     }
+                    else if(strtolower($keyName) == Constants::COUNT && strtolower($type) == strtolower(Constants::INTEGER_NAMESPACE))
+					{
+						$matches++;
+					}
                     else if (strtolower($memberDetail[Constants::TYPE]) == strtolower(Constants::CHOICE_NAMESPACE))
                     {
                         foreach ($memberDetail[Constants::VALUES] as $value)

@@ -46,7 +46,7 @@ class APIHTTPConnector
      * This is a setter method to set the API URL.
      * @param string $url A string containing the API Request URL.
      */
-    public function setUrl($url)
+    public function setURL($url)
     {
         $this->url = $url;
     }
@@ -323,7 +323,7 @@ class APIHTTPConnector
 
     private function setContentTypeHeader()
 	{
-		foreach(Constants::SET_TO_CONTENT_TYPE as $contentType)
+		foreach(Constants::SET_CONTENT_TYPE_HEADER as $contentType)
 		{
 			if(strpos($this->url, $contentType) == true)
 			{

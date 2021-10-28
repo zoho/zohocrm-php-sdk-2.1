@@ -829,10 +829,38 @@ class Notification
 								echo("Details: \n");
 
 								//Get the details map
-								foreach ($successResponse->getDetails() as $keyName => $keyValue)
+								foreach($successResponse->getDetails() as $keyName => $value)
 								{
-									//Get each value in the map
-									echo($keyName . ": " . $keyValue . "\n");
+									if((is_array($value) && sizeof($value) > 0) && isset($value[0]))
+									{
+										if($value[0] instanceof $notificationClass)
+										{
+											$eventList = $value;
+
+											foreach($eventList as $event)
+											{
+												//Get the ChannelExpiry of each Notification
+												echo("Notification ChannelExpiry: "); print_r($event->getChannelExpiry());
+
+												//Get the ResourceUri each Notification
+												echo("Notification ResourceUri: " . $event->getResourceUri() . "\n");
+
+												//Get the ResourceId each Notification
+												echo("Notification ResourceId: " . $event->getResourceId() . "\n");
+
+												//Get the ResourceName each Notification
+												echo("Notification ResourceName: " . $event->getResourceName() . "\n");
+
+												//Get the ChannelId each Notification
+												echo("Notification ChannelId: " . $event->getChannelId() . "\n");
+											}
+										}
+									}
+									else
+									{
+										//Get each value in the map
+										echo($keyName . ": "); print_r($value);
+									}
 								}
 							}
 
@@ -987,10 +1015,38 @@ class Notification
 								echo("Details: \n");
 
 								//Get the details map
-								foreach ($successResponse->getDetails() as $keyName => $keyValue)
+								foreach($successResponse->getDetails() as $keyName => $value)
 								{
-									//Get each value in the map
-									echo($keyName . ": " . $keyValue . "\n");
+									if((is_array($value) && sizeof($value) > 0) && isset($value[0]))
+									{
+										if($value[0] instanceof $notificationClass)
+										{
+											$eventList = $value;
+
+											foreach($eventList as $event)
+											{
+												//Get the ChannelExpiry of each Notification
+												echo("Notification ChannelExpiry: "); print_r($event->getChannelExpiry());
+
+												//Get the ResourceUri each Notification
+												echo("Notification ResourceUri: " . $event->getResourceUri() . "\n");
+
+												//Get the ResourceId each Notification
+												echo("Notification ResourceId: " . $event->getResourceId() . "\n");
+
+												//Get the ResourceName each Notification
+												echo("Notification ResourceName: " . $event->getResourceName() . "\n");
+
+												//Get the ChannelId each Notification
+												echo("Notification ChannelId: " . $event->getChannelId() . "\n");
+											}
+										}
+									}
+									else
+									{
+										//Get each value in the map
+										echo($keyName . ": "); print_r($value);
+									}
 								}
 							}
 

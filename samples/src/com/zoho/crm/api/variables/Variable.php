@@ -85,6 +85,9 @@ class Variable
                         //Get the ID of each Variable
                         echo("Variable ID: " . $variable->getId() . "\n");
 
+                        //Get the Source of each Variable
+                        echo("Variable Source: " . $variable->getSource(). "\n");
+
                         //Get the Type of each Variable
                         echo("Variable Type: " . $variable->getType() . "\n");
 

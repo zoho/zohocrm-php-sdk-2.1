@@ -236,7 +236,7 @@ class User
                     echo("User CountryLocale: " . $user->getCountryLocale() . "\n");
 
                     //Get the SandboxDeveloper of each User
-                    echo("User SandboxDeveloper: "); print_r($user->getSandboxDeveloper()); echo("\n");
+                    echo("User SandboxDeveloper: "); print_r($user->getSandboxdeveloper()); echo("\n");
 
                     //Get the FirstName of each User
                     echo("User FirstName: " . $user->getFirstName() . "\n");
@@ -352,6 +352,9 @@ class User
 
                     //Get the Status of each User
                     echo("User Status: " . $user->getStatus() . "\n");
+
+                    //Get the Status of each User
+					echo("User Status: " . $user->getCategory());
                 }
 
                 //Get the Object obtained Info instance
@@ -429,7 +432,7 @@ class User
 
 		$user1->setFirstName("TestUser");
 
-		$user1->setEmail("testuser@zoho.com");
+		$user1->setEmail("testuser1234321@zoho.com");
 
 		$profile = new Profile();
 
@@ -568,7 +571,7 @@ class User
 		//Get instance of User Class
 		$user1 = new $userClass();
 
-		$user1->setId("34770615791024");
+		$user1->setId("3477061012291001");
 
 		$role = new Role();
 
@@ -582,7 +585,7 @@ class User
 
 		$user1 = new $userClass();
 
-		$user1->setId("34770615791024");
+		$user1->setId("34770610026014");
 
 		$role = new Role();
 
@@ -1015,25 +1018,6 @@ class User
 
                     //Get the Status of each User
                     echo("User Status: " . $user->getStatus() . "\n");
-                }
-
-                //Get the Object obtained Info instance
-                $info = $responseWrapper->getInfo();
-
-                //Check if info is not null
-                if($info != null)
-                {
-                    //Get the PerPage of the Info
-                    echo("User Info PerPage: " . $info->getPerPage() . "\n");
-
-                    //Get the Count of the Info
-                    echo("User Info Count: " . $info->getCount() . "\n");
-
-                    //Get the Page of the Info
-                    echo("User Info Page: " . $info->getPage() . "\n");
-
-                    //Get the MoreRecords of the Info
-                    echo("User Info MoreRecords: " . $info->getMoreRecords() . "\n");
                 }
             }
             //Check if the request returned an exception

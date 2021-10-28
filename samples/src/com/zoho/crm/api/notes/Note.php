@@ -368,7 +368,7 @@ class Note
 			$parentRecord = new Record();
 
 			//Set ID of the Record
-			$parentRecord->setId("34770619762066");
+			$parentRecord->setId("3477061012184003");
 
 			//Set ParentId of the Note
 			$note->setParentId($parentRecord);
@@ -515,7 +515,7 @@ class Note
 		//Get instance of Note Class
 		$note = new $noteClass();
 
-		$note->setId("34770616154001");
+		$note->setId("3477061012226005");
 
 		//Set Note_Title of the Note
 		$note->setNoteTitle("Contacted12");
@@ -528,7 +528,7 @@ class Note
 
 		$note = new $noteClass();
 
-		$note->setId("34770616153004");
+		$note->setId("3477061012226004");
 
 		//Set Note_Title of the Note
 		$note->setNoteTitle("Contacted13");

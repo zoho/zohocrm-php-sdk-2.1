@@ -99,6 +99,18 @@ use com\zoho\crm\api\record\Tax;
 
 use com\zoho\crm\api\users\User;
 
+use com\zoho\crm\api\record\UpdateRecordHeader;
+
+use com\zoho\crm\api\record\DeleteRecordHeader;
+
+use com\zoho\crm\api\record\CreateRecordsHeader;
+
+use com\zoho\crm\api\record\UpsertRecordsHeader;
+
+use com\zoho\crm\api\record\RecordCountParam;
+
+use com\zoho\crm\api\record\CountWrapper;
+
 class Record
 {
 	/**
@@ -121,34 +133,36 @@ class Record
 		//Get instance of ParameterMap Class
 		$paramInstance = new ParameterMap();
 
-		// $paramInstance->add(GetRecordParam::approved(), "false");
+		$paramInstance->add(GetRecordParam::approved(), "false");
 
-		// $paramInstance->add(GetRecordParam::converted(), "false");
+		$paramInstance->add(GetRecordParam::converted(), "false");
 
-		// $fieldNames = array("Deal_Name", "Company");
+		$fieldNames = array("Deal_Name", "Company");
 
-		// foreach($fieldNames as $fieldName)
-		// {
-		// 	$paramInstance->add(GetRecordParam::fields(), $fieldName);
-        // }
+		foreach($fieldNames as $fieldName)
+		{
+			$paramInstance->add(GetRecordParam::fields(), $fieldName);
+        }
 
-		// $startdatetime = date_create("2020-06-27T15:10:00");
+		$startdatetime = date_create("2020-06-27T15:10:00");
 
-        // $paramInstance->add(GetRecordParam::startDateTime(), $startdatetime);
+        $paramInstance->add(GetRecordParam::startDateTime(), $startdatetime);
 
-		// $enddatetime = date_create("2020-06-29T15:10:00");
+		$enddatetime = date_create("2020-06-29T15:10:00");
 
-		// $paramInstance->add(GetRecordParam::endDateTime(), $enddatetime);
+		$paramInstance->add(GetRecordParam::endDateTime(), $enddatetime);
 
-		// $paramInstance->add(GetRecordParam::territoryId(), "34770613051357");
+		$paramInstance->add(GetRecordParam::territoryId(), "34770613051357");
 
-        // $paramInstance->add(GetRecordParam::includeChild(), "true");
+        $paramInstance->add(GetRecordParam::includeChild(), "true");
 
 		$headerInstance = new HeaderMap();
 
-		// $ifmodifiedsince = date_create("2020-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+		$ifmodifiedsince = date_create("2020-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-		// $headerInstance->add(GetRecordHeader::IfModifiedSince(), $ifmodifiedsince);
+		$headerInstance->add(GetRecordHeader::IfModifiedSince(), $ifmodifiedsince);
+
+		// $headerInstance->add(GetRecordHeader::XEXTERNAL(), "Leads.External");
 
 		//Call getRecord method that takes paramInstance, moduleAPIName and recordID as parameter
 		$response = $recordOperations->getRecord( $recordId,$moduleAPIName,$paramInstance, $headerInstance);
@@ -641,9 +655,9 @@ class Record
 
 										echo("Record Consent ContactThroughPhone: " . $consent->getContactThroughPhone());
 
-										echo("Record Consent MailSentTime: " . $consent->getMailSentTime().toString());
+										echo("Record Consent MailSentTime: " . $consent->getMailSentTime());
 
-										echo("Record Consent ConsentDate: " . $consent->getConsentDate().toString());
+										echo("Record Consent ConsentDate: " . $consent->getConsentDate());
 
 										echo("Record Consent ConsentRemarks: " . $consent->getConsentRemarks());
 
@@ -760,6 +774,12 @@ class Record
 
 		$record1->addFieldValue(Leads::Company(), "KKRNP");
 
+		// $accounts = new $recordClass();
+
+		// $accounts->addKeyValue("id", "34770615848009");
+
+		// $record1->addFieldValue(Contacts::AccountName(), $accounts);
+
 		/*
 		 * Call addKeyValue method that takes two arguments
 		 * 1 -> A string that is the Field's API Name
@@ -797,6 +817,133 @@ class Record
 
 		$record1->addKeyValue("File_Upload", $fileDetails);
 
+		$recordOwner = new User();
+        
+		$recordOwner->setEmail("abc@zoho.com");
+        
+        $record1->addKeyValue("Owner", $recordOwner);
+
+		//Used when GDPR is enabled
+		$dataConsent = new Consent();
+		
+		$dataConsent->setConsentRemarks("Approved.");
+		
+		$dataConsent->setConsentThrough("Email");
+		
+		$dataConsent->setContactThroughEmail(true);
+		
+		$dataConsent->setContactThroughSocial(false);
+		
+		$record1->addKeyValue("Data_Processing_Basis_Details", $dataConsent);
+		
+		$subformList = [];
+		
+		$subform = new $recordClass();
+		
+		$subform->addKeyValue("Subform FieldAPIName", "FieldValue");
+		
+		array_push($subformList, $subform);
+		
+		$record1->addKeyValue("Subform Name", $subformList);
+		
+		/** Following methods are being used only by Inventory modules */
+		
+		$dealName = new $recordClass();
+		
+		$dealName->addFieldValue(Deals::id(), "3477061012112003");
+		
+		$record1->addFieldValue(Sales_Orders::DealName(), $dealName);
+		
+		$contactName = new $recordClass();
+		
+		$contactName->addFieldValue(Contacts::id(), "3477061011853001");
+		
+		$record1->addFieldValue(Purchase_Orders::ContactName(), $contactName);
+		
+		$accountName = new $recordClass();
+		
+		$accountName->addKeyValue("name", "automatedAccount");
+		
+		$record1->addFieldValue(Quotes::AccountName(), $accountName);
+
+		$record1->addKeyValue("Discount", 10.5);
+		
+		$inventoryLineItemList = [];
+		
+		$inventoryLineItem = new $recordClass();
+		
+		$lineItemProduct = new LineItemProduct();
+		
+		$lineItemProduct->setId("3477061012107031");
+
+		// $lineItemProduct->addKeyValue("Products_External", "AutomatedSDKExternal");
+		
+		$inventoryLineItem->addKeyValue("Description", "asd");
+		
+		$inventoryLineItem->addKeyValue("Discount", "5");
+		
+		$parentId = new $recordClass();
+		
+		$parentId->setId("35240337331017");
+
+//		inventoryLineItem->addKeyValue("Parent_Id", 5);
+		
+		$inventoryLineItem->addKeyValue("Sequence_Number", "1");
+		
+		$lineitemProduct = new LineItemProduct();
+		
+		$lineitemProduct->setId("35240333659082");
+		
+		$inventoryLineItem->addKeyValue("Product_Name", $lineItemProduct);
+		
+		$inventoryLineItem->addKeyValue("Sequence_Number", "1");
+		
+		$inventoryLineItem->addKeyValue("Quantity",123.2);
+		
+		$inventoryLineItem->addKeyValue("Tax",123.2);
+		
+		array_push($inventoryLineItemList, $inventoryLineItem);
+		
+		$productLineTaxes = [];
+		
+		$productLineTax = new LineTax();
+		
+		$productLineTax->setName("MyT2ax1134");
+		
+		$productLineTax->setPercentage(20.0);
+		
+		array_push($productLineTaxes, $productLineTax);
+		
+		$inventoryLineItem->addKeyValue("Line_Tax", $productLineTaxes);
+		
+		array_push($inventoryLineItemList, $inventoryLineItem);
+
+		$record1->addKeyValue("Quoted_Items", $inventoryLineItemList);
+		
+		$lineTaxes = [];
+		
+		$lineTax = new LineTax();
+		
+		$lineTax->setName("MyT2ax1134");
+		
+		$lineTax->setPercentage(20.0);
+		
+		array_push($lineTaxes, $lineTax);
+		
+		$record1->addKeyValue('$line_tax', $lineTaxes);
+		
+		/** End Inventory **/
+		
+		$tagList = [];
+		
+		$tag = new Tag();
+		
+		$tag->setName("Testtask1");
+		
+		array_push($tagList, $tag);
+		
+		$record1->setTag($tagList);
+
 		//Add Record instance to the list
 		array_push($records, $record1);
 
@@ -807,8 +954,12 @@ class Record
 
 		$request->setTrigger($trigger);
 
+		$headerInstance = new HeaderMap();
+
+		// $headerInstance->add(UpdateRecordHeader::XEXTERNAL(), "Quotes.Quoted_Items.Product_Name.Products_External");
+
 		//Call updateRecord method that takes BodyWrapper instance, ModuleAPIName and recordId as parameter.
-		$response = $recordOperations->updateRecord( $recordId, $moduleAPIName,$request);
+		$response = $recordOperations->updateRecord($recordId, $moduleAPIName, $request, $headerInstance);
 
 		if($response != null)
 		{
@@ -935,10 +1086,1098 @@ class Record
 		//Get instance of ParameterMap Class
 		$paramInstance = new ParameterMap();
 
-		$paramInstance->add(DeleteRecordParam::wfTrigger(), "false");
+		$paramInstance->add(DeleteRecordParam::wfTrigger(), false);
+
+		$headerInstance = new HeaderMap();
+
+		$headerInstance->add(DeleteRecordHeader::XEXTERNAL(), "Leads.External");
 
 		//Call deleteRecord method that takes paramInstance, ModuleAPIName and recordId as parameter.
-		$response = $recordOperations->deleteRecord($recordId,$moduleAPIName, $paramInstance);
+		$response = $recordOperations->deleteRecord($recordId,$moduleAPIName, $paramInstance, $headerInstance);
+
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ActionWrapper instance
+					$actionWrapper = $actionHandler;
+
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+
+	/**
+	 * <h3> Get Record Using External Id</h3>
+	 * This method is used to get a single record using external id and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param externalFieldValue - 
+	 * @param destinationFolder - The absolute path of the destination folder to store the attachment
+	 * @throws Exception
+	 */
+	public static function getRecordUsingExternalId(string $moduleAPIName, string $externalFieldValue, string $destinationFolder)
+	{
+		//example
+		//$moduleAPIName = "module_api_name";
+		//$recordId = "347002";
+
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+
+		//Get instance of ParameterMap Class
+		$paramInstance = new ParameterMap();
+
+		$paramInstance->add(GetRecordParam::approved(), "false");
+
+		$paramInstance->add(GetRecordParam::converted(), "false");
+
+		$fieldNames = array("Deal_Name", "Company");
+
+		foreach($fieldNames as $fieldName)
+		{
+			$paramInstance->add(GetRecordParam::fields(), $fieldName);
+        }
+
+		$startdatetime = date_create("2020-06-27T15:10:00");
+
+        $paramInstance->add(GetRecordParam::startDateTime(), $startdatetime);
+
+		$enddatetime = date_create("2020-06-29T15:10:00");
+
+		$paramInstance->add(GetRecordParam::endDateTime(), $enddatetime);
+
+		$paramInstance->add(GetRecordParam::territoryId(), "34770613051357");
+
+        $paramInstance->add(GetRecordParam::includeChild(), "true");
+
+		$headerInstance = new HeaderMap();
+
+		$ifmodifiedsince = date_create("2020-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+		// $headerInstance->add(GetRecordHeader::IfModifiedSince(), $ifmodifiedsince);
+
+		$headerInstance->add(GetRecordHeader::XEXTERNAL(), "Leads.External");
+
+		//Call getRecordUsingExternalId method that takes externalFieldValue, moduleAPIName, paramInstance and headerInstance as parameter
+		$response = $recordOperations->getRecordUsingExternalId($externalFieldValue, $moduleAPIName, $paramInstance, $headerInstance);
+
+		if($response != null)
+		{
+            //Get the status code from response
+            echo("Status code " . $response->getStatusCode() . "\n");
+
+            if(in_array($response->getStatusCode(), array(204, 304)))
+            {
+                echo($response->getStatusCode() == 204? "No Content\n" : "Not Modified\n");
+
+                return;
+			}
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$responseHandler = $response->getObject();
+
+				if($responseHandler instanceof ResponseWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					$responseWrapper = $responseHandler;
+
+					//Get the list of obtained Record instances
+					$records = $responseWrapper->getData();
+
+					if($records != null)
+					{
+						$recordClass = 'com\zoho\crm\api\record\Record';
+
+						foreach($records as $record)
+						{
+							//Get the ID of each Record
+							echo("Record ID: " . $record->getId() . "\n");
+
+							//Get the createdBy User instance of each Record
+							$createdBy = $record->getCreatedBy();
+
+							//Check if createdBy is not null
+							if($createdBy != null)
+							{
+								//Get the ID of the createdBy User
+								echo("Record Created By User-ID: " . $createdBy->getId() . "\n");
+
+								//Get the name of the createdBy User
+								echo("Record Created By User-Name: " . $createdBy->getName() . "\n");
+
+								//Get the Email of the createdBy User
+								echo("Record Created By User-Email: " . $createdBy->getEmail() . "\n");
+							}
+
+							//Get the CreatedTime of each Record
+							echo("Record CreatedTime: "); print_r($record->getCreatedTime()); echo("\n");
+
+							//Get the modifiedBy User instance of each Record
+							$modifiedBy = $record->getModifiedBy();
+
+							//Check if modifiedBy is not null
+							if($modifiedBy != null)
+							{
+								//Get the ID of the modifiedBy User
+								echo("Record Modified By User-ID: " . $modifiedBy->getId() . "\n");
+
+								//Get the name of the modifiedBy User
+								echo("Record Modified By User-Name: " . $modifiedBy->getName() . "\n");
+
+								//Get the Email of the modifiedBy User
+								echo("Record Modified By User-Email: " . $modifiedBy->getEmail() . "\n");
+							}
+
+							//Get the ModifiedTime of each Record
+							echo("Record ModifiedTime: "); print_r($record->getModifiedTime()); echo("\n");
+
+							//Get the list of Tag instance each Record
+							$tags = $record->getTag();
+
+							//Check if tags is not null
+							if($tags != null)
+							{
+								foreach($tags as $tag)
+								{
+									//Get the Name of each Tag
+									echo("Record Tag Name: " . $tag->getName() . "\n");
+
+									//Get the Id of each Tag
+									echo("Record Tag ID: " . $tag->getId() . "\n");
+								}
+							}
+
+							//To get particular field value
+							echo("Record Field Value: " . $record->getKeyValue("Last_Name") . "\n");// FieldApiName
+
+							echo("Record KeyValues : \n" );
+
+							//Get the KeyValue map
+							foreach($record->getKeyValues() as $keyName => $value)
+							{
+								if($value != null)
+								{
+									if((is_array($value) && sizeof($value) > 0) && isset($value[0]))
+									{
+										if($value[0] instanceof FileDetails)
+										{
+											$fileDetails = $value;
+
+											foreach($fileDetails as $fileDetail)
+											{
+												//Get the Extn of each FileDetails
+												echo("Record FileDetails Extn: " . $fileDetail->getExtn() . "\n");
+
+												//Get the IsPreviewAvailable of each FileDetails
+												echo("Record FileDetails IsPreviewAvailable: " . $fileDetail->getIsPreviewAvailable() . "\n");
+
+												//Get the DownloadUrl of each FileDetails
+												echo("Record FileDetails DownloadUrl: " . $fileDetail->getDownloadUrl() . "\n");
+
+												//Get the DeleteUrl of each FileDetails
+												echo("Record FileDetails DeleteUrl: " . $fileDetail->getDeleteUrl() . "\n");
+
+												//Get the EntityId of each FileDetails
+												echo("Record FileDetails EntityId: " . $fileDetail->getEntityId() . "\n");
+
+												//Get the Mode of each FileDetails
+												echo("Record FileDetails Mode: " . $fileDetail->getMode() . "\n");
+
+												//Get the OriginalSizeByte of each FileDetails
+												echo("Record FileDetails OriginalSizeByte: " . $fileDetail->getOriginalSizeByte() . "\n");
+
+												//Get the PreviewUrl of each FileDetails
+												echo("Record FileDetails PreviewUrl: " . $fileDetail->getPreviewUrl() . "\n");
+
+												//Get the FileName of each FileDetails
+												echo("Record FileDetails FileName: " . $fileDetail->getFileName() . "\n");
+
+												//Get the FileId of each FileDetails
+												echo("Record FileDetails FileId: " . $fileDetail->getFileId() . "\n");
+
+												//Get the AttachmentId of each FileDetails
+												echo("Record FileDetails AttachmentId: " . $fileDetail->getAttachmentId() . "\n");
+
+												//Get the FileSize of each FileDetails
+												echo("Record FileDetails FileSize: " . $fileDetail->getFileSize() . "\n");
+
+												//Get the CreatorId of each FileDetails
+												echo("Record FileDetails CreatorId: " . $fileDetail->getCreatorId() . "\n");
+
+												//Get the LinkDocs of each FileDetails
+												echo("Record FileDetails LinkDocs: " . $fileDetail->getLinkDocs() . "\n");
+											}
+										}
+										else if($value[0] instanceof Choice)
+										{
+											$choice = $value;
+
+											foreach($choice as $choiceValue)
+											{
+												echo("Record " . $keyName . " : " . $choiceValue->getValue() . "\n");
+											}
+										}
+										else if($value[0] instanceof Tag)
+										{
+											$tagList = $value;
+
+											foreach($tagList as $tag)
+											{
+												//Get the Name of each Tag
+												echo("Record Tag Name: " . $tag->getName() . "\n");
+
+												//Get the Id of each Tag
+												echo("Record Tag ID: " . $tag->getId() . "\n");
+											}
+										}
+										else if($value[0] instanceof PricingDetails)
+										{
+											$pricingDetails = $value;
+
+											foreach($pricingDetails as $pricingDetail)
+											{
+												echo("Record PricingDetails ToRange: " . $pricingDetail->getToRange(). "\n");
+
+												echo("Record PricingDetails Discount: " . $pricingDetail->getDiscount(). "\n");
+
+												echo("Record PricingDetails ID: " . $pricingDetail->getId() . "\n");
+
+												echo("Record PricingDetails FromRange: " . $pricingDetail->getFromRange(). "\n");
+											}
+										}
+										else if($value[0] instanceof Participants)
+										{
+											$participants = $value;
+
+											foreach($participants as $participant)
+											{
+												echo("RelatedRecord Participants Name: " . $participant->getName() . "\n");
+
+												echo("RelatedRecord Participants Invited: " . $participant->getInvited() . "\n");
+
+												echo("RelatedRecord Participants ID: " . $participant->getId() . "\n");
+
+												echo("RelatedRecord Participants Type: " . $participant->getType() . "\n");
+
+												echo("RelatedRecord Participants Participant: " . $participant->getParticipant() . "\n");
+
+												echo("RelatedRecord Participants Status: " . $participant->getStatus() . "\n");
+											}
+										}
+										else if($value[0] instanceof $recordClass)
+										{
+											$recordList = $value;
+
+											foreach($recordList as $record1)
+											{
+												//Get the details map
+												foreach($record1->getKeyValues() as $key => $value1)
+												{
+													//Get each value in the map
+													echo($key . " : " ); print_r($value1); echo("\n");
+												}
+											}
+										}
+										else if($value[0] instanceof LineTax)
+										{
+											$lineTaxes = $value;
+
+											foreach($lineTaxes as $lineTax)
+											{
+												echo("Record ProductDetails LineTax Percentage: " . $lineTax->getPercentage(). "\n");
+
+												echo("Record ProductDetails LineTax Name: " . $lineTax->getName() . "\n");
+
+												echo("Record ProductDetails LineTax Id: " . $lineTax->getId() . "\n");
+
+												echo("Record ProductDetails LineTax Value: " . $lineTax->getValue(). "\n");
+											}
+										}
+										else if($value[0] instanceof Comment)
+										{
+											$comments = $value;
+
+											foreach($comments as $comment)
+											{
+												echo("Record Comment CommentedBy: " . $comment->getCommentedBy() . "\n");
+
+												echo("Record Comment CommentedTime: "); print_r($comment->getCommentedTime()); echo("\n");
+
+												echo("Record Comment CommentContent: " . $comment->getCommentContent(). "\n");
+
+												echo("Record Comment Id: " . $comment->getId() . "\n");
+											}
+										}
+										else if($value[0] instanceof Attachment)
+										{
+											$attachments = $value;
+
+											foreach ($attachments as $attachment)
+											{
+												//Get the owner User instance of each attachment
+												$owner = $attachment->getOwner();
+
+												//Check if owner is not null
+												if($owner != null)
+												{
+													//Get the Name of the Owner
+													echo("Record Attachment Owner User-Name: " . $owner->getName() . "\n");
+
+													//Get the ID of the Owner
+													echo("Record Attachment Owner User-ID: " . $owner->getId() . "\n");
+
+													//Get the Email of the Owner
+													echo("Record Attachment Owner User-Email: " . $owner->getEmail() . "\n");
+												}
+
+												//Get the modified time of each attachment
+												echo("Record Attachment Modified Time: "); print_r($attachment->getModifiedTime()); echo("\n");
+
+												//Get the name of the File
+												echo("Record Attachment File Name: " . $attachment->getFileName() . "\n");
+
+												//Get the created time of each attachment
+												echo("Record Attachment Created Time: " ); print_r($attachment->getCreatedTime()); echo("\n");
+
+												//Get the Attachment file size
+												echo("Record Attachment File Size: " . $attachment->getSize() . "\n");
+
+												//Get the parentId Record instance of each attachment
+												$parentId = $attachment->getParentId();
+
+												//Check if parentId is not null
+												if($parentId != null)
+												{
+													//Get the parent record Name of each attachment
+													echo("Record Attachment parent record Name: " . $parentId->getKeyValue("name") . "\n");
+
+													//Get the parent record ID of each attachment
+													echo("Record Attachment parent record ID: " . $parentId->getId() . "\n");
+												}
+
+												//Get the attachment is Editable
+												echo("Record Attachment is Editable: " . $attachment->getEditable() . "\n");
+
+												//Get the file ID of each attachment
+												echo("Record Attachment File ID: " . $attachment->getFileId() . "\n");
+
+												//Get the type of each attachment
+												echo("Record Attachment File Type: " . $attachment->getType() . "\n");
+
+												//Get the seModule of each attachment
+												echo("Record Attachment seModule: " . $attachment->getSeModule() . "\n");
+
+												//Get the modifiedBy User instance of each attachment
+												$modifiedBy = $attachment->getModifiedBy();
+
+												//Check if modifiedBy is not null
+												if($modifiedBy != null)
+												{
+													//Get the Name of the modifiedBy User
+													echo("Record Attachment Modified By User-Name: " . $modifiedBy->getName() . "\n");
+
+													//Get the ID of the modifiedBy User
+													echo("Record Attachment Modified By User-ID: " . $modifiedBy->getId() . "\n");
+
+													//Get the Email of the modifiedBy User
+													echo("Record Attachment Modified By User-Email: " . $modifiedBy->getEmail() . "\n");
+												}
+
+												//Get the state of each attachment
+												echo("Record Attachment State: " . $attachment->getState() . "\n");
+
+												//Get the ID of each attachment
+												echo("Record Attachment ID: " . $attachment->getId() . "\n");
+
+												//Get the createdBy User instance of each attachment
+												$createdBy = $attachment->getCreatedBy();
+
+												//Check if createdBy is not null
+												if($createdBy != null)
+												{
+													//Get the name of the createdBy User
+													echo("Record Attachment Created By User-Name: " . $createdBy->getName() . "\n");
+
+													//Get the ID of the createdBy User
+													echo("Record Attachment Created By User-ID: " . $createdBy->getId() . "\n");
+
+													//Get the Email of the createdBy User
+													echo("Record Attachment Created By User-Email: " . $createdBy->getEmail() . "\n");
+												}
+
+												//Get the linkUrl of each attachment
+												echo("Record Attachment LinkUrl: " . $attachment->getLinkUrl() . "\n");
+											}
+										}
+										else if($value[0] instanceof ImageUpload)
+										{
+											$imageUploads = $value;
+
+											foreach($imageUploads as $imageUpload)
+											{
+												echo("Record " . $keyName . " Description: " . $imageUpload->getDescription() . "\n");
+
+												echo("Record " . $keyName . " PreviewId: " . $imageUpload->getPreviewId() . "\n");
+
+												echo("Record " . $keyName . " File_Name: " . $imageUpload->getFileName() . "\n");
+
+												echo("Record " . $keyName . " State: "); print_r($imageUpload->getState()); echo("\n");
+
+												echo("Record " . $keyName . " Size: " . $imageUpload->getSize() . "\n");
+
+												echo("Record " . $keyName . " SequenceNumber: " . $imageUpload->getSequenceNumber() . "\n");
+
+												echo("Record " . $keyName . " Id: " . $imageUpload->getId() . "\n");
+
+												echo("Record " . $keyName . " FileId: " . $imageUpload->getFileId() . "\n");
+											}
+										}
+										else
+										{
+											echo($keyName . " : "); print_r($value); echo("\n");
+										}
+									}
+									else if($value instanceof Layout)
+									{
+										$layout = $value;
+
+										if($layout != null)
+										{
+											echo("Record " . $keyName. " ID: " . $layout->getId() . "\n");
+
+											echo("Record " . $keyName . " Name: " . $layout->getName() . "\n");
+										}
+									}
+									else if($value instanceof User)
+									{
+										$user = $value;
+
+										if($user != null)
+										{
+											echo("Record " . $keyName . " User-ID: " . $user->getId() . "\n");
+
+											echo("Record " . $keyName . " User-Name: " . $user->getName() . "\n");
+
+											echo("Record " . $keyName . " User-Email: " . $user->getEmail() . "\n");
+										}
+									}
+									else if($value instanceof $recordClass)
+									{
+										$recordValue = $value;
+
+										echo("Record " . $keyName . " ID: " . $recordValue->getId() . "\n");
+
+										echo("Record " . $keyName . " Name: " . $recordValue->getKeyValue("name") . "\n");
+									}
+									else if($value instanceof Choice)
+									{
+										$choiceValue = $value;
+
+										echo("Record " . $keyName . " : " . $choiceValue->getValue() . "\n");
+									}
+									else if($value instanceof RemindAt)
+									{
+										echo($keyName . ": " . $value->getAlarm() . "\n");
+									}
+									else if($value instanceof RecurringActivity)
+									{
+										echo($keyName . " : RRULE" . ": " . $value->getRrule() . "\n");
+									}
+									else if($value instanceof Consent)
+									{
+										$consent = $value;
+
+										echo("Record Consent ID: " . $consent->getId());
+
+										//Get the Owner User instance of each attachment
+										$owner = $consent->getOwner();
+
+										//Check if owner is not null
+										if($owner != null)
+										{
+											//Get the name of the owner User
+											echo("Record Consent Owner Name: " . $owner->getName());
+
+											//Get the ID of the owner User
+											echo("Record Consent Owner ID: " . $owner->getId());
+
+											//Get the Email of the owner User
+											echo("Record Consent Owner Email: " . $owner->getEmail());
+										}
+
+										$consentCreatedBy = $consent->getCreatedBy();
+
+										//Check if createdBy is not null
+										if($consentCreatedBy != null)
+										{
+											//Get the name of the CreatedBy User
+											echo("Record Consent CreatedBy Name: " . $consentCreatedBy->getName());
+
+											//Get the ID of the CreatedBy User
+											echo("Record Consent CreatedBy ID: " . $consentCreatedBy->getId());
+
+											//Get the Email of the CreatedBy User
+											echo("Record Consent CreatedBy Email: " . $consentCreatedBy->getEmail());
+										}
+
+										$consentModifiedBy = $consent->getModifiedBy();
+
+										//Check if createdBy is not null
+										if($consentModifiedBy != null)
+										{
+											//Get the name of the ModifiedBy User
+											echo("Record Consent ModifiedBy Name: " . $consentModifiedBy->getName());
+
+											//Get the ID of the ModifiedBy User
+											echo("Record Consent ModifiedBy ID: " . $consentModifiedBy->getId());
+
+											//Get the Email of the ModifiedBy User
+											echo("Record Consent ModifiedBy Email: " . $consentModifiedBy->getEmail());
+										}
+
+										echo("Record Consent CreatedTime: " . $consent->getCreatedTime());
+
+										echo("Record Consent ModifiedTime: " . $consent->getModifiedTime());
+
+										echo("Record Consent ContactThroughEmail: " . $consent->getContactThroughEmail());
+
+										echo("Record Consent ContactThroughSocial: " . $consent->getContactThroughSocial());
+
+										echo("Record Consent ContactThroughSurvey: " . $consent->getContactThroughSurvey());
+
+										echo("Record Consent ContactThroughPhone: " . $consent->getContactThroughPhone());
+
+										echo("Record Consent MailSentTime: " . $consent->getMailSentTime());
+
+										echo("Record Consent ConsentDate: " . $consent->getConsentDate());
+
+										echo("Record Consent ConsentRemarks: " . $consent->getConsentRemarks());
+
+										echo("Record Consent ConsentThrough: " . $consent->getConsentThrough());
+
+										echo("Record Consent DataProcessingBasis: " . $consent->getDataProcessingBasis());
+
+										//To get custom values
+										echo("Record Consent Lawful Reason: " . $consent->getKeyValue("Lawful_Reason"));
+									}
+									else
+									{
+										//Get each value in the map
+										echo($keyName . " : "); print_r($value); echo("\n");
+									}
+								}
+								else
+								{
+									//Get each value in the map
+									echo($keyName . " : "); print_r($value); echo("\n");
+								}
+							}
+						}
+					}
+				}
+				else if($responseHandler instanceof FileBodyWrapper)
+				{
+					//Get object from response
+					$fileBodyWrapper = $responseHandler;
+
+					//Get StreamWrapper instance from the returned FileBodyWrapper instance
+					$streamWrapper = $fileBodyWrapper->getFile();
+
+					//Create a file instance with the absolute_file_path
+					$fp = fopen($destinationFolder."/".$streamWrapper->getName(), "w");
+
+					//Get stream from the response
+					$stream = $streamWrapper->getStream();
+
+					fputs($fp, $stream);
+
+					fclose($fp);
+				}
+				//Check if the request returned an exception
+				else if($responseHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $responseHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+
+	/**
+	 * <h3> UpdateRecordUsingExternalId</h3>
+	 * This method is used to update a single record of a module with ID and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param externalFieldValue - The ID of the record to be obtained.
+	 * @throws Exception
+	 */
+	public static function updateRecordUsingExternalId(string $moduleAPIName, string $externalFieldValue)
+	{
+		//API Name of the module to update record
+		//$moduleAPIName = "module_api_name";
+		//$recordId = "3477002";
+
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+
+		//Get instance of BodyWrapper Class that will contain the request body
+		$request = new BodyWrapper();
+
+		//List of Record instances
+        $records = array();
+
+        $recordClass = 'com\zoho\crm\api\record\Record';
+
+		//Get instance of Record Class
+		$record1 = new $recordClass();
+
+		/*
+		 * Call addFieldValue method that takes two arguments
+		 * 1 -> Call Field "." and choose the module from the displayed list and press "." and choose the field name from the displayed list.
+		 * 2 -> Value
+		*/
+
+		$record1->addFieldValue(Leads::City(), "City");
+
+		$record1->addFieldValue(Leads::LastName(), "Last Name");
+
+		$record1->addFieldValue(Leads::FirstName(), "First Name");
+
+		$record1->addFieldValue(Leads::Company(), "KKRNP");
+
+		// $accounts = new $recordClass();
+
+		// $accounts->addKeyValue("id", "34770615848009");
+
+		// $record1->addFieldValue(Contacts::AccountName(), $accounts);
+
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		$record1->addKeyValue("Custom_field", "Value");
+
+		$record1->addKeyValue("Custom_field_2", "value");
+
+		$record1->addKeyValue("Date_1", new \DateTime('2020-03-08'));
+
+		$record1->addKeyValue("Date_Time_2", date_create("2021-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get())));
+
+		$fileDetails = array();
+
+		$fileDetail1 = new FileDetails();
+
+		$fileDetail1->setAttachmentId("347005");
+
+		$fileDetail1->setDelete("null");
+
+		array_push($fileDetails, $fileDetail1);
+
+		$fileDetail2 = new FileDetails();
+
+		$fileDetail2->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c32244f4e660f3702f05463e2fd0a2d8c1c");
+
+		array_push($fileDetails, $fileDetail2);
+
+		$fileDetail3 = new FileDetails();
+
+		$fileDetail3->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c326a3f4c7562925ac9afc0f7433dd2098c");
+
+		array_push($fileDetails, $fileDetail3);
+
+		$record1->addKeyValue("File_Upload", $fileDetails);
+
+		$recordOwner = new User();
+        
+		$recordOwner->setEmail("abc@zoho.com");
+        
+        $record1->addKeyValue("Owner", $recordOwner);
+
+		//Used when GDPR is enabled
+		$dataConsent = new Consent();
+		
+		$dataConsent->setConsentRemarks("Approved.");
+		
+		$dataConsent->setConsentThrough("Email");
+		
+		$dataConsent->setContactThroughEmail(true);
+		
+		$dataConsent->setContactThroughSocial(false);
+		
+		$record1->addKeyValue("Data_Processing_Basis_Details", $dataConsent);
+		
+		$subformList = [];
+		
+		$subform = new $recordClass();
+		
+		$subform->addKeyValue("Subform FieldAPIName", "FieldValue");
+		
+		array_push($subformList, $subform);
+		
+		$record1->addKeyValue("Subform Name", $subformList);
+		
+		/** Following methods are being used only by Inventory modules */
+		
+		$dealName = new $recordClass();
+		
+		$dealName->addFieldValue(Deals::id(), "3477061012112003");
+		
+		$record1->addFieldValue(Sales_Orders::DealName(), $dealName);
+		
+		$contactName = new $recordClass();
+		
+		$contactName->addFieldValue(Contacts::id(), "3477061011853001");
+		
+		$record1->addFieldValue(Purchase_Orders::ContactName(), $contactName);
+		
+		$accountName = new $recordClass();
+		
+		$accountName->addKeyValue("name", "automatedAccount");
+		
+		$record1->addFieldValue(Quotes::AccountName(), $accountName);
+
+		$record1->addKeyValue("Discount", 10.5);
+		
+		$inventoryLineItemList = [];
+		
+		$inventoryLineItem = new $recordClass();
+		
+		$lineItemProduct = new LineItemProduct();
+		
+		$lineItemProduct->setId("3477061012107031");
+
+		// $lineItemProduct->addKeyValue("Products_External", "AutomatedSDKExternal");
+		
+		$inventoryLineItem->addKeyValue("Description", "asd");
+		
+		$inventoryLineItem->addKeyValue("Discount", "5");
+		
+		$parentId = new $recordClass();
+		
+		$parentId->setId("35240337331017");
+
+//		inventoryLineItem->addKeyValue("Parent_Id", 5);
+		
+		$inventoryLineItem->addKeyValue("Sequence_Number", "1");
+		
+		$lineitemProduct = new LineItemProduct();
+		
+		$lineitemProduct->setId("35240333659082");
+		
+		$inventoryLineItem->addKeyValue("Product_Name", $lineItemProduct);
+		
+		$inventoryLineItem->addKeyValue("Sequence_Number", "1");
+		
+		$inventoryLineItem->addKeyValue("Quantity",123.2);
+		
+		$inventoryLineItem->addKeyValue("Tax",123.2);
+		
+		array_push($inventoryLineItemList, $inventoryLineItem);
+		
+		$productLineTaxes = [];
+		
+		$productLineTax = new LineTax();
+		
+		$productLineTax->setName("MyT2ax1134");
+		
+		$productLineTax->setPercentage(20.0);
+		
+		array_push($productLineTaxes, $productLineTax);
+		
+		$inventoryLineItem->addKeyValue("Line_Tax", $productLineTaxes);
+		
+		array_push($inventoryLineItemList, $inventoryLineItem);
+
+		$record1->addKeyValue("Quoted_Items", $inventoryLineItemList);
+		
+		$lineTaxes = [];
+		
+		$lineTax = new LineTax();
+		
+		$lineTax->setName("MyT2ax1134");
+		
+		$lineTax->setPercentage(20.0);
+		
+		array_push($lineTaxes, $lineTax);
+		
+		$record1->addKeyValue('$line_tax', $lineTaxes);
+		
+		/** End Inventory **/
+		
+		$tagList = [];
+		
+		$tag = new Tag();
+		
+		$tag->setName("Testtask1");
+		
+		array_push($tagList, $tag);
+		
+		$record1->setTag($tagList);
+
+		//Add Record instance to the list
+		array_push($records, $record1);
+
+		//Set the list to Records in BodyWrapper instance
+		$request->setData($records);
+
+		$trigger = array("approval", "workflow", "blueprint");
+
+		$request->setTrigger($trigger);
+
+		$headerInstance = new HeaderMap();
+
+		$headerInstance->add(UpdateRecordHeader::XEXTERNAL(), "Quotes.Quoted_Items.Product_Name.Products_External");
+
+		//Call updateRecordUsingExternalId method that takes externalFieldValue, ModuleAPIName, BodyWrapper instance and headerInstance as parameter.
+		$response = $recordOperations->updateRecordUsingExternalId($externalFieldValue, $moduleAPIName, $request, $headerInstance);
+
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					$actionWrapper = $actionHandler;
+
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : ");
+
+								print_r($value);
+
+								echo("\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+
+	/**
+	 * <h3> Delete RecordUsingExternalId</h3>
+	 * This method is used to delete a single record of a module with ID and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param externalFieldValue - The ID of the record to be obtained.
+	 * @throws Exception
+	 */
+	public static function deleteRecordUsingExternalId(string $moduleAPIName, string $externalFieldValue)
+	{
+		//API Name of the module to delete record
+		//$moduleAPIName = "module_api_name";
+		//$recordId = "3477002";
+
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+
+		//Get instance of ParameterMap Class
+		$paramInstance = new ParameterMap();
+
+		$paramInstance->add(DeleteRecordParam::wfTrigger(), false);
+
+		$headerInstance = new HeaderMap();
+
+		$headerInstance->add(DeleteRecordHeader::XEXTERNAL(), "Leads.External");
+
+		//Call deleteRecordUsingExternalId method that takes externalFieldValue, ModuleAPIName, paramInstance and headerInstance as parameter.
+		$response = $recordOperations->deleteRecordUsingExternalId($externalFieldValue, $moduleAPIName, $paramInstance, $headerInstance);
 
 		if($response != null)
 		{
@@ -1059,53 +2298,55 @@ class Record
 
 		$paramInstance = new ParameterMap();
 
-		// $paramInstance->add(GetRecordsParam::approved(), "true");
+		$paramInstance->add(GetRecordsParam::approved(), "true");
 
-		// $paramInstance->add(GetRecordsParam::converted(), "1234");
+		$paramInstance->add(GetRecordsParam::converted(), "1234");
 
-		// $paramInstance->add(GetRecordsParam::cvid(), "34770610089005");
+		$paramInstance->add(GetRecordsParam::cvid(), "34770610089005");
 
-		// $ids = array("34770615623115", "34770614352001");
+		$ids = array("TestExternalLead111", "34770614352001");
 
-		// foreach($ids as $id)
-		// {
-		// 	$paramInstance->add(GetRecordsParam::ids(), $id);
-		// }
+		foreach($ids as $id)
+		{
+			$paramInstance->add(GetRecordsParam::ids(), $id);
+		}
 
-		// $paramInstance->add(GetRecordsParam::uid(), "34770615181008");
+		$paramInstance->add(GetRecordsParam::uid(), "34770615181008");
 
-		// $fieldNames = array("Last_Name", "City");
+		$fieldNames = array("Last_Name", "City");
 
-		// foreach($fieldNames as $fieldName)
-		// {
-			// $paramInstance->add(GetRecordsParam::fields(), "id");
-		// }
+		foreach($fieldNames as $fieldName)
+		{
+			$paramInstance->add(GetRecordsParam::fields(), "id");
+		}
 
-		// $paramInstance->add(GetRecordsParam::sortBy(), "Email");
+		$paramInstance->add(GetRecordsParam::sortBy(), "Email");
 
-		// $paramInstance->add(GetRecordsParam::sortOrder(), "desc");
+		$paramInstance->add(GetRecordsParam::sortOrder(), "desc");
 
-		// $paramInstance->add(GetRecordsParam::page(), 1);
+		$paramInstance->add(GetRecordsParam::page(), 1);
 
-		// $paramInstance->add(GetRecordsParam::perPage(), 3);
+		$paramInstance->add(GetRecordsParam::perPage(), 3);
 
-		// $startdatetime = date_create("2020-06-27T15:10:00+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+		$startdatetime = date_create("2020-06-27T15:10:00+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-		// $paramInstance->add(GetRecordsParam::startDateTime(), $startdatetime);
+		$paramInstance->add(GetRecordsParam::startDateTime(), $startdatetime);
 
-		// $enddatetime = date_create("2020-06-29T15:10:00+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+		$enddatetime = date_create("2020-06-29T15:10:00+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-		// $paramInstance->add(GetRecordsParam::endDateTime(), $enddatetime);
+		$paramInstance->add(GetRecordsParam::endDateTime(), $enddatetime);
 
-		// $paramInstance->add(GetRecordsParam::territoryId(), "34770613051357");
+		$paramInstance->add(GetRecordsParam::territoryId(), "34770613051357");
 
-		// $paramInstance->add(GetRecordsParam::includeChild(), true);
+		$paramInstance->add(GetRecordsParam::includeChild(), true);
 
 		$headerInstance = new HeaderMap();
 
-		// $datetime = date_create("2021-02-26T15:28:34+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+		$datetime = date_create("2021-02-26T15:28:34+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-		// $headerInstance->add(GetRecordsHeader::IfModifiedSince(), $datetime);
+		$headerInstance->add(GetRecordsHeader::IfModifiedSince(), $datetime);
+
+		$headerInstance->add(GetRecordsHeader::XEXTERNAL(), "Leads.External");
 
 		//Call getRecords method
 		$response = $recordOperations->getRecords($moduleAPIName, $paramInstance, $headerInstance);
@@ -1598,9 +2839,9 @@ class Record
 
 										echo("Record Consent ContactThroughPhone: " . $consent->getContactThroughPhone());
 
-										echo("Record Consent MailSentTime: " . $consent->getMailSentTime().toString());
+										echo("Record Consent MailSentTime: " . $consent->getMailSentTime());
 
-										echo("Record Consent ConsentDate: " . $consent->getConsentDate().toString());
+										echo("Record Consent ConsentDate: " . $consent->getConsentDate());
 
 										echo("Record Consent ConsentRemarks: " . $consent->getConsentRemarks());
 
@@ -1635,24 +2876,6 @@ class Record
 					echo("Record Info Page : " . $info->getPage(). "\n");
 
 					echo("Record Info MoreRecords : "); print_r($info->getMoreRecords()); echo("\n");
-				}
-				else if($responseHandler instanceof FileBodyWrapper)
-				{
-					//Get object from response
-					$fileBodyWrapper = $responseHandler;
-
-					//Get StreamWrapper instance from the returned FileBodyWrapper instance
-					$streamWrapper = $fileBodyWrapper->getFile();
-
-					//Create a file instance with the absolute_file_path
-					$fp = fopen($destinationFolder."/".$streamWrapper->getName(), "w");
-
-					//Get stream from the response
-					$stream = $streamWrapper->getStream();
-
-					fputs($fp, $stream);
-
-					fclose($fp);
 				}
 				//Check if the request returned an exception
 				else if($responseHandler instanceof APIException)
@@ -1740,6 +2963,12 @@ class Record
 
 		$record1->addFieldValue(Solutions::SolutionTitle(), "Solution_Title");
 
+		$accounts = new $recordClass();
+
+		$accounts->addKeyValue("id", "34770615848009");
+
+		$record1->addFieldValue(Accounts::AccountName(), $accounts);
+
 		$record1->addFieldValue(Accounts::AccountName(), "Account_Name");
 
 		$record1->addFieldValue(Cases::CaseOrigin(), new Choice("AutomatedSDK"));
@@ -1759,11 +2988,13 @@ class Record
 
 		$record1->addKeyValue("Subject", "From PHP");
 
+		$record1->addKeyValue("External", "TestExternal123");
+
 		$taxes = array();
 
 		$tax = new Tax();
 
-		$tax->setValue("Sales Tax - 20.0 %");
+		$tax->setValue("MyTax1123 - 10.0 %");
 
 		array_push($taxes, $tax);
 
@@ -1771,9 +3002,11 @@ class Record
 
 		$record1->addKeyValue("Product_Name", "AutomatedSDK");
 
+		$record1->addKeyValue("Products_External", "Products_External");
+
 		$imageUpload = new ImageUpload();
 
-		$imageUpload->setEncryptedId("ae9c7cefa418aec1d6a5cc2d9ab35c32c868f35aa764283fe160f1ca5d9fc777");
+		$imageUpload->setEncryptedId("ae9c7cefa418aec1d6a5cc2d9ab35c320c7da49c4222acd283e275ffade3f0ff");
 
 		$record1->addKeyValue("Image_Upload", [$imageUpload]);
 
@@ -1781,13 +3014,13 @@ class Record
 
 		$fileDetail1 = new FileDetails();
 
-		$fileDetail1->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c32dd6c9909d3d45a7d43f4f5997f98fef9");
+		$fileDetail1->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c32b3ec27aa98b6161a4df6e2c0dc1f0f80");
 
 		array_push($fileDetails, $fileDetail1);
 
 		$fileDetail2 = new FileDetails();
 
-		$fileDetail2->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c32cf8c21acc735a439b1e84e92ec8454d7");
+		$fileDetail2->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c328db2d16efac6afe745678b577297a3b3");
 
 		array_push($fileDetails, $fileDetail2);
 
@@ -1799,6 +3032,12 @@ class Record
 
 		$record1->addKeyValue("File_Upload", $fileDetails);
 
+		$recordOwner = new User();
+        
+		$recordOwner->setEmail("abc@zoho.com");
+        
+        $record1->addKeyValue("Owner", $recordOwner);
+
 		/** Following methods are being used only by Inventory modules */
 
 		$vendorName = new $recordClass();
@@ -1809,13 +3048,13 @@ class Record
 
 		$dealName = new $recordClass();
 
-		$dealName->addFieldValue(Deals::id(), "34770614995070");
+		$dealName->addFieldValue(Deals::id(), "3477061012112003");
 
 		$record1->addFieldValue(Sales_Orders::DealName(), $dealName);
 
 		$contactName = new $recordClass();
 
-		$contactName->addFieldValue(Contacts::id(), "34770614977055");
+		$contactName->addFieldValue(Contacts::id(), "3477061011383004");
 
 		$record1->addFieldValue(Purchase_Orders::ContactName(), $contactName);
 
@@ -1833,7 +3072,9 @@ class Record
 
 		$lineItemProduct = new LineItemProduct();
 
-		$lineItemProduct->setId("34770615356009");
+		$lineItemProduct->setId("3477061012261");
+
+		// $lineItemProduct->addKeyValue("Products_External", "Products_External");
 
 		$inventoryLineItem->addKeyValue("Product_Name", $lineItemProduct);
 
@@ -1849,7 +3090,7 @@ class Record
 
 		$productLineTax = new LineTax();
 
-		$productLineTax->setName("Sales Tax");
+		$productLineTax->setName("MyTax1123");
 
 		$productLineTax->setPercentage(20.0);
 
@@ -1871,7 +3112,7 @@ class Record
 
 		$lineTax = new LineTax();
 
-		$lineTax->setName("Sales Tax");
+		$lineTax->setName("MyTax1123");
 
 		$lineTax->setPercentage(20.0);
 
@@ -1890,13 +3131,13 @@ class Record
 
 		$remindAt = new RemindAt();
 
-		$remindAt->setAlarm("FREQ=NONE;ACTION=EMAILANDPOPUP;TRIGGER=DATE-TIME:2020-07-03T12:30:00.05:30");
+		$remindAt->setAlarm("FREQ=DAILY;INTERVAL=10;UNTIL=2020-08-14;DTSTART=2020-07-03");
 
 		$record1->addFieldValue(Tasks::RemindAt(), $remindAt);
 
 		$whoId = new $recordClass();
 
-		$whoId->setId("34770614977055");
+		$whoId->setId("3477061011383004");
 
 		$record1->addFieldValue(Tasks::WhoId(), $whoId);
 
@@ -1910,7 +3151,7 @@ class Record
 
 		$whatId = new $recordClass();
 
-		$whatId->setId("34770610207118");
+		$whatId->setId("3477061011383001");
 
 		$record1->addFieldValue(Tasks::WhatId(), $whatId);
 
@@ -1933,7 +3174,7 @@ class Record
 
 		$participant1 = new Participants();
 
-		$participant1->setParticipant("username@gmail.com");
+		$participant1->setParticipant("abc@zoho.com");
 
 		$participant1->setType("email");
 
@@ -1943,7 +3184,7 @@ class Record
 
 		$participant2 = new Participants();
 
-		$participant2->addKeyValue("participant", "34770615844006");
+		$participant2->addKeyValue("participant", "347706155001");
 
 		$participant2->addKeyValue("type", "lead");
 
@@ -1973,9 +3214,11 @@ class Record
 
 		$record1->addKeyValue('$se_module', "Leads");
 
+		$record1->addKeyValue('Remind_At', new \DateTime('2020-03-08'));
+
 		$whatId = new $recordClass();
 
-		$whatId->setId("34770614381002");
+		$whatId->setId("3477061012255001");
 
 		$record1->addFieldValue(Events::WhatId(), $whatId);
 
@@ -2044,8 +3287,14 @@ class Record
 
 		//bodyWrapper.setLarId("34770610087515");
 
+		$headerInstance = new HeaderMap();
+
+		// $headerInstance->add(CreateRecordsHeader::XEXTERNAL(), "Quotes.Quoted_Items.Product_Name.Products_External");
+
+		// $headerInstance->add(CreateRecordsHeader::XEXTERNAL(), "Products.Products_External");
+
 		//Call createRecords method that takes BodyWrapper instance as parameter.
-		$response = $recordOperations->createRecords($moduleAPIName, $bodyWrapper);
+		$response = $recordOperations->createRecords($moduleAPIName, $bodyWrapper, $headerInstance);
 
 		if($response != null)
 		{
@@ -2174,7 +3423,7 @@ class Record
 		//Get instance of Record Class
 		$record1 = new $recordClass();
 
-		$record1->setId("3477061000004381002");
+		$record1->setId("3477061012266");
 
 		/*
 		 * Call addFieldValue method that takes two arguments
@@ -2198,6 +3447,96 @@ class Record
 		$record1->addKeyValue("Custom_field", "Value");
 
 		$record1->addKeyValue("Custom_field_2", "value");
+
+		$recordOwner = new User();
+        
+		$recordOwner->setEmail("abc@zoho.com");
+        
+        $record1->addKeyValue("Owner", $recordOwner);
+
+		/** Following methods are being used only by Inventory modules */
+
+		$vendorName = new $recordClass();
+
+		$vendorName->addFieldValue(Vendors::id(), "34770617247001");
+
+		$record1->addFieldValue(Purchase_Orders::VendorName(), $vendorName);
+
+		$dealName = new $recordClass();
+
+		$dealName->addFieldValue(Deals::id(), "3477061012112003");
+
+		$record1->addFieldValue(Sales_Orders::DealName(), $dealName);
+
+		$contactName = new $recordClass();
+
+		$contactName->addFieldValue(Contacts::id(), "3477061011383004");
+
+		$record1->addFieldValue(Purchase_Orders::ContactName(), $contactName);
+
+		$accountName = new $recordClass();
+
+		$accountName->addKeyValue("name", "automatedAccount");
+
+		$record1->addFieldValue(Quotes::AccountName(), $accountName);
+
+		$record1->addKeyValue("Discount", 10.5);
+
+		$inventoryLineItemList = array();
+
+		$inventoryLineItem = new $recordClass();
+
+		$lineItemProduct = new LineItemProduct();
+
+		// $lineItemProduct->setId("3477061012261");
+
+		$lineItemProduct->addKeyValue("Products_External", "Products_External");
+
+		$inventoryLineItem->addKeyValue("Product_Name", $lineItemProduct);
+
+		$inventoryLineItem->addKeyValue("Quantity", 1.5);
+
+		$inventoryLineItem->addKeyValue("Description", "productDescription");
+
+		$inventoryLineItem->addKeyValue("ListPrice", 10.0);
+
+		$inventoryLineItem->addKeyValue("Discount", "5%");
+
+		$productLineTaxes = array();
+
+		$productLineTax = new LineTax();
+
+		$productLineTax->setName("MyTax1123");
+
+		$productLineTax->setPercentage(20.0);
+
+		array_push($productLineTaxes, $productLineTax);
+
+		$inventoryLineItem->addKeyValue("Line_Tax", $productLineTaxes);
+
+		array_push($inventoryLineItemList, $inventoryLineItem);
+
+		$record1->addKeyValue("Quoted_Items", $inventoryLineItemList);
+
+		$record1->addKeyValue("Invoiced_Items", $inventoryLineItemList);
+
+		$record1->addKeyValue("Purchase_Items", $inventoryLineItemList);
+
+		$record1->addKeyValue("Ordered_Items", $inventoryLineItemList);
+
+		$lineTaxes = array();
+
+		$lineTax = new LineTax();
+
+		$lineTax->setName("MyTax1123");
+
+		$lineTax->setPercentage(20.0);
+
+		array_push($lineTaxes,$lineTax);
+
+		$record1->addKeyValue('$line_tax', $lineTaxes);
+
+		/** End Inventory **/
 
 		//Add Record instance to the list
 		array_push($records, $record1);
@@ -2239,8 +3578,12 @@ class Record
 
 		$request->setTrigger($trigger);
 
-		//Call createRecords method that takes BodyWrapper instance and moduleAPIName as parameter.
-		$response = $recordOperations->updateRecords($moduleAPIName, $request);
+		$headerInstance = new HeaderMap();
+
+		// $headerInstance->add(CreateRecordsHeader::XEXTERNAL(), "Quotes.Quoted_Items.Product_Name.Products_External");
+
+		//Call createRecords method that takes moduleAPIName, BodyWrapper instance and $headerInstance as parameter.
+		$response = $recordOperations->updateRecords($moduleAPIName, $request, $headerInstance);
 
 		if($response != null)
 		{
@@ -2371,10 +3714,14 @@ class Record
 			$paramInstance->add(DeleteRecordsParam::ids(), $id);
 		}
 
-		// $paramInstance->add(DeleteRecordsParam::wfTrigger(), "true");
+		$paramInstance->add(DeleteRecordsParam::wfTrigger(), true);
 
-		//Call deleteRecord method that takes ModuleAPIName and recordId as parameter.
-		$response = $recordOperations->deleteRecords($moduleAPIName,$paramInstance);
+		$headerInstance = new HeaderMap();
+
+		// $headerInstance->add(CreateRecordsHeader::XEXTERNAL(), "Leads.External");
+
+		//Call deleteRecord method that takes ModuleAPIName, $paramInstance and $headerInstance as parameter.
+		$response = $recordOperations->deleteRecords($moduleAPIName, $paramInstance, $headerInstance);
 
 		if($response != null)
 		{
@@ -2555,6 +3902,8 @@ class Record
 
 		$record2->addKeyValue("Custom_field_2", "value");
 
+		$record2->addKeyValue("External", "External1");
+
 		//Add Record instance to the list
 		array_push($records, $record2);
 
@@ -2565,8 +3914,12 @@ class Record
 		//Set the list to Records in BodyWrapper instance
 		$request->setData($records);
 
-		//Call createRecords method that takes BodyWrapper instance as parameter.
-		$response = $recordOperations->upsertRecords($moduleAPIName, $request);
+		$headerInstance = new HeaderMap();
+
+		// $headerInstance->add(UpsertRecordsHeader::XEXTERNAL(), "Leads.External");
+
+		//Call UpsertRecordsHeader method that takes BodyWrapper instance as parameter.
+		$response = $recordOperations->upsertRecords($moduleAPIName, $request, $headerInstance);
 
 		if($response != null)
 		{
@@ -2855,6 +4208,8 @@ class Record
 
 		$paramInstance->add(SearchRecordsParam::criteria(), "((Last_Name:starts_with:Last Name) or (Company:starts_with:fasf\\(123\\) K))");
 
+		// $paramInstance->add(SearchRecordsParam::criteria(), "(External:in:External1)");
+		
 		$paramInstance->add(SearchRecordsParam::email(), "username@gmail.com");
 
 		$paramInstance->add(SearchRecordsParam::phone(), "234567890");
@@ -2869,8 +4224,12 @@ class Record
 
 		$paramInstance->add(SearchRecordsParam::perPage(), 2);
 
+		$headerInstance = new HeaderMap();
+
+		$headerInstance->add(UpdateRecordHeader::XEXTERNAL(), "Leads.External");
+
 		//Call searchRecords method
-		$response = $recordOperations->searchRecords($moduleAPIName,$paramInstance);
+		$response = $recordOperations->searchRecords($moduleAPIName, $paramInstance, $headerInstance);
 
 		if($response->isExpected())
 		{
@@ -3348,9 +4707,9 @@ class Record
 
 									echo("Record Consent ContactThroughPhone: " . $consent->getContactThroughPhone());
 
-									echo("Record Consent MailSentTime: " . $consent->getMailSentTime().toString());
+									echo("Record Consent MailSentTime: " . $consent->getMailSentTime());
 
-									echo("Record Consent ConsentDate: " . $consent->getConsentDate().toString());
+									echo("Record Consent ConsentDate: " . $consent->getConsentDate());
 
 									echo("Record Consent ConsentRemarks: " . $consent->getConsentRemarks());
 
@@ -3375,24 +4734,6 @@ class Record
 						}
 					}
 				}
-			}
-			else if($responseHandler instanceof FileBodyWrapper)
-			{
-				//Get object from response
-				$fileBodyWrapper = $responseHandler;
-
-				//Get StreamWrapper instance from the returned FileBodyWrapper instance
-				$streamWrapper = $fileBodyWrapper->getFile();
-
-				//Create a file instance with the absolute_file_path
-				$fp = fopen($destinationFolder."/".$streamWrapper->getName(), "w");
-
-				//Get stream from the response
-				$stream = $streamWrapper->getStream();
-
-				fputs($fp, $stream);
-
-				fclose($fp);
 			}
 			//Check if the request returned an exception
 			else if($responseHandler instanceof APIException)
@@ -3435,7 +4776,7 @@ class Record
 	public static function convertLead(string $recordId)
 	{
 		//API Name of the module to update record
-		//$moduleAPIName = "module_api_name";
+		//$recordId = "02034003";
 
 		//Get instance of RecordOperations Class
 		$recordOperations = new RecordOperations();
@@ -3449,17 +4790,17 @@ class Record
 		//Get instance of LeadConverter Class
 		$record1 = new LeadConverter();
 
-		$record1->setOverwrite(true);
+		// $record1->setOverwrite(true);
 
-		$record1->setNotifyLeadOwner(true);
+		// $record1->setNotifyLeadOwner(true);
 
-		$record1->setNotifyNewEntityOwner(true);
+		// $record1->setNotifyNewEntityOwner(true);
 
-		$record1->setAccounts("34770615848125");
+		// $record1->setAccounts("34770615848125");
 
-		$record1->setContacts("34770610358009");
+		// $record1->setContacts("34770610358009");
 
-		$record1->setAssignTo("34770610173021");
+		// $record1->setAssignTo("34770610173021");
 
 		$recordClass = 'com\zoho\crm\api\record\Record';
 
@@ -3930,9 +5271,9 @@ class Record
 
 		$request->setCvid("34770610087501");
 
-		// $ids = array("34770616603276");
+		$ids = array("3477061012054037");
 
-		// $request->setIds($ids);
+		$request->setIds($ids);
 
 		// $territory = new Territory();
 
@@ -4187,6 +5528,668 @@ class Record
 							//Get each value in the map
 							echo($keyName . ": " . $keyValue . "\n");
 						}
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+
+	public static function getRecordCount()
+	{
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+		
+		$moduleAPIName = "Leads";
+				
+		$paramInstance = new ParameterMap();
+		
+		$paramInstance->add(RecordCountParam::phone(), "(990) -0");
+		
+		$response = $recordOperations->recordCount($moduleAPIName, $paramInstance);
+		
+		if($response != null)
+		{
+            //Get the status code from response
+            echo("Status code " . $response->getStatusCode() . "\n");
+
+            if(in_array($response->getStatusCode(), array(204, 304)))
+            {
+                echo($response->getStatusCode() == 204? "No Content\n" : "Not Modified\n");
+
+                return;
+			}
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$countHandler = $response->getObject();
+				
+				if($countHandler instanceof CountWrapper)
+				{
+					//Get the received CountWrapper instance
+					$countWrapper = $countHandler;
+					
+					//Get the Count of Tag
+					echo("Record Count: " . $countWrapper->getCount());
+				}
+				//Check if the request returned an exception
+				else if($countHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $countHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				print_r($response);
+			}
+		}
+	}
+	
+	public static function assignTerritoriesToMultipleRecords($moduleAPIName)
+	{
+		//API Name of the module to assignTerritoriesToMultipleRecords
+		//$moduleAPIName = "Leads";
+		
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+		
+		//Get instance of BodyWrapper Class that will contain the request body
+		$request = new BodyWrapper();
+		
+		//List of Record instances
+		$records = [];
+
+		$recordClass = 'com\zoho\crm\api\record\Record';
+		
+		//Get instance of Record Class
+		$record1 = new $recordClass();
+		
+		$record1->setId("3477061012107002");
+	
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		
+		$territory = new Territory();
+		
+		$territory->setId("34770613051397");
+		
+		$record1->addKeyValue("Territories", [$territory]);
+		
+		//Add Record instance to the list
+		array_push($records, $record1);
+		
+		//Set the list to Records in BodyWrapper instance
+		$request->setData($records);
+		
+		//Call assignTerritoriesToMultipleRecords method that takes ModuleAPIName and  BodyWrapper instance as parameter.
+		$response = $recordOperations->assignTerritoriesToMultipleRecords($moduleAPIName, $request);
+		
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+				
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ActionWrapper instance
+					$actionWrapper = $actionHandler;
+					
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+					
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : ");
+
+								print_r($value);
+
+								echo("\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				print_r($response);
+			}
+		}
+	}
+
+	public static function assignTerritoryToRecord($moduleAPIName, $id)
+	{
+		//API Name of the module to assignTerritoryToRecord
+		//$moduleAPIName = "Leads";
+		
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+		
+		//Get instance of BodyWrapper Class that will contain the request body
+		$request = new BodyWrapper();
+		
+		//List of Record instances
+		$records = array();
+
+		$recordClass = 'com\zoho\crm\api\record\Record';
+		
+		//Get instance of Record Class
+		$record1 = new $recordClass();
+		
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		
+		$territory = new Territory();
+		
+		$territory->setId("34770613051397");
+		
+		$record1->addKeyValue("Territories", [$territory]);
+		
+		//Add Record instance to the list
+		array_push($records, $record1);
+		
+		//Set the list to Records in BodyWrapper instance
+		$request->setData($records);
+		
+		//Call assignTerritoryToRecord method that takes ModuleAPIName, id and  BodyWrapper instance as parameter.
+		$response = $recordOperations->assignTerritoryToRecord($moduleAPIName, $id, $request);
+		
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					$actionWrapper = $actionHandler;
+
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : ");
+
+								print_r($value);
+
+								echo("\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+	
+	public static function removeTerritoriesFromMultipleRecords($moduleAPIName)
+	{
+		//example
+		//$moduleAPIName = "Leads";
+		//$recordId = 34770615177002L;
+		
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+		
+		//Get instance of BodyWrapper Class that will contain the request body
+		$request = new BodyWrapper();
+		
+		//List of Record instances
+		$records = array();
+
+		$recordClass = 'com\zoho\crm\api\record\Record';
+		
+		//Get instance of Record Class
+		$record1 = new $recordClass();
+		
+		$record1->setId("3477061012107002");
+	
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		
+		$territory = new Territory();
+		
+		$territory->setId("34770613051397");
+		
+		$record1->addKeyValue("Territories", [$territory]);
+		
+		//Add Record instance to the list
+		array_push($records, $record1);
+		
+		//Set the list to Records in BodyWrapper instance
+		$request->setData($records);
+		
+		//Call removeTerritoriesFromMultipleRecords method that takes moduleAPIName and BodyWrapper instance as parameter
+		$response = $recordOperations->removeTerritoriesFromMultipleRecords($moduleAPIName, $request);
+		
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					$actionWrapper = $actionHandler;
+
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : ");
+
+								print_r($value);
+
+								echo("\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
+					}
+
+					//Get the Message
+					echo("Message: " . $exception->getMessage()->getValue() . "\n");
+				}
+			}
+			else
+			{
+				print_r($response);
+			}
+		}
+	}
+	
+	public static function removeTerritoriesFromRecord($moduleAPIName, $id)
+	{
+		//example
+		//$moduleAPIName = "Leads";
+		//$recordId = 34770615177002L;
+		
+		//Get instance of RecordOperations Class
+		$recordOperations = new RecordOperations();
+		
+		//Get instance of BodyWrapper Class that will contain the request body
+		$request = new BodyWrapper();
+		
+		//List of Record instances
+		$records = array();
+
+		$recordClass = 'com\zoho\crm\api\record\Record';
+		
+		//Get instance of Record Class
+		$record1 = new $recordClass();
+	
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		
+		$territory = new Territory();
+		
+		$territory->setId("34770613051397");
+		
+		$record1->addKeyValue("Territories", [$territory]);
+		
+		//Add Record instance to the list
+		array_push($records, $record1);
+		
+		//Set the list to Records in BodyWrapper instance
+		$request->setData($records);
+		
+		//Call removeTerritoriesFromRecord method that takes moduleAPIName, recordId and BodyWrapper instance as parameter
+		$response = $recordOperations->removeTerritoriesFromRecord($moduleAPIName, $id, $request);
+		
+		if($response != null)
+		{
+			//Get the status code from response
+			echo("Status Code: " . $response->getStatusCode() . "\n");
+
+			if($response->isExpected())
+			{
+				//Get object from response
+				$actionHandler = $response->getObject();
+
+				if($actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					$actionWrapper = $actionHandler;
+
+					//Get the list of obtained ActionResponse instances
+					$actionResponses = $actionWrapper->getData();
+
+					foreach($actionResponses as $actionResponse)
+					{
+						//Check if the request is successful
+						if($actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							$successResponse = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $successResponse->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $successResponse->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($successResponse->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : ");
+
+								print_r($value);
+
+								echo("\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $successResponse->getMessage()->getValue() . "\n");
+						}
+						//Check if the request returned an exception
+						else if($actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							$exception = $actionResponse;
+
+							//Get the Status
+							echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+							//Get the Code
+							echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+							echo("Details: " );
+
+							//Get the details map
+							foreach($exception->getDetails() as $key => $value)
+							{
+								//Get each value in the map
+								echo($key . " : " . $value . "\n");
+							}
+
+							//Get the Message
+							echo("Message: " . $exception->getMessage()->getValue() . "\n");
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if($actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					$exception = $actionHandler;
+
+					//Get the Status
+					echo("Status: " . $exception->getStatus()->getValue() . "\n");
+
+					//Get the Code
+					echo("Code: " . $exception->getCode()->getValue() . "\n");
+
+					echo("Details: " );
+
+					//Get the details map
+					foreach($exception->getDetails() as $key => $value)
+					{
+						//Get each value in the map
+						echo($key . " : " . $value . "\n");
 					}
 
 					//Get the Message
