@@ -959,15 +959,13 @@ $obj->main();
 
 ```php
 <?php
-namespace index;
+use com\zoho\api\authenticator\OAuthBuilder;
 
-use com\zoho\api\authenticator\OAuthToken;
-
-use com\zoho\api\authenticator\store\DBStore;
+use com\zoho\api\authenticator\store\DBBuilder;
 
 use com\zoho\api\authenticator\store\FileStore;
 
-use com\zoho\crm\api\Initializer;
+use com\zoho\crm\api\InitializeBuilder;
 
 use com\zoho\crm\api\UserSignature;
 
@@ -975,7 +973,7 @@ use com\zoho\crm\api\SDKConfigBuilder;
 
 use com\zoho\crm\api\dc\USDataCenter;
 
-use com\zoho\api\logger\Logger;
+use com\zoho\api\logger\LogBuilder;
 
 use com\zoho\api\logger\Levels;
 
@@ -995,7 +993,7 @@ require_once 'vendor/autoload.php';
 
 class Record
 {
-  public static function getRecord()
+  public function initialize()
   {
     /*
       * Create an instance of Logger Class that requires the following
@@ -1050,7 +1048,6 @@ class Record
     $sdkConfig = (new SDKConfigBuilder())
     ->autoRefreshFields($autoRefreshFields)
     ->pickListValidation($pickListValidation)
-    ->sslVerification($enableSSLVerification)
     ->connectionTimeout($connectionTimeout)
     ->timeout($timeout)
     ->build();
@@ -1066,19 +1063,20 @@ class Record
     * SDKConfig -> SDKConfig instance
     * resourcePath -> resourcePath -A String
     * logger -> Log instance (optional)
-    * requestProxy -> RequestProxy instance (optional)
     */
     (new InitializeBuilder())
     ->user($user)
     ->environment($environment)
     ->token($token)
     ->store($tokenstore)
-    ->SDKConfig($configInstance)
+    ->SDKConfig($sdkConfig)
     ->resourcePath($resourcePath)
     ->logger($logger)
-    ->requestProxy($requestProxy)
     ->initialize();
+  }
 
+  public function getRecord()
+  {
     try
     {
       $recordOperations = new RecordOperations();
@@ -1210,6 +1208,8 @@ class Record
   }
 }
 
-Record::getRecord();
+$obj = new Record();
+$obj->initialize();
+$obj->getRecord();
 ?>
 ```
