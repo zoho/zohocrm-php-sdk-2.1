@@ -1,4 +1,5 @@
 <?php
+namespace com\zoho\crm\api;
 
 /*
 Copyright (c) 2021, ZOHO CORPORATION PRIVATE LIMITED 
@@ -16,8 +17,6 @@ All rights reserved.
    See the License for the specific language governing permissions and 
    limitations under the License. 
 */
-
-namespace com\zoho\crm\api;
 
 use com\zoho\api\logger\Levels;
 
@@ -89,7 +88,7 @@ class Initializer
             {
                 if(is_null(self::$jsonDetails))
                 {
-                    self::$jsonDetails = json_decode(file_get_contents(explode("src", realpath(__DIR__))[0] . Constants::JSON_DETAILS_FILE_PATH), true);
+                    self::$jsonDetails = json_decode(file_get_contents(explode("src/com", realpath(__DIR__))[0] . Constants::JSON_DETAILS_FILE_PATH), true);
                 }
             }
             catch (\Exception $ex)

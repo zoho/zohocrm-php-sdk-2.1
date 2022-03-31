@@ -8,6 +8,7 @@ class BodyWrapper implements Model
 
 	private  $data;
 	private  $trigger;
+	private  $process;
 	private  $duplicateCheckFields;
 	private  $wfTrigger;
 	private  $larId;
@@ -52,6 +53,27 @@ class BodyWrapper implements Model
 	{
 		$this->trigger=$trigger; 
 		$this->keyModified['trigger'] = 1; 
+
+	}
+
+	/**
+	 * The method to get the process
+	 * @return array A array representing the process
+	 */
+	public  function getProcess()
+	{
+		return $this->process; 
+
+	}
+
+	/**
+	 * The method to set the value to process
+	 * @param array $process A array
+	 */
+	public  function setProcess(array $process)
+	{
+		$this->process=$process; 
+		$this->keyModified['process'] = 1; 
 
 	}
 
