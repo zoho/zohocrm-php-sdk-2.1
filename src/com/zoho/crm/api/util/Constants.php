@@ -472,7 +472,7 @@ class Constants
 
     const FORM_REQUEST_EXCEPTION = "Exception in forming request body : ";
 
-    const SDK_VERSION = "6.0.0";
+    const SDK_VERSION = "7.0.0";
 
     const API_CALL_EXCEPTION = "Exception in current API call execution : ";
 
