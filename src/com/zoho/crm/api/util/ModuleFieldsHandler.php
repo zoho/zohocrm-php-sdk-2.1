@@ -94,7 +94,7 @@ class ModuleFieldsHandler
 	 * The method to delete fields of the given module from the current user's fields JSON file.
 	 * @param module A string representing the module.
 	 */
-	private static function deleteFields($module)
+	public static function deleteFields(string $module)
 	{
 		try
 		{
@@ -114,7 +114,9 @@ class ModuleFieldsHandler
 		}
 		catch (\Exception $e)
 		{
-			throw new SDKException(null, null, null, $e);
+            SDKLogger::severeError(Constants::DELETE_MODULE_FROM_FIELDFILE_ERROR, $e);
+
+            throw new SDKException(null, null, null, $e);
 		}
 	}
 

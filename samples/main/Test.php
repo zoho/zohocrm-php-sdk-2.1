@@ -12,6 +12,8 @@ use com\zoho\crm\sample\bulkread\BulkRead;
 
 use com\zoho\crm\sample\bulkwrite\BulkWrite;
 
+use com\zoho\crm\sample\cancelmeetings\CancelMeetings;
+
 use com\zoho\crm\sample\contactroles\ContactRoles;
 
 use com\zoho\crm\sample\currencies\Currency;
@@ -95,6 +97,8 @@ class Test
         self::BulkRead();
 
         self::BulkWrite();
+
+		self::cancelmeetings();
 
         self::ContactRoles();
 
@@ -246,6 +250,15 @@ class Test
 		BulkWrite::downloadBulkWriteResult($downloadUrl, $destinationFolder);
     }
 
+	public static function cancelmeetings()
+	{
+	    $event_id=440248000000680118;
+	    
+	    $send_cancel_mail = false;
+	    
+	    CancelMeetings::cancelmeetings($event_id,$send_cancel_mail);
+	    
+	}
     public static function ContactRoles()
 	{
 		$contactRoleId = "34770619608005";

@@ -194,14 +194,16 @@ class Utility
             {
                 mkdir($resourcesPath);
             }
-
-            $moduleAPIName = self::verifyModuleAPIName($moduleAPIName);
-
-            self::setHandlerAPIPath($moduleAPIName, $handlerInstance);
-
-            if($handlerInstance != null && $handlerInstance->getModuleAPIName() == null && !in_array(strtolower($moduleAPIName), Constants::SKIP_MODULES)) 
+            if ($moduleAPIName != null)
             {
-                return;
+                $moduleAPIName = self::verifyModuleAPIName($moduleAPIName);
+
+                self::setHandlerAPIPath($moduleAPIName, $handlerInstance);
+
+                if($handlerInstance != null && $handlerInstance->getModuleAPIName() == null && !in_array(strtolower($moduleAPIName), Constants::SKIP_MODULES)) 
+                {
+                    return;
+                }
             }
 
             $recordFieldDetailsPath = $resourcesPath . DIRECTORY_SEPARATOR . self::getFileName();

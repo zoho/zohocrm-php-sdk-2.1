@@ -77,7 +77,7 @@ use com\zoho\crm\api\record\GetRecordsParam;
 
 use com\zoho\crm\api\record\SearchRecordsParam;
 
-use com\zoho\crm\api\record\{Cases, Field, Solutions, Accounts, Campaigns, Calls, Leads, Tasks, Deals, Sales_Orders, Contacts, Quotes, Events, Price_Books, Purchase_Orders, Vendors};
+use com\zoho\crm\api\record\{ApplyFeatureExecution, Cases, Field, Solutions, Accounts, Campaigns, Calls, Leads, Tasks, Deals, Sales_Orders, Contacts, Quotes, Events, Price_Books, Purchase_Orders, Vendors};
 
 use com\zoho\crm\api\util\Choice;
 
@@ -759,6 +759,21 @@ class Record
 
 		//Get instance of Record Class
 		$record1 = new $recordClass();
+		
+		//Get the instance of ApplyFeatureExecution Class
+		$apply_feature_execution = new ApplyFeatureExecution();
+		
+		//set name to instance of ApplyFeatureExecution
+		$apply_feature_execution->setName("layout_rules");
+		
+		//List of ApplyFeatureExecution instances
+		$apply_feature_list = array();
+		
+		//add the ApplyFeatureExecution instance to the List
+		array_push($apply_feature_list,$apply_feature_execution);
+		
+		//set the List of ApplyFeatureExecution instances to BodyWrapper instance
+		$request->setApplyFeatureExecution($apply_feature_list);
 
 		/*
 		 * Call addFieldValue method that takes two arguments
@@ -2933,6 +2948,21 @@ class Record
 
 		//Get instance of Record Class
 		$record1 = new $recordClass();
+		
+		//Get the instance of ApplyFeatureExecution Class
+		$apply_feature_execution = new ApplyFeatureExecution();
+		
+		//set name to instance of ApplyFeatureExecution
+		$apply_feature_execution->setName("layout_rules");
+		
+		//List of ApplyFeatureExecution instances
+		$apply_feature_list = array();
+		
+		//add the ApplyFeatureExecution instance to the List
+		array_push($apply_feature_list,$apply_feature_execution);
+		
+		//set the List of ApplyFeatureExecution instances to BodyWrapper instance
+		$bodyWrapper->setApplyFeatureExecution($apply_feature_list);
 
 		/*
 		 * Call addFieldValue method that takes two arguments
@@ -3424,6 +3454,21 @@ class Record
 		$record1 = new $recordClass();
 
 		$record1->setId("3477061012266");
+		
+		//Get the instance of ApplyFeatureExecution Class
+		$apply_feature_execution = new ApplyFeatureExecution();
+		
+		//set name to instance of ApplyFeatureExecution
+		$apply_feature_execution->setName("layout_rules");
+		
+		//List of ApplyFeatureExecution instances
+		$apply_feature_list = array();
+		
+		//add the ApplyFeatureExecution instance to the List
+		array_push($apply_feature_list,$apply_feature_execution);
+		
+		//set the List of ApplyFeatureExecution instances to BodyWrapper instance
+		$request->setApplyFeatureExecution($apply_feature_list);
 
 		/*
 		 * Call addFieldValue method that takes two arguments
@@ -3849,6 +3894,21 @@ class Record
 
 		//Get instance of Record Class
 		$record1 = new $recordClass();
+		
+		//Get the instance of ApplyFeatureExecution Class
+		$apply_feature_execution = new ApplyFeatureExecution();
+		
+		//set name to instance of ApplyFeatureExecution
+		$apply_feature_execution->setName("layout_rules");
+		
+		//List of ApplyFeatureExecution instances
+		$apply_feature_list = array();
+		
+		//add the ApplyFeatureExecution instance to the List
+		array_push($apply_feature_list,$apply_feature_execution);
+		
+		//set the List of ApplyFeatureExecution instances to BodyWrapper instance
+		$request->setApplyFeatureExecution($apply_feature_list);
 
 		/*
 		 * Call addFieldValue method that takes two arguments
