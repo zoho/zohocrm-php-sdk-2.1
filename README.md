@@ -113,7 +113,7 @@ You can include the SDK to your project using:
 
 ## Token Persistence
 
-Token persistence refers to storing and utilizing the authentication tokens that are provided by Zoho. There are three ways provided by the SDK in which persistence can be utilized. They are DataBase Persistence, File Persistence, and Custom Persistence.
+Token persistence refers to storing and utilizing the authentication tokens that are provided by Zoho.  Token persistence enables the SDK to automatically refresh the access token after initialization using the refresh token without the need for user intervention. There are three ways provided by the SDK in which persistence can be applied. They are file persistence, DB persistence and Custom persistence. Please note that the default method of token persistence provided by the Zoho CRM SDK is File persistence.
 
 ### Table of Contents
 
@@ -151,7 +151,7 @@ Note:
 
 ### DataBase Persistence
 
-In case the user prefers to use the default DataBase persistence, **MySQL** can be used.
+Database persistence is a technique that involves storing and retrieving data from a database.  In case the user prefers to use the default DataBase persistence, **MySQL** can be used.
 
 - The database name should be **zohooauth**.
 
@@ -220,7 +220,7 @@ $tokenstore = (new DBBuilder())
 
 ### File Persistence
 
-In case of default File Persistence, the user can persist tokens in the local drive, by providing the the absolute file path to the FileStore object.
+File persistence is a simple approach for storing and retrieving data that is saved to a file on local drive. In case of default File Persistence, the user can persist tokens in the local drive, by providing the the absolute file path to the FileStore object.
 
 - The File contains
 
@@ -251,7 +251,7 @@ $tokenstore = new FileStore("/Documents/php_sdk_token.txt");
 
 ### Custom Persistence
 
-To use Custom Persistence, the user must implement **TokenStore interface** (**com\zoho\api\authenticator\store\TokenStore**) and override the methods.
+Users can create their own logic for storing and retrieving authentication tokens using the custom persistence technique.  To use Custom Persistence, the user must implement **TokenStore interface** (**com\zoho\api\authenticator\store\TokenStore**) and override the methods.
 
 ```php
 use com\zoho\api\authenticator\Token;
@@ -329,6 +329,9 @@ Before you get started with creating your PHP application, you need to register 
 |                   | resourcePath  |
 ----
 
+The **user** key will be used to store and identify the **tokenstore** details in the DB or File Storage for token persistence. The **environment** key contains the domain information to make API calls. The **token** key represents the OAuth info, including the clientID, clientSecret, grantToken, redirectURL, refreshToken or accessToken depending on the flow that you use. Refer to ##create an instance of OAuthToken## for more details. 
+
+
 - Create an instance of **UserSignature** that identifies the current user.
 
     ```php
@@ -348,9 +351,9 @@ Before you get started with creating your PHP application, you need to register 
     $environment = USDataCenter::PRODUCTION();
     ```
 
-- Create an instance of **OAuthToken** with the information that you get after registering your Zoho client.
+- Create an instance of **OAuthToken** with the information that you get after registering your Zoho client. In the context of token persistence, the grant token flow and refresh token flow involve storing and persisting the token. However, the access token flow does not involve token persistence and the access token is directly utilized for API calls. Depending on the tokens available with you, choose grantToken flow, refreshToken flow or accessToken flow.  
 
-  - **grantToken flow :**
+  - Use the following method for **grantToken flow :**
   ```php
     $token = (new OAuthBuilder())
     ->clientId("clientId")
@@ -359,7 +362,7 @@ Before you get started with creating your PHP application, you need to register 
     ->redirectURL("redirectURL")
     ->build();
     ```
-  - **refreshToken flow :**
+  - Use the following method for **refreshToken flow :**
   ```php
     $token = (new OAuthBuilder())
     ->clientId("clientId")
@@ -369,7 +372,7 @@ Before you get started with creating your PHP application, you need to register 
     ->build();
   ```
 
-  - **accessToken flow :**
+  - Use the following method for **accessToken flow :**
   ```php
     $token = (new OAuthBuilder())
     ->accessToken("accessToken")
@@ -390,8 +393,9 @@ Before you get started with creating your PHP application, you need to register 
     ->build();
     ```
 
-- Create an instance of **TokenStore** to persist tokens, used for authenticating all the requests. By default, the SDK creates the sdk_tokens.txt created in the current working directory) to persist the tokens.
+- Create an instance of **TokenStore** to persist tokens, used for authenticating all the requests. By default, the SDK creates the sdk_tokens.txt in the current working directory to persist the tokens.
 
+  - Use the following method for DB Store
     ```php
     /*
     * Create an instance of DBStore that requires the following
@@ -410,9 +414,14 @@ Before you get started with creating your PHP application, you need to register 
     ->portNumber("portNumber")
     ->tableName("tableName")
     ->build();
-
-    // $tokenstore = new FileStore("absolute_file_path");
-    // $tokenstore = new CustomStore();
+    ```
+  - Use the following method for File Store
+    ```php
+    $tokenstore = new FileStore("absolute_file_path");
+    ```
+  - Use the following method for Custom Store
+    ```php
+    $tokenstore = new CustomStore();
     ```
 
 - Create an instance of SDKConfig containing SDK configurations.
@@ -662,7 +671,9 @@ The **PHP SDK** (version 4.x.x) supports both single user and a multi-user app.
 
 ### Multi-user App
 
-Multi-users functionality is achieved using **switchUser()** method
+In the PHP SDK, multi-user functionality is achieved using the **switchUser()**method. To use this method, you need to provide the user, environment, token, and SDK configuration details.
+
+Please note that only one user can send requests at a time. If another user need to send requests, the **switchUser()** method must be used prior to sending the requests.
 
 ```php
   (new InitializeBuilder())
@@ -685,6 +696,7 @@ use com\zoho\api\authenticator\OAuthBuilder;
 use com\zoho\crm\api\InitializeBuilder;
 use com\zoho\crm\api\UserSignature;
 use com\zoho\crm\api\dc\USDataCenter;
+use com\zoho\crm\api\dc\EUDataCenter;
 use com\zoho\crm\api\Initializer;
 use com\zoho\crm\api\record\RecordOperations;
 use com\zoho\crm\api\record\GetRecordsHeader;
@@ -692,7 +704,7 @@ use com\zoho\crm\api\HeaderMap;
 use com\zoho\crm\api\ParameterMap;
 require_once 'vendor/autoload.php';
 
-class MultiThread
+class MultiUser
 {
   public function main()
   {
@@ -704,17 +716,13 @@ class MultiThread
     ->grantToken("grantToken")
     ->redirectURL("redirectURL")
     ->build();
-    $autoRefreshFields = false;
-    $pickListValidation = false;
-    $connectionTimeout = 2;
-    $timeout = 2;
     (new InitializeBuilder())
     ->user($user1)
     ->environment($environment1)
     ->token($token1)
     ->initialize();
-
     $this->getRecords("Leads");
+
     $environment2 = EUDataCenter::PRODUCTION();
     $user2 = new UserSignature("abc2@zoho.eu");
     $token2 = (new OAuthBuilder())
@@ -754,7 +762,7 @@ class MultiThread
     }
   }
 }
-$obj = new MultiThread();
+$obj = new MultiUser();
 $obj->main();
 ?>
 ```
@@ -797,10 +805,6 @@ class Record
     ->refreshToken("refreshToken")
     ->redirectURL("redirectURL")
     ->build();
-    $autoRefreshFields = false;
-    $pickListValidation = false;
-    $connectionTimeout = 2;
-    $timeout = 2;
     (new InitializeBuilder())
     ->user($user)
     ->environment($environment)

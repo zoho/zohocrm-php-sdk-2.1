@@ -114,6 +114,16 @@ class CreateRecords
 		$recordOwner = new User();
 		$recordOwner->setEmail("abc@zoho.com");
         $record1->addKeyValue("Owner", $recordOwner);
+		//Lookup
+		$lookup = new $recordClass();
+		$lookup->addKeyValue("id", "34770615848009");
+		$record1->addKeyValue("lookup", $lookup);
+		//MultiLookup
+		$multiLookup = array();
+		$lookup = new $recordClass();
+		$lookup->addKeyValue("id", "34770615848009");
+		array_push($multiLookup, $lookup);
+		$record1->addKeyValue("multi-selectlookup", $multiLookup);
 
 		/** Following methods are being used only by Inventory modules */
 		$vendorName = new $recordClass();
