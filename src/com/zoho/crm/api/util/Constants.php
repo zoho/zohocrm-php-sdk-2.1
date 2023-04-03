@@ -472,7 +472,7 @@ class Constants
 
     const FORM_REQUEST_EXCEPTION = "Exception in forming request body : ";
 
-    const SDK_VERSION = "7.0.0";
+    const SDK_VERSION = "7.1.0";
 
     const API_CALL_EXCEPTION = "Exception in current API call execution : ";
 
@@ -510,7 +510,7 @@ class Constants
 
     const MODULE_API_EXCEPTION = "com\zoho\crm\api\modules\APIException";
 
-    const JSON_DETAILS_FILE_PATH = "src/resources/JSONDetails.json";
+    const JSON_DETAILS_FILE_PATH = "resources/JSONDetails.json";
 
     const EVENTS_MODULE_PARAMS = array("startDateTime", "endDateTime");
 
