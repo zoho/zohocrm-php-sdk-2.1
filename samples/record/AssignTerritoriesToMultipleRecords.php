@@ -48,6 +48,12 @@ class AssignTerritoriesToMultipleRecords
 		$territory->setId("34770613051397");
 		$record1->addKeyValue("Territories", [$territory]);
 		array_push($records, $record1);
+		$record2 = new $recordClass();
+		$record2->setId("3477061012107034");
+		$territory2 = new Territory();
+		$territory2->setId("347706130597");
+		$record2->addKeyValue("Territories", [$territory2]);
+		array_push($records, $record2);
 		$request->setData($records);
 		$response = $recordOperations->assignTerritoriesToMultipleRecords($moduleAPIName, $request);
 		if($response != null)
@@ -112,5 +118,5 @@ class AssignTerritoriesToMultipleRecords
 }
 
 AssignTerritoriesToMultipleRecords::initialize();
-$moduleAPIName = "Leads";
+$moduleAPIName = "Contacts";
 AssignTerritoriesToMultipleRecords::assignTerritoriesToMultipleRecords($moduleAPIName);
