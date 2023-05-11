@@ -80,7 +80,7 @@ class CreateRecords
 		$record1->addFieldValue(Cases::CaseOrigin(), new Choice("AutomatedSDK"));
 		$record1->addFieldValue(Cases::Status(), new Choice("AutomatedSDK"));
 		/*
-		 * Call addKeyValue method that takes two arguments
+		 * Call addKeyValue method for custom fields and it takes two arguments
 		 * 1 -> A string that is the Field's API Name
 		 * 2 -> Value
 		 */
@@ -103,12 +103,6 @@ class CreateRecords
 		$fileDetail1 = new FileDetails();
 		$fileDetail1->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c32b3ec27aa98b6161a4df6e2c0dc1f0f80");
 		array_push($fileDetails, $fileDetail1);
-		$fileDetail2 = new FileDetails();
-		$fileDetail2->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c328db2d16efac6afe745678b577297a3b3");
-		array_push($fileDetails, $fileDetail2);
-		$fileDetail3 = new FileDetails();
-		$fileDetail3->setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c3207c8e1a4448a63b609f1ba7bd4aee6eb");
-		array_push($fileDetails, $fileDetail3);
 		$record1->addKeyValue("File_Upload", $fileDetails);
 
 		$recordOwner = new User();
@@ -190,7 +184,7 @@ class CreateRecords
 		$recurringActivity->setRrule("FREQ=DAILY;INTERVAL=10;UNTIL=2020-08-14;DTSTART=2020-07-03");
 		$record1->addFieldValue(Events::RecurringActivity(), $recurringActivity);
 		
-        // Events
+    // Events
 		$record1->addFieldValue(Events::Description(), "Test Events");
 		$startdatetime = date_create("2020-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 		$record1->addFieldValue(Events::StartDateTime(), $startdatetime);
@@ -225,7 +219,7 @@ class CreateRecords
 		$record1->addFieldValue(Calls::CallStartTime(), date_create("2020-07-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get())));
 		/** End Activity **/
 		
-        /** Following methods are being used only by Price_Books modules */
+    /** Following methods are being used only by Price_Books modules */
 		$pricingDetails = array();
 		$pricingDetail1 = new PricingDetails();
 		$pricingDetail1->setFromRange(1.0);
@@ -242,7 +236,7 @@ class CreateRecords
 		$record1->addFieldValue(Price_Books::Description(), "TEST");
 		$record1->addFieldValue(Price_Books::PriceBookName(), "book_name");
 		$record1->addFieldValue(Price_Books::PricingModel(), new Choice("Flat"));
-        /** Price_Books */
+    /** End Price_Books */
 
 		$tagList = array();
 		$tag = new Tag();

@@ -111,6 +111,6 @@ class AssignTerritoryToRecord
 }
 
 AssignTerritoryToRecord::initialize();
-$moduleAPIName = "Leads";
+$moduleAPIName = "Contacts";
 $recordId = "347706112184003";
 AssignTerritoryToRecord::assignTerritoryToRecord($moduleAPIName, $recordId);
