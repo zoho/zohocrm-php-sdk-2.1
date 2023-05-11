@@ -184,7 +184,7 @@ class CreateRecords
 		$recurringActivity->setRrule("FREQ=DAILY;INTERVAL=10;UNTIL=2020-08-14;DTSTART=2020-07-03");
 		$record1->addFieldValue(Events::RecurringActivity(), $recurringActivity);
 		
-        // Events
+    // Events
 		$record1->addFieldValue(Events::Description(), "Test Events");
 		$startdatetime = date_create("2020-06-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 		$record1->addFieldValue(Events::StartDateTime(), $startdatetime);
@@ -219,7 +219,7 @@ class CreateRecords
 		$record1->addFieldValue(Calls::CallStartTime(), date_create("2020-07-02T11:03:06+05:30")->setTimezone(new \DateTimeZone(date_default_timezone_get())));
 		/** End Activity **/
 		
-        /** Following methods are being used only by Price_Books modules */
+    /** Following methods are being used only by Price_Books modules */
 		$pricingDetails = array();
 		$pricingDetail1 = new PricingDetails();
 		$pricingDetail1->setFromRange(1.0);
@@ -236,7 +236,7 @@ class CreateRecords
 		$record1->addFieldValue(Price_Books::Description(), "TEST");
 		$record1->addFieldValue(Price_Books::PriceBookName(), "book_name");
 		$record1->addFieldValue(Price_Books::PricingModel(), new Choice("Flat"));
-        /** Price_Books */
+    /** End Price_Books */
 
 		$tagList = array();
 		$tag = new Tag();
