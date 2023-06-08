@@ -700,7 +700,7 @@ use com\zoho\crm\api\HeaderMap;
 use com\zoho\crm\api\ParameterMap;
 require_once 'vendor/autoload.php';
 
-class MultiDC
+class MultiUser
 {
   public function main()
   {
