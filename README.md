@@ -32,7 +32,7 @@ License
 * [Initialization](#initializing-the-application)
 * [Class Hierarchy](#class-hierarchy)
 * [Responses And Exceptions](#responses-and-exceptions)
-* [Multi-User support in the PHP SDK](#multi-user-support-in-the-php-sdk)
+* [Multi User and Multi DC support in the PHP SDK](#multi-user-and-multi-dc-support-in-the-php-sdk)
 * [Sample Code](#sdk-sample-code)
 
 ## Overview
@@ -665,13 +665,9 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
   - **TransferActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
-## Multi-User support in the PHP SDK
+## Multi User and Multi DC support in the PHP SDK
 
-The **PHP SDK** (version 4.x.x) supports both single user and a multi-user app.
-
-### Multi-user App
-
-In the PHP SDK, multi-user functionality is achieved using the **switchUser()**method. To use this method, you need to provide the user, environment, token, and SDK configuration details.
+In the PHP SDK, multi-user functionality is achieved using the **switchUser()** method. To use this method, you need to provide the user, **environment**, **token**, and **SDK configuration** details.
 
 Please note that only one user can send requests at a time. If another user need to send requests, the **switchUser()** method must be used prior to sending the requests.
 
@@ -704,7 +700,7 @@ use com\zoho\crm\api\HeaderMap;
 use com\zoho\crm\api\ParameterMap;
 require_once 'vendor/autoload.php';
 
-class MultiUser
+class MultiDC
 {
   public function main()
   {
@@ -772,6 +768,7 @@ $obj->main();
 - The details of **"user1"** are is given in the variables user1, token1, environment1.
 
 - Similarly, the details of another user **"user2"** is given in the variables user2, token2, environment2.
+  - If you have enabled **multi-dc** support in the client app, the token object will be DC specific. In multi-DC enabled case, the **client-id** will be the same for different DCs for the same org, but the tokens (**grant**, **refresh** and **access**) will be different. The **client-secret** could be the same or different, depending on how you have configured it. 
 
 - Then, the **switchUser()** function is used to switch between the **"user1"** and **"user2"** as required.
 
