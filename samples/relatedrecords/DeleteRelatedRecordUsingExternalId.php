@@ -29,11 +29,11 @@ class DeleteRelatedRecordUsingExternalId
             ->initialize();
     }
 
-	public static function deleteRelatedRecordUsingExternalId(string $moduleAPIName, string $recordId, string $relatedListAPIName, string $relatedListId)
+	public static function deleteRelatedRecordUsingExternalId(string $moduleAPIName, string $externalValue, string $relatedListAPIName, string $externalFieldValue)
 	{
 		$xExternal = "Leads.External,Products.Products_External";
 	    $relatedRecordsOperations = new RelatedRecordsOperations($relatedListAPIName, $moduleAPIName, $xExternal);
-		$response = $relatedRecordsOperations->delinkRecord($relatedListId, $recordId);
+		$response = $relatedRecordsOperations->deleteRelatedRecordUsingExternalId($externalFieldValue, $externalValue);
 		if($response != null)
 		{
 			echo("Status Code: " . $response->getStatusCode() . "\n");
